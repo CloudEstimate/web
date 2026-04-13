@@ -1,25 +1,51 @@
 # CloudEstimate
 
-CloudEstimate is a static Astro utility for sizing self-managed enterprise workloads across Google Cloud, AWS, and Azure. It maps published reference architectures to concrete instance shapes, applies cached pricing snapshots, and renders shareable estimate pages without accounts or runtime API calls.
+CloudEstimate is a static Astro utility for sizing self-managed enterprise workloads across Google Cloud, AWS, and Azure. It maps published reference architectures to concrete instance shapes, applies cached pricing snapshots, and renders shareable estimate pages without accounts or runtime pricing or AI calls.
 
-The current implementation includes GitLab Self-Managed, Redis Enterprise, JFrog Artifactory Self-Hosted, Sonatype Nexus Repository, Jira Data Center, and Confluence Data Center, along with a comparison view across all three clouds, schema-validated YAML content, and the supporting pages defined in the product specification.
+Current roster:
+- GitLab Self-Managed
+- Redis Enterprise
+- JFrog Artifactory Self-Hosted
+- Sonatype Nexus Repository
+- Jira Data Center
+- Confluence Data Center
 
-- Production URL: configured via `PUBLIC_SITE_URL`
-- Build spec: [.github/docs/SPEC.md](.github/docs/SPEC.md)
-- Brand spec: [.github/docs/BRAND.md](.github/docs/BRAND.md)
-- Operations guide: [.github/docs/OPERATIONS.md](.github/docs/OPERATIONS.md)
-- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
-- About the project: `/about`
+## What is in this repo
 
-## Local development
+- Static Astro site for estimate, comparison, share, and policy pages
+- Schema-validated ISV catalog in `src/content/isvs/`
+- Shared sizing and Terraform generation logic in `shared/`
+- Firebase Hosting and Cloud Functions deploy wiring
+- Build-time pricing and explanation cache fetch pipeline
+
+## Getting started
 
 ```bash
 npm install
+npm install --prefix functions
 npm run validate:isvs
 npm run dev
 ```
 
-Copy [`.env.example`](.env.example) to a local env file if you want to test canonical URLs, GA4/Search Console tags, or pull remote build caches.
+If you are working on Functions or shared generated data, run:
+
+```bash
+npm run sync:functions-data
+```
+
+## Local configuration
+
+This repo intentionally avoids hardcoded production IDs.
+
+Copy `.env.example` to `.env` if you want to test canonical URLs, analytics tags, Search Console verification, or remote cache downloads.
+
+Available local env vars:
+- `PUBLIC_SITE_URL`
+- `PUBLIC_GA4_MEASUREMENT_ID`
+- `PUBLIC_GOOGLE_SITE_VERIFICATION`
+- `CLOUDESTIMATE_CACHE_BUCKET`
+
+In GitHub Actions, public configuration belongs in repository or environment variables. Secrets such as `GCP_SA_KEY` belong in GitHub Actions Secrets.
 
 ## Quality checks
 
@@ -27,8 +53,20 @@ Copy [`.env.example`](.env.example) to a local env file if you want to test cano
 npm run validate:isvs
 npm run lint
 npm run test
+npm run check:functions
 npm run validate:terraform -- --mode=generate-only
 npm run build
 ```
 
-If Terraform is installed locally, run `npm run validate:terraform` for the full GCP XS/M/XL export gate.
+If Terraform is installed locally, run the full gate with:
+
+```bash
+npm run validate:terraform
+```
+
+## Contributing and security
+
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security reporting: [SECURITY.md](SECURITY.md)
+- Code of conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- License: [LICENSE](LICENSE)

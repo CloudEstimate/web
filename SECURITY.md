@@ -1,18 +1,24 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-Currently, only the latest `main` branch of CloudEstimate is supported with security updates.
+Security fixes are applied to the latest state of `main`. Older commits and forks may not receive updates.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-We take the security of CloudEstimate seriously. If you discover a security vulnerability, please **DO NOT** publicly disclose the issue (e.g., by creating a public GitHub Issue).
+Please do not open a public GitHub issue for security problems.
 
-Instead, please privately report it to us using GitHub's **Private Vulnerability Reporting** feature. 
+Use GitHub Private Vulnerability Reporting instead:
 
-1. Navigate to the **Security** tab of this repository.
-2. Select **Advisories** on the left menu.
-3. Click the **Report a vulnerability** button.
-4. Provide a detailed description of the vulnerability and steps to reproduce.
+1. Open the repository's **Security** tab.
+2. Select **Advisories**.
+3. Click **Report a vulnerability**.
+4. Include a clear description, impact, reproduction steps, and any suggested mitigation.
 
-We will review the report, acknowledge receipt, and coordinate a fix and disclosure timeline with you. Thank you for helping keep the project secure!
+Please do not include live secrets, private keys, or production credentials in the report.
+
+## What to expect
+
+- Reports will be reviewed on a best-effort basis.
+- Valid reports will be acknowledged and triaged privately.
+- Fixes and disclosure timing will be coordinated through the advisory thread when possible.

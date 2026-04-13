@@ -2,40 +2,62 @@
 
 CloudEstimate is maintained in spare time. Contributions are welcome, but every change is reviewed before publishing.
 
-## Local Setup
+## Before you start
 
-1. Check out the repository and install dependencies:
-   ```bash
-   npm install
-   ```
-2. Run the development server:
-   ```bash
-   npm run dev
-   ```
+- Keep scope tight.
+- Use public, versioned sources for any sizing or pricing-related change.
+- Open an issue before starting a large feature, a new integration, or a broad refactor.
+- Do not introduce hardcoded production IDs, secrets, or environment-specific values.
 
-## Adding an ISV
+## Local setup
 
-1. Add a YAML file in `src/content/isvs/`.
-2. Make sure the filename matches the `slug`.
-3. Validate it against the JSON Schema in `src/schemas/isv.schema.json`.
-4. Include a public, versioned reference architecture source and retrieval date.
-5. Update any pricing, explanation, or changelog content needed for the new coverage.
+```bash
+npm install
+npm install --prefix functions
+npm run validate:isvs
+npm run dev
+```
 
-Run:
+If you touch Functions, generated runtime data, or shared sizing logic, also run:
+
+```bash
+npm run sync:functions-data
+```
+
+## Adding or updating an ISV
+
+1. Add or edit the YAML file in `src/content/isvs/`.
+2. Keep the filename aligned with the `slug`.
+3. Cite a public reference architecture source and retrieval date.
+4. Keep notes and disclaimers honest about what is and is not modelled.
+5. Run the schema validator:
 
 ```bash
 npm run validate:isvs
 ```
 
-The validator is the build gate. A YAML file that fails schema validation fails the build.
+The schema in `src/schemas/isv.schema.json` is the source of truth for ISV content. A YAML file that fails validation fails the build.
 
 ## Pull requests
 
-- Keep scope tight.
-- Cite sources for any new or changed ISV sizing data.
-- Do not add out-of-scope product features without discussion.
-- Expect spare-time review cadence rather than same-day turnaround.
+Before opening a PR, run the checks that match your change:
 
-## Source of truth
+```bash
+npm run validate:isvs
+npm run lint
+npm run test
+npm run check:functions
+npm run validate:terraform -- --mode=generate-only
+```
 
-The ISV YAML schema defined in `.github/docs/SPEC.md` section 4.1 and implemented in `src/schemas/isv.schema.json` is the source of truth for all ISV content.
+PRs should:
+- explain the user-visible change clearly
+- cite sources for new or changed sizing data
+- include tests when behaviour changes
+- avoid unrelated cleanup in the same branch
+
+## Review expectations
+
+- Review is best-effort, not same-day.
+- The owner is required on all PRs via `CODEOWNERS`.
+- Contributions may be declined if they add product scope the project is not ready to support.
