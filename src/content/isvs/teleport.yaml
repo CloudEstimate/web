@@ -1,0 +1,113 @@
+slug: teleport
+name: Teleport Self-Hosted
+vendor: Teleport
+category: identity
+description: >
+  Self-hosted Teleport for infrastructure identity, privileged access, Kubernetes access, and audited remote sessions.
+ref_arch:
+  source_url: https://goteleport.com/docs/reference/deployment/scaling/
+  version: "Teleport 18.x scaling guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: starter self-hosted control plane for smaller Teleport estates
+    ref_arch_tier: starter-control-plane
+    components:
+      - role: auth-service
+        count: 1
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: proxy-service
+        count: 1
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+    ha_components:
+      - role: auth-service
+        count: 1
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: proxy-service
+        count: 1
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: backend
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: up to 10,000 SSH nodes or similarly sized protected-resource estates
+    ref_arch_tier: 10k-ha
+    components:
+      - role: auth-service
+        count: 2
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: proxy-service
+        count: 2
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: backend
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  xl:
+    label: Extra Large
+    range_description: 10,000 to 50,000 SSH nodes or larger Teleport access estates
+    ref_arch_tier: 50k-ha
+    components:
+      - role: auth-service
+        count: 2
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: proxy-service
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: backend
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: load-balancer
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - Teleport's own control plane is made up of Auth Service and Proxy Service, and the published hardware table assumes a high-availability setup.
+  - The backend nodes model a self-managed shared state store for self-hosted Teleport rather than a cloud-managed backend service.
+disclaimers:
+  - Based on Teleport's official architecture and scaling guidance, translated into VM-based planning tiers.
+  - Estimate excludes the infrastructure resources protected by Teleport, session recording object storage, external identity providers, and network transfer.

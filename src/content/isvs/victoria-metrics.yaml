@@ -1,0 +1,131 @@
+slug: victoria-metrics
+name: VictoriaMetrics
+vendor: VictoriaMetrics
+category: data-store
+description: >
+  Self-managed VictoriaMetrics for long-retention metrics storage, Prometheus remote write, and cost-conscious observability backends.
+ref_arch:
+  source_url: https://docs.victoriametrics.com/cluster-victoriametrics/
+  version: "VictoriaMetrics cluster version current documentation"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: single-node deployment for ingestion rates below 1 million samples per second
+    ref_arch_tier: single-node
+    components:
+      - role: single-node
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+    ha_components:
+      - role: single-node
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: starter cluster for higher-ingest or independently scaled insert, query, and storage paths
+    ref_arch_tier: minimal-cluster
+    components:
+      - role: vmstorage
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+      - role: vminsert
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: vmselect
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: vmstorage
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+      - role: vminsert
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: vmselect
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  xl:
+    label: Extra Large
+    range_description: larger cluster for longer retention, heavier query fan-out, or multi-tenant metrics estates
+    ref_arch_tier: scale-out-cluster
+    components:
+      - role: vmstorage
+        count: 2
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 4000
+        storage_type: ssd
+      - role: vminsert
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: vmselect
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: ssd
+    ha_components:
+      - role: vmstorage
+        count: 2
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 4000
+        storage_type: ssd
+      - role: vminsert
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: vmselect
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: ssd
+      - role: load-balancer
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - VictoriaMetrics explicitly recommends the single-node version below 1 million samples per second, and recommends at least two nodes for each cluster service when high availability is required.
+  - The cluster documentation stresses iterative capacity planning and leaving substantial spare CPU, RAM, and storage, so these tiers should be treated as conservative starting points.
+disclaimers:
+  - Based on VictoriaMetrics cluster documentation and translated into VM-based planning tiers for single-node and clustered self-managed deployments.
+  - Estimate excludes object storage backups, vmagent fan-out, vmauth policy layers beyond the generic load balancer role, and workload-specific tuning from a production test run.

@@ -1,0 +1,50 @@
+slug: redpanda
+name: Redpanda Self-Managed
+vendor: Redpanda Data
+category: streaming
+description: >
+  Self-managed Redpanda for Kafka-compatible event streaming, durable logs, and high-throughput messaging pipelines.
+ref_arch:
+  source_url: https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/
+  version: "Redpanda current production requirements"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: starter three-broker production cluster for durable event streaming
+    ref_arch_tier: three-broker-small
+    components:
+      - role: broker
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 1000
+        storage_type: nvme
+  m:
+    label: Medium
+    range_description: three-broker production cluster with higher partition density and retention
+    ref_arch_tier: three-broker-medium
+    components:
+      - role: broker
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: nvme
+  xl:
+    label: Extra Large
+    range_description: six-broker production cluster for higher-ingest and longer-retention workloads
+    ref_arch_tier: six-broker-large
+    components:
+      - role: broker
+        count: 6
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 4000
+        storage_type: nvme
+notes:
+  - Redpanda requires one dedicated node per broker, at least three brokers for production, and NVMe-backed local storage for best results.
+  - Broker memory follows the published requirement of at least 2 GB per core, with larger tiers adding headroom for partition density and retention.
+disclaimers:
+  - Based on Redpanda self-managed production requirements and translated into VM-based planning tiers.
+  - Estimate excludes Redpanda Console, Connect workloads, tiered storage object costs, and the producer and consumer applications that use the cluster.
