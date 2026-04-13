@@ -108,6 +108,86 @@ select option {
     line-height: 1.25;
   }
 
+  .home-hero {
+    @apply w-full space-y-5;
+  }
+
+  .home-hero h1 {
+    @apply w-full max-w-none text-[2.35rem] font-semibold tracking-tight sm:text-[2.75rem] lg:text-[3.2rem];
+    line-height: 0.98;
+  }
+
+  .home-hero p {
+    @apply w-full max-w-none text-lg;
+    color: var(--color-fg-muted);
+  }
+
+  .home-filter-grid {
+    @apply grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end;
+  }
+
+  .home-filter-note {
+    @apply text-sm font-medium;
+    color: var(--color-fg-muted);
+  }
+
+  .home-results-divider {
+    @apply mt-8 flex items-center gap-4;
+  }
+
+  .home-results-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-border), transparent);
+  }
+
+  .home-results-meta {
+    @apply flex min-w-0 items-center gap-3;
+  }
+
+  .home-results-label {
+    @apply text-xs font-semibold uppercase tracking-[0.12em];
+    color: var(--color-fg-muted);
+  }
+
+  .home-results-count {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium;
+    background: var(--color-bg-subtle);
+    border-color: var(--color-border);
+    color: var(--color-fg-default);
+  }
+
+  .home-insights {
+    @apply mt-16 border-t pt-8;
+    border-color: var(--color-border-muted);
+  }
+
+  .insight-card {
+    @apply space-y-3;
+    padding: 0;
+  }
+
+  .insight-card-kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.12em];
+    color: var(--color-fg-muted);
+  }
+
+  .insight-card h2 {
+    @apply text-lg font-semibold tracking-tight;
+    line-height: 1.25;
+  }
+
+  .insight-card p,
+  .insight-card li {
+    @apply text-sm;
+    color: var(--color-fg-muted);
+  }
+
+  .insight-card ul {
+    @apply mt-3 list-disc space-y-2 pl-5;
+  }
+
   .field-label {
     @apply mb-2 block text-xs font-semibold uppercase tracking-[0.08em];
     color: var(--color-fg-muted);
