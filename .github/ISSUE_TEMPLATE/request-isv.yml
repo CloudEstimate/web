@@ -1,0 +1,25 @@
+name: Request an ISV
+description: Request support for a new self-managed workload.
+title: "[ISV] "
+labels:
+  - isv-request
+body:
+  - type: input
+    id: isv-name
+    attributes:
+      label: ISV name
+      placeholder: Example: Atlassian Jira Data Center
+    validations:
+      required: true
+  - type: input
+    id: ref-arch
+    attributes:
+      label: Public reference architecture URL
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Why this matters
+      description: Share the deployment pattern or comparison you want to model.

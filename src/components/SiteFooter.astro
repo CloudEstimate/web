@@ -1,0 +1,42 @@
+---
+import { formatDate } from "@/lib/format";
+import { getPricingSnapshotDate } from "@/lib/estimates";
+import { cloudOrder, siteConfig } from "@/lib/site";
+
+const pricingDate = [...cloudOrder]
+  .map((cloud) => getPricingSnapshotDate(cloud))
+  .sort()
+  .at(-1) as string;
+---
+
+<footer class="mt-16 border-t py-10" style="border-color: var(--color-border-muted);">
+  <div class="page-shell grid gap-8 text-sm md:grid-cols-3">
+    <div class="space-y-2">
+      <p>
+        Built by <a href={siteConfig.owner.site}>{siteConfig.owner.name}</a>. Free and open —
+        <a href={siteConfig.owner.github}>contribute on GitHub</a>.
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      {siteConfig.footerMiddle.map((item) => (
+        <p>
+          <a class="link-quiet" href={item.href}>
+            {item.label}
+          </a>
+        </p>
+      ))}
+    </div>
+
+    <div class="space-y-2 text-muted">
+      {siteConfig.footerRight.map((item) => (
+        <p>
+          <a class="link-quiet" href={item.href}>
+            {item.label}
+          </a>
+        </p>
+      ))}
+      <p>Pricing data last refreshed: {formatDate(pricingDate)}</p>
+    </div>
+  </div>
+</footer>

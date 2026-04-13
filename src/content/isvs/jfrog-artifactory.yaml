@@ -1,0 +1,107 @@
+slug: jfrog-artifactory
+name: JFrog Artifactory Self-Hosted
+vendor: JFrog Ltd.
+category: artifact-repo
+description: >
+  Self-hosted JFrog Artifactory for binary repositories, release promotion, and software supply chain distribution.
+ref_arch:
+  source_url: https://jfrog.com/reference-architecture/self-managed/deployment/sizing/
+  version: "49"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 6,000 requests per minute
+    ref_arch_tier: small
+    components:
+      - role: artifactory
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+      - role: nginx
+        count: 1
+        vcpu: 4
+        memory_gb: 8
+      - role: database
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+    ha_components:
+      - role: artifactory
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+      - role: database-replica
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  s:
+    label: Small
+    range_description: up to 50,000 requests per minute
+    ref_arch_tier: medium
+    components:
+      - role: artifactory
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+      - role: nginx
+        count: 2
+        vcpu: 4
+        memory_gb: 8
+      - role: database
+        count: 1
+        vcpu: 16
+        memory_gb: 64
+    ha_components:
+      - role: database-replica
+        count: 1
+        vcpu: 16
+        memory_gb: 64
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: up to 100,000 requests per minute
+    ref_arch_tier: large
+    components:
+      - role: artifactory
+        count: 3
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 1000
+        storage_type: ssd
+      - role: nginx
+        count: 2
+        vcpu: 4
+        memory_gb: 8
+      - role: database
+        count: 1
+        vcpu: 32
+        memory_gb: 128
+    ha_components:
+      - role: database-replica
+        count: 1
+        vcpu: 32
+        memory_gb: 128
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - Node counts are derived from JFrog Artifactory sizing templates, with storage taken from the companion storage specifications page.
+  - Local SSD in this estimate reflects node cache and temp storage only; external filestore object storage is not fully modelled.
+disclaimers:
+  - Based on JFrog self-managed sizing guidance and translated from the published cloud-native reference templates into VM-style capacity estimates.
+  - Estimate excludes Artifactory licensing, Xray, distribution edge nodes, and artifact blob storage beyond the local node disks shown.

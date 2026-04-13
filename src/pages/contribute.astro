@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
+---
+
+<BaseLayout title="Contribute | CloudEstimate" canonical={buildCanonical("/contribute")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Contribute</h1>
+
+    <p>
+      Add an ISV by following the YAML schema, citing a public reference architecture, and validating the file before opening a pull request.
+    </p>
+
+    <ul>
+      <li><a href={`${siteConfig.url}/schemas/isv.json`}>ISV YAML schema</a></li>
+      <li><a href={siteConfig.owner.github}>GitHub repository</a></li>
+      <li><a href={siteConfig.owner.github + "/issues/new/choose"}>Issue templates</a></li>
+    </ul>
+
+    <p>
+      Every contribution is reviewed before publishing. Maintenance happens in spare time, so queue depth can vary.
+    </p>
+  </section>
+</BaseLayout>

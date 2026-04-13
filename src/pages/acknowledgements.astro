@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Acknowledgements | CloudEstimate" canonical={buildCanonical("/acknowledgements")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Acknowledgements</h1>
+
+    <ul>
+      <li><a href="https://archives.docs.gitlab.com/17.11/administration/reference_architectures/">GitLab reference architectures</a></li>
+      <li><a href="https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/">Redis Enterprise hardware guidance</a></li>
+      <li><a href="https://jfrog.com/reference-architecture/self-managed/deployment/sizing/">JFrog self-managed sizing guidance</a></li>
+      <li><a href="https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html">Sonatype Nexus Repository reference architectures</a></li>
+      <li><a href="https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html">Atlassian Jira Data Center infrastructure recommendations</a></li>
+      <li><a href="https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html">Atlassian Confluence Data Center infrastructure recommendations</a></li>
+      <li><a href="https://confluence.atlassian.com/enterprise/jira-data-center-size-profiles-955171062.html">Atlassian Jira Data Center size profiles</a></li>
+      <li><a href="https://confluence.atlassian.com/enterprise/confluence-data-center-load-profiles-946603546.html">Atlassian Confluence Data Center load profiles</a></li>
+      <li><a href="https://cloud.google.com/billing/docs/how-to/export-data-bigquery">Google Cloud pricing data exports</a></li>
+      <li><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html">AWS pricing API documentation</a></li>
+      <li><a href="https://learn.microsoft.com/rest/api/cost-management/retail-prices/azure-retail-prices">Azure Retail Prices API</a></li>
+      <li><a href="https://astro.build/">Astro</a>, <a href="https://tailwindcss.com/">Tailwind CSS</a>, and <a href="https://github.com/thx/resvg-js">Resvg</a></li>
+    </ul>
+
+    <p>This tool is possible because these teams publish their work openly. Thank you.</p>
+  </section>
+</BaseLayout>

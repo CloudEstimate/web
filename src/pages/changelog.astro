@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Changelog | CloudEstimate" canonical={buildCanonical("/changelog")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Changelog</h1>
+
+    <h2>2026-04-13</h2>
+    <p>Added — JFrog Artifactory, Sonatype Nexus Repository, Jira Data Center, and Confluence Data Center across Google Cloud, AWS, and Azure.</p>
+    <p>Changed — Estimate and compare views now show clearer HA controls, currency-formatted annual totals, and cleaner explanation copy.</p>
+
+    <h2>2026-04-12</h2>
+    <p>Added — Initial Astro implementation with GitLab Self-Managed and Redis Enterprise across Google Cloud, AWS, and Azure.</p>
+    <p>Added — Estimate pages, compare view, methodology, contribution flow, and static OG images.</p>
+  </section>
+</BaseLayout>

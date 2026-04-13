@@ -1,0 +1,39 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Privacy policy | CloudEstimate" canonical={buildCanonical("/privacy")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Privacy policy</h1>
+    <p>Last updated: April 12, 2026</p>
+
+    <p>
+      CloudEstimate is a static website with minimal data collection. This policy describes what is collected and why.
+    </p>
+
+    <p>
+      <strong>What is collected.</strong> The site is intended to use Google Analytics 4 for aggregate usage, Google Search Console for search performance, and standard Firebase Hosting logs for operational request metadata.
+    </p>
+
+    <p>
+      <strong>What is not collected.</strong> No accounts, email addresses, advertising trackers, or data resale flows are part of the product.
+    </p>
+
+    <p>
+      <strong>Cookies.</strong> If analytics is enabled, GA4 may set cookies for measurement. The site still functions without analytics cookies.
+    </p>
+
+    <p>
+      <strong>Estimate URLs.</strong> Selected inputs appear in the URL and may be visible in server logs or analytics. Those inputs are not personally identifying on their own.
+    </p>
+
+    <p>
+      <strong>Changes.</strong> This policy may be updated. The date above reflects the current version.
+    </p>
+
+    <p>
+      <strong>Contact.</strong> Questions can be raised through the project issue tracker or via the links on <a href="/about">About</a>.
+    </p>
+  </section>
+</BaseLayout>

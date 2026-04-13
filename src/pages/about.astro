@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
+---
+
+<BaseLayout title="About CloudEstimate | CloudEstimate" canonical={buildCanonical("/about")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>About CloudEstimate</h1>
+
+    <p>
+      I built CloudEstimate because sizing self-managed enterprise workloads across clouds is harder than it should be. Vendor docs give you reference architectures. Cloud calculators give you pricing. Very little bridges the two quickly when the real question is whether the same workload looks different on Google Cloud, AWS, and Azure.
+    </p>
+
+    <p>
+      I&apos;m Regnard Raquedan, a Senior Solutions Architect at GitLab and a Google Developer Expert. Most of my work has lived around infrastructure, partner architectures, and the practical gap between published guidance and what teams need in a procurement meeting.
+    </p>
+
+    <p>
+      CloudEstimate is a personal project. It is free, open source, and intentionally narrow. Every estimate cites its source reference architecture and pricing snapshot date so the number can stand up in a Slack thread or an email review.
+    </p>
+
+    <p>
+      Find me at <a href={siteConfig.owner.site}>raquedan.com</a>, on <a href={siteConfig.owner.linkedIn}>LinkedIn</a>, or via my <a href={siteConfig.owner.gde}>GDE profile</a>. If something looks wrong, please <a href={siteConfig.owner.github}>open an issue</a>.
+    </p>
+  </section>
+</BaseLayout>

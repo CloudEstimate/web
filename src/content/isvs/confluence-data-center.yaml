@@ -1,0 +1,83 @@
+slug: confluence-data-center
+name: Confluence Data Center
+vendor: Atlassian
+category: other
+description: >
+  Self-managed Confluence Data Center for enterprise documentation, knowledge bases, and collaborative editing.
+ref_arch:
+  source_url: https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html
+  version: "Confluence Data Center 6.13-6.15 benchmark guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  m:
+    label: Medium
+    range_description: 500,000 to 2.5 million content items or 70,000 to 350,000 HTTP calls per hour
+    ref_arch_tier: medium
+    components:
+      - role: application
+        count: 2
+        vcpu: 4
+        memory_gb: 8
+      - role: database
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+      - role: synchrony
+        count: 1
+        vcpu: 2
+        memory_gb: 4
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  l:
+    label: Large
+    range_description: 2.5 million to 10 million content items or 350,000 to 700,000 HTTP calls per hour
+    ref_arch_tier: large
+    components:
+      - role: application
+        count: 3
+        vcpu: 8
+        memory_gb: 16
+      - role: database
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+      - role: synchrony
+        count: 2
+        vcpu: 2
+        memory_gb: 4
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  xl:
+    label: Extra Large
+    range_description: 10 million to 25 million content items or 700,000 to 1,000,000 HTTP calls per hour
+    ref_arch_tier: xlarge
+    components:
+      - role: application
+        count: 4
+        vcpu: 16
+        memory_gb: 32
+      - role: database
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+      - role: synchrony
+        count: 2
+        vcpu: 2
+        memory_gb: 4
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - Medium, Large, and XLarge tiers map to Atlassian's published Confluence Data Center benchmark recommendations, with Synchrony added from Atlassian's sample enterprise deployment topology.
+  - The Large tier uses the low-cost recommendation, while the XLarge tier uses the stability recommendation to preserve cluster fault tolerance.
+disclaimers:
+  - Estimate excludes shared-home EFS/NFS storage, collaborative editing proxy details, Marketplace app overhead, and managed database HA costs not captured in the benchmark summary.
+  - The HA toggle models load balancer overhead only; clustered Confluence application and Synchrony nodes are already represented in the base deployment.

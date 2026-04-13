@@ -1,0 +1,71 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCompareMatrix } from "@/lib/estimates";
+import { buildCompareDescription, buildCompareTitle, buildJsonLd } from "@/lib/seo";
+import { decodeCompareShareState, encodeCompareShareState } from "@/lib/share";
+import { siteConfig } from "@/lib/site";
+import type { IsvEntry } from "@/lib/types";
+
+export async function getStaticPaths() {
+  const isvs = await getCollection("isvs");
+
+  return isvs.flatMap((isv) => {
+    const states = [];
+
+    for (const size of ["xs", "s", "m", "l", "xl"] as const) {
+      if (!isv.data.sizes[size]) {
+        continue;
+      }
+
+      for (const ha of [false, true]) {
+        for (const term of ["on-demand", "1yr", "3yr"] as const) {
+          states.push({
+            params: {
+              isv: isv.data.slug,
+              state: encodeCompareShareState({ size, ha, term })
+            },
+            props: {
+              isv,
+              state: { size, ha, term }
+            }
+          });
+        }
+      }
+    }
+
+    return states;
+  });
+}
+
+const { isv, state } = Astro.props as {
+  isv: IsvEntry;
+  state: ReturnType<typeof decodeCompareShareState>;
+};
+const compareMatrix = buildCompareMatrix(isv);
+const compareView = compareMatrix[`${state.size}:${state.ha ? "ha" : "noha"}:${state.term}`];
+const description = buildCompareDescription(isv, compareView.estimates.gcp);
+const title = buildCompareTitle(isv);
+const targetUrl = new URL(`/sizing/${isv.data.slug}/compare?size=${state.size}&ha=${state.ha}&term=${state.term}`, siteConfig.url).toString();
+const image = `/og/share/${isv.data.slug}/compare/${encodeCompareShareState(state)}.png`;
+const jsonLd = buildJsonLd({ title, description, canonical: targetUrl, image: new URL(image, siteConfig.url).toString() });
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={targetUrl}
+  image={image}
+  jsonLd={jsonLd}
+  metaRefresh={targetUrl}
+  robots="noindex,follow"
+>
+  <section class="page-shell-narrow py-16">
+    <h1 class="text-[2rem] font-semibold tracking-tight">Opening exact comparison</h1>
+    <p class="mt-4 text-muted">
+      This share link points to the current cross-cloud comparison. If the redirect does not happen, open
+      {" "}
+      <a href={targetUrl}>the comparison directly</a>.
+    </p>
+  </section>
+</BaseLayout>

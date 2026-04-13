@@ -1,0 +1,54 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+import { cloudOrder, cloudMeta } from "@/lib/site";
+
+const isvs = await getCollection("isvs");
+---
+
+<BaseLayout
+  title="Supported ISVs | CloudEstimate"
+  description="Directory of supported self-managed workloads and cloud coverage."
+  canonical={buildCanonical("/isvs")}
+>
+  <section class="page-shell py-10 lg:py-14">
+    <div class="max-w-3xl space-y-4">
+      <h1 class="text-[2rem] font-semibold tracking-tight">Supported ISVs</h1>
+      <p class="text-lg text-muted">
+        Directory of workloads currently encoded from public reference architectures.
+      </p>
+    </div>
+
+    <div class="mt-8 overflow-x-auto panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ISV</th>
+            <th>Vendor</th>
+            <th>Category</th>
+            {cloudOrder.map((cloud) => (
+              <th data-align="right">{cloudMeta[cloud].name}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {isvs.map((isv) => (
+            <tr>
+              <td>
+                <a class="font-medium" href={`/sizing/${isv.data.slug}/gcp`}>{isv.data.name}</a>
+              </td>
+              <td>{isv.data.vendor}</td>
+              <td>{isv.data.category}</td>
+              {cloudOrder.map((cloud) => (
+                <td data-align="right">
+                  <a href={`/sizing/${isv.data.slug}/${cloud}`}>Yes</a>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>

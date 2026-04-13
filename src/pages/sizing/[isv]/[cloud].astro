@@ -1,0 +1,67 @@
+---
+import { getCollection } from "astro:content";
+import EstimateExplorer from "@/components/EstimateExplorer.astro";
+import IsvCard from "@/components/IsvCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildEstimate, buildEstimateMatrix, getDefaultRegion, getDefaultSize } from "@/lib/estimates";
+import { buildCanonical, buildEstimateDescription, buildEstimateTitle, buildJsonLd } from "@/lib/seo";
+import { cloudOrder, cloudMeta, siteConfig, type CloudSlug } from "@/lib/site";
+import type { IsvEntry } from "@/lib/types";
+
+export async function getStaticPaths() {
+  const isvs = await getCollection("isvs");
+  return isvs.flatMap((isv) =>
+    cloudOrder.map((cloud) => ({
+      params: {
+        isv: isv.data.slug,
+        cloud
+      },
+      props: {
+        isv,
+        cloud
+      }
+    }))
+  );
+}
+
+const { isv, cloud } = Astro.props as { isv: IsvEntry; cloud: CloudSlug };
+const initialState = {
+  size: getDefaultSize(isv),
+  ha: false,
+  term: "on-demand" as const,
+  region: getDefaultRegion(cloud)
+};
+const estimateMatrix = buildEstimateMatrix(isv);
+const initialEstimate = buildEstimate({
+  isv,
+  cloud,
+  size: initialState.size,
+  ha: initialState.ha,
+  term: initialState.term,
+  region: initialState.region
+});
+const title = buildEstimateTitle(isv, cloud);
+const description = buildEstimateDescription(isv, cloud, initialEstimate);
+const canonical = buildCanonical(`/sizing/${isv.data.slug}/${cloud}`);
+const image = `/og/${isv.data.slug}/${cloud}.png`;
+const jsonLd = buildJsonLd({ title, description, canonical, image: new URL(image, siteConfig.url).toString() });
+const allIsvs = await getCollection("isvs");
+const relatedIsvs = allIsvs.filter((entry) => entry.data.slug !== isv.data.slug).slice(0, 3);
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} image={image} jsonLd={jsonLd}>
+  <EstimateExplorer isv={isv} cloud={cloud} initialState={initialState} estimateMatrix={estimateMatrix} />
+
+  {relatedIsvs.length > 0 && (
+    <section class="page-shell pb-10">
+      <div class="space-y-4">
+        <h2 class="section-heading">Other workloads on {cloudMeta[cloud].name}</h2>
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {relatedIsvs.map((related) => (
+            <IsvCard isv={related} href={`/sizing/${related.data.slug}/${cloud}`} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildEstimate, getRegionsForCloud } from "@/lib/estimates";
+import { buildEstimateDescription, buildEstimateTitle, buildJsonLd } from "@/lib/seo";
+import { decodeEstimateShareState, encodeEstimateShareState } from "@/lib/share";
+import { cloudMeta, cloudOrder, siteConfig, type CloudSlug } from "@/lib/site";
+import type { IsvEntry } from "@/lib/types";
+
+export async function getStaticPaths() {
+  const isvs = await getCollection("isvs");
+
+  return isvs.flatMap((isv) =>
+    cloudOrder.flatMap((cloud) => {
+      const states = [];
+
+      for (const size of ["xs", "s", "m", "l", "xl"] as const) {
+        if (!isv.data.sizes[size]) {
+          continue;
+        }
+
+        for (const ha of [false, true]) {
+          for (const term of ["on-demand", "1yr", "3yr"] as const) {
+            for (const region of getRegionsForCloud(cloud)) {
+              states.push({
+                params: {
+                  isv: isv.data.slug,
+                  cloud,
+                  state: encodeEstimateShareState({ size, ha, term, region })
+                },
+                props: {
+                  isv,
+                  cloud,
+                  state: { size, ha, term, region }
+                }
+              });
+            }
+          }
+        }
+      }
+
+      return states;
+    })
+  );
+}
+
+const { isv, cloud, state } = Astro.props as {
+  isv: IsvEntry;
+  cloud: CloudSlug;
+  state: ReturnType<typeof decodeEstimateShareState>;
+};
+const estimate = buildEstimate({
+  isv,
+  cloud,
+  size: state.size,
+  ha: state.ha,
+  term: state.term,
+  region: state.region
+});
+const targetUrl = new URL(`/sizing/${isv.data.slug}/${cloud}?size=${state.size}&ha=${state.ha}&term=${state.term}&region=${state.region}`, siteConfig.url).toString();
+const image = `/og/share/${isv.data.slug}/${cloud}/${encodeEstimateShareState(state)}.png`;
+const title = buildEstimateTitle(isv, cloud);
+const description = buildEstimateDescription(isv, cloud, estimate);
+const jsonLd = buildJsonLd({ title, description, canonical: targetUrl, image: new URL(image, siteConfig.url).toString() });
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={targetUrl}
+  image={image}
+  jsonLd={jsonLd}
+  metaRefresh={targetUrl}
+  robots="noindex,follow"
+>
+  <section class="page-shell-narrow py-16">
+    <h1 class="text-[2rem] font-semibold tracking-tight">Opening exact estimate</h1>
+    <p class="mt-4 text-muted">
+      This share link points to {isv.data.name} on {cloudMeta[cloud].name}. If the redirect does not happen, open
+      {" "}
+      <a href={targetUrl}>the estimate directly</a>.
+    </p>
+  </section>
+</BaseLayout>

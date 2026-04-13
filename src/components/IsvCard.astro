@@ -1,0 +1,36 @@
+---
+import type { IsvEntry } from "@/lib/types";
+
+type Props = {
+  isv: IsvEntry;
+  href?: string;
+};
+
+const { isv, href = `/sizing/${isv.data.slug}/gcp` } = Astro.props;
+---
+
+<article class="interactive-panel p-5">
+  <div class="space-y-3">
+    <div>
+      <h3 class="text-lg font-semibold tracking-tight">
+        <a class="link-quiet" href={href}>
+          {isv.data.name}
+        </a>
+      </h3>
+      <p class="mt-1 text-sm text-muted">{isv.data.description}</p>
+    </div>
+
+    <div class="flex flex-wrap gap-2 text-xs text-subtle">
+      <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
+        {isv.data.vendor}
+      </span>
+      <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
+        {Object.keys(isv.data.sizes).filter((value) => Boolean(isv.data.sizes[value as keyof typeof isv.data.sizes])).length} sizes
+      </span>
+    </div>
+
+    <p class="pt-2 text-sm font-medium">
+      <a href={href}>Size on Google Cloud →</a>
+    </p>
+  </div>
+</article>

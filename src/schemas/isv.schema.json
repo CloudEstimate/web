@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/isv.json",
+  "title": "ISV Reference Architecture",
+  "type": "object",
+  "required": ["slug", "name", "vendor", "category", "description", "ref_arch", "sizes"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "URL-safe identifier. Must match the filename."
+    },
+    "name": { "type": "string", "description": "Display name." },
+    "vendor": { "type": "string", "description": "Vendor company name." },
+    "category": {
+      "type": "string",
+      "enum": ["devops-platform", "data-store", "search", "streaming", "artifact-repo", "identity", "other"]
+    },
+    "description": { "type": "string", "maxLength": 280 },
+    "ref_arch": {
+      "type": "object",
+      "required": ["source_url", "version", "retrieved_date"],
+      "properties": {
+        "source_url": { "type": "string", "format": "uri" },
+        "version": { "type": "string" },
+        "retrieved_date": { "type": "string", "format": "date" }
+      }
+    },
+    "sizes": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 5,
+      "propertyNames": { "enum": ["xs", "s", "m", "l", "xl"] },
+      "additionalProperties": { "$ref": "#/$defs/sizeTier" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "disclaimers": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "sizeTier": {
+      "type": "object",
+      "required": ["label", "range_description", "ref_arch_tier", "components"],
+      "properties": {
+        "label": { "type": "string" },
+        "range_description": {
+          "type": "string",
+          "description": "Human-readable range."
+        },
+        "ref_arch_tier": {
+          "type": "string",
+          "description": "Identifier of the vendor reference architecture tier."
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/component" }
+        },
+        "ha_components": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/component" },
+          "description": "Additional components provisioned when HA is enabled."
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["role", "count", "vcpu", "memory_gb"],
+      "properties": {
+        "role": { "type": "string" },
+        "count": { "type": "integer", "minimum": 1 },
+        "vcpu": { "type": "integer", "minimum": 1 },
+        "memory_gb": { "type": "number", "minimum": 0.5 },
+        "storage_gb": { "type": "integer", "minimum": 0 },
+        "storage_type": {
+          "type": "string",
+          "enum": ["ssd", "hdd", "nvme", "object"]
+        }
+      }
+    }
+  }
+}

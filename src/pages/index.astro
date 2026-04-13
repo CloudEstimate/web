@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import IsvCard from "@/components/IsvCard.astro";
+import { buildCanonical } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
+
+const isvs = await getCollection("isvs");
+---
+
+<BaseLayout
+  title="Size self-managed workloads across clouds. | CloudEstimate"
+  description={siteConfig.description}
+  canonical={buildCanonical("/")}
+>
+  <section class="page-shell py-10 lg:py-14">
+    <div class="max-w-3xl space-y-4">
+      <h1 class="text-[2rem] font-semibold tracking-tight">Size self-managed workloads across clouds.</h1>
+      <p class="max-w-2xl text-lg text-muted">
+        Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure.
+      </p>
+    </div>
+
+    <div class="mt-8 grid gap-4 md:grid-cols-[minmax(0,1fr)_260px] md:items-end">
+      <div>
+        <label class="field-label" for="isv-filter">Filter ISVs</label>
+        <input
+          class="w-full rounded-[6px] border px-3 py-2 text-sm"
+          style="border-color: var(--color-border);"
+          id="isv-filter"
+          type="search"
+          placeholder="Filter by ISV or vendor"
+        />
+      </div>
+      <p class="text-sm text-muted">No signup, no guessing.</p>
+    </div>
+
+    <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3" id="isv-grid">
+      {isvs.map((isv) => (
+        <div data-filter-card={`${isv.data.name} ${isv.data.vendor} ${isv.data.slug}`.toLowerCase()}>
+          <IsvCard isv={isv} />
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 grid gap-4 lg:grid-cols-3">
+      <section class="panel p-5">
+        <h2 class="section-heading">How it works</h2>
+        <p class="mt-3 text-sm text-muted">
+          Published vendor reference architectures are mapped to cloud instance shapes, then priced against cached regional snapshots. The page loads with a default estimate and keeps the full state in the URL.
+        </p>
+      </section>
+      <section class="panel p-5">
+        <h2 class="section-heading">What&apos;s not modelled</h2>
+        <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
+          <li>Vendor licensing and support</li>
+          <li>Network egress and backups</li>
+          <li>Compliance controls and DR topologies</li>
+        </ul>
+      </section>
+      <section class="panel p-5">
+        <h2 class="section-heading">Who built this</h2>
+        <p class="mt-3 text-sm text-muted">
+          CloudEstimate is a personal project by Regnard Raquedan. The short version and the links are on <a href="/about">About</a>.
+        </p>
+      </section>
+    </div>
+  </section>
+
+  <script is:inline>
+    const input = document.getElementById("isv-filter");
+    const cards = Array.from(document.querySelectorAll("[data-filter-card]"));
+
+    input?.addEventListener("input", () => {
+      const query = input.value.trim().toLowerCase();
+      cards.forEach((card) => {
+        card.style.display = card.dataset.filterCard.includes(query) ? "" : "none";
+      });
+    });
+  </script>
+</BaseLayout>

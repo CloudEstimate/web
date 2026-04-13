@@ -1,0 +1,576 @@
+---
+import { buildStateKey, getDefaultRegion, getRegionsForCloud } from "@/lib/estimates";
+import { getSizingExplanation } from "@/lib/explanations";
+import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatStorage, formatUserRange } from "@/lib/format";
+import { cloudMeta, cloudOrder, termOrder, type CloudSlug, type CommitmentTerm, type SizeSlug } from "@/lib/site";
+import { buildTerraformSnippet } from "@/lib/terraform";
+import type { EstimateResult, IsvEntry } from "@/lib/types";
+
+type Props = {
+  isv: IsvEntry;
+  cloud: CloudSlug;
+  initialState: {
+    size: SizeSlug;
+    ha: boolean;
+    term: CommitmentTerm;
+    region: string;
+  };
+  estimateMatrix: Record<string, EstimateResult>;
+};
+
+const { isv, cloud, initialState, estimateMatrix } = Astro.props;
+const slug = isv.data.slug;
+const widgetId = `estimate-${slug}-${cloud}`;
+const sizeOptions = (["xs", "s", "m", "l", "xl"] as SizeSlug[]).filter((size) => Boolean(isv.data.sizes[size]));
+const initialKey = buildStateKey({ cloud, ...initialState });
+const initialEstimate = estimateMatrix[initialKey];
+
+const clientData = {
+  slug,
+  name: isv.data.name,
+  refArchUrl: isv.data.ref_arch.source_url,
+  disclaimers: isv.data.disclaimers,
+  notes: isv.data.notes,
+  currentCloud: cloud,
+  clouds: cloudMeta,
+  defaultRegions: Object.fromEntries(cloudOrder.map((value) => [value, getDefaultRegion(value)])),
+  sizes: Object.fromEntries(
+    sizeOptions.map((size) => [
+      size,
+      {
+        label: isv.data.sizes[size]?.label,
+        rangeDescription: isv.data.sizes[size]?.range_description,
+        refArchTier: isv.data.sizes[size]?.ref_arch_tier
+      }
+    ])
+  ),
+  regionsByCloud: Object.fromEntries(cloudOrder.map((value) => [value, getRegionsForCloud(value)])),
+  states: Object.fromEntries(
+    Object.entries(estimateMatrix).map(([key, estimate]) => {
+      const [, size, haKey, term, region] = key.split(":");
+      return [
+        key,
+        {
+          estimate,
+          size,
+          ha: haKey === "ha",
+          term,
+          region,
+          explanation: getSizingExplanation({
+            isv,
+            cloud,
+            size,
+            region,
+            term,
+            ha: haKey === "ha",
+            estimate
+          }),
+          terraform: buildTerraformSnippet({
+            slug,
+            cloud,
+            region,
+            estimate
+          })
+        }
+      ];
+    })
+  )
+};
+---
+
+<section class="page-shell py-8 lg:py-10">
+  <div class="mb-6 space-y-3">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
+      <a href="/">Home</a>
+      <span aria-hidden="true"> / </span>
+      <a href="/isvs">ISVs</a>
+      <span aria-hidden="true"> / </span>
+      <span>{isv.data.name}</span>
+    </nav>
+
+    <div class="space-y-2">
+      <h1 class="text-[2rem] font-semibold tracking-tight">Size {isv.data.name} on {cloudMeta[cloud].name}</h1>
+      <p class="text-lg text-muted">
+        <span id={`${widgetId}-size-subhead`}>
+          {initialEstimate.sizeLabel} — {formatUserRange(initialEstimate.sizeDescription)}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)]">
+    <aside class="space-y-5">
+      <section class="panel p-4">
+        <div class="space-y-5">
+          <div>
+            <span class="field-label">Cloud</span>
+            <div class="flex flex-wrap gap-2">
+              {cloudOrder.map((candidate) => (
+                <a
+                  aria-current={candidate === cloud ? "page" : undefined}
+                  class="button-chip"
+                  data-cloud-link={candidate}
+                  data-active={candidate === cloud ? "true" : "false"}
+                  href={`/sizing/${slug}/${candidate}?size=${initialState.size}&ha=${initialState.ha}&term=${initialState.term}&region=${candidate === cloud ? initialState.region : getDefaultRegion(candidate)}`}
+                >
+                  {cloudMeta[candidate].name}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <span class="field-label">Size</span>
+            <div class="flex flex-wrap gap-2">
+              {sizeOptions.map((size) => (
+                <button
+                  class="button-chip"
+                  data-size-button={size}
+                  data-active={size === initialState.size ? "true" : "false"}
+                  type="button"
+                >
+                  {size.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <span class="field-label">High availability</span>
+            <div class="flex gap-2">
+              <button aria-pressed={!initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="false" data-active={!initialState.ha ? "true" : "false"} type="button">Off</button>
+              <button aria-pressed={initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="true" data-active={initialState.ha ? "true" : "false"} type="button">On</button>
+            </div>
+          </div>
+
+          <div>
+            <span class="field-label">Commitment term</span>
+            <div class="flex flex-wrap gap-2">
+              {termOrder.map((term) => (
+                <button class="button-chip" data-term-button={term} data-active={term === initialState.term ? "true" : "false"} type="button">
+                  {term === "on-demand" ? "On-demand" : term}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <label class="field-label" for={`${widgetId}-region`}>Region</label>
+              <span class="mono-data text-xs text-muted" id={`${widgetId}-region-summary`}>{initialState.region}</span>
+            </div>
+            <select
+              class="w-full rounded-[6px] border px-3 py-2 text-sm"
+              style="border-color: var(--color-border);"
+              id={`${widgetId}-region`}
+            >
+              {getRegionsForCloud(cloud).map((region) => (
+                <option selected={region === initialState.region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="subtle-panel p-4 text-sm">
+        <p id={`${widgetId}-size-definition`}>
+          Maps to {isv.data.name}'s {initialEstimate.refArchTier} reference architecture. <a href={isv.data.ref_arch.source_url}>Source</a>
+        </p>
+      </section>
+    </aside>
+
+    <div class="space-y-6">
+      <section class="panel overflow-hidden">
+        <div class="border-b p-5" style="border-color: var(--color-border-muted);">
+          <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div class="space-y-2">
+              <p class="text-sm text-muted">Monthly cost</p>
+              <p class="mono-data text-[2.5rem] font-semibold tracking-tight" id={`${widgetId}-monthly`}>
+                {formatCurrency(initialEstimate.monthlyTotal)}
+              </p>
+            </div>
+
+            <div class="space-y-2 text-left md:text-right">
+              <p class="text-sm text-muted">Annual cost</p>
+              <p class="mono-data text-xl font-semibold" id={`${widgetId}-annual`}>
+                {formatRoundedAnnual(initialEstimate.annualTotal)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-6 p-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div class="space-y-3">
+            <h2 class="section-heading text-lg">Line-item breakdown</h2>
+            <table class="data-table">
+              <tbody id={`${widgetId}-breakdown`}>
+                <tr>
+                  <td>Compute</td>
+                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.computeTotal)}</td>
+                </tr>
+                <tr>
+                  <td>Storage</td>
+                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.storageTotal)}</td>
+                </tr>
+                <tr>
+                  <td>Other</td>
+                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.otherTotal)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="space-y-3">
+            <h2 class="section-heading text-lg">Components provisioned</h2>
+            <div class="overflow-x-auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Role</th>
+                    <th>Instance</th>
+                    <th data-align="right">vCPU</th>
+                    <th data-align="right">GB RAM</th>
+                    <th data-align="right">Storage</th>
+                  </tr>
+                </thead>
+                <tbody id={`${widgetId}-components`}>
+                  {initialEstimate.components.map((component) => (
+                    <tr>
+                      <td class="font-medium">{formatRoleLabel(component.role)}</td>
+                      <td>{component.count} × <span class="mono-data">{component.instanceType}</span></td>
+                      <td data-align="right" class="mono-data">{component.vcpu}</td>
+                      <td data-align="right" class="mono-data">{component.memoryGb}</td>
+                      <td data-align="right" class="mono-data">{component.storageGb > 0 ? formatStorage(component.storageGb) : "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="section-heading">Why this sizing</h2>
+        <p class="max-w-none text-base" id={`${widgetId}-explanation`}>
+          {getSizingExplanation({
+            isv,
+            cloud,
+            size: initialState.size,
+            region: initialState.region,
+            term: initialState.term,
+            ha: initialState.ha,
+            estimate: initialEstimate
+          })}
+        </p>
+      </section>
+
+      <section class="panel p-5">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="section-heading">Export</h2>
+            <p class="mt-1 text-sm text-muted">Share the current URL or copy the launch Terraform baseline.</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <button class="button-secondary" id={`${widgetId}-copy-url`} type="button">Copy URL</button>
+            <button class="button-secondary" id={`${widgetId}-copy-terraform`} type="button">Copy Terraform</button>
+            <a class="button-secondary" href={cloudMeta[cloud].calculatorUrl} rel="noreferrer" target="_blank">
+              Open generic {cloudMeta[cloud].name} calculator
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-4 overflow-hidden rounded-[6px] border" style="border-color: var(--color-border);">
+          <div class="border-b px-4 py-2 text-sm font-medium" style="background: var(--color-bg-subtle); border-color: var(--color-border);">
+            Google Cloud Terraform baseline
+          </div>
+          <pre class="overflow-x-auto bg-[var(--color-bg-subtle)] p-4 text-sm leading-6"><code id={`${widgetId}-terraform`}>{buildTerraformSnippet({
+            slug,
+            cloud,
+            region: initialState.region,
+            estimate: initialEstimate
+          }) ?? "Terraform export is available for Google Cloud at launch. AWS and Azure are deferred to v1.5."}</code></pre>
+        </div>
+      </section>
+
+      <section class="panel p-5">
+        <h2 class="section-heading">Related views</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {cloudOrder.filter((candidate) => candidate !== cloud).map((candidate) => (
+            <a
+              class="button-secondary"
+              data-related-cloud={candidate}
+              href={`/sizing/${slug}/${candidate}?size=${initialState.size}&ha=${initialState.ha}&term=${initialState.term}&region=${getDefaultRegion(candidate)}`}
+            >
+              View on {cloudMeta[candidate].name}
+            </a>
+          ))}
+          <a class="button-secondary" id={`${widgetId}-compare-link`} href={`/sizing/${slug}/compare?size=${initialState.size}&ha=${initialState.ha}&term=${initialState.term}`}>
+            Compare all three
+          </a>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="section-heading">Sources</h2>
+        <div class="text-sm leading-6" id={`${widgetId}-sources`}>
+          <p>
+            Reference architecture: {isv.data.name} for {initialEstimate.refArchTier}, version {initialEstimate.citations.refArchVersion}, retrieved {formatDate(initialEstimate.citations.refArchRetrievedDate)}.
+          </p>
+          <p><a href={initialEstimate.citations.refArchUrl}>{initialEstimate.citations.refArchUrl}</a></p>
+          <p>
+            Pricing: {cloudMeta[cloud].name} pricing snapshot, retrieved {formatDate(initialEstimate.pricingSnapshotDate)}.
+          </p>
+          <p class="text-subtle">Commercial pricing only. GovCloud, sovereign cloud, and discounts beyond those shown are not modelled.</p>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="section-heading">Not included in this estimate</h2>
+        <ul class="list-disc space-y-2 pl-5 text-sm text-muted">
+          <li>Vendor licensing and support</li>
+          <li>Professional services</li>
+          <li>Network egress</li>
+          <li>Compliance controls</li>
+          <li>Backup storage</li>
+          <li>Monitoring</li>
+        </ul>
+        <div class="text-sm text-subtle">
+          {isv.data.disclaimers.map((disclaimer) => (
+            <p>{disclaimer}</p>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<script id={`${widgetId}-data`} is:inline set:html={JSON.stringify(clientData)} type="application/json"></script>
+
+<script is:inline define:vars={{ widgetId }}>
+  const root = document.getElementById(`${widgetId}-data`);
+  const data = root ? JSON.parse(root.textContent || "{}") : null;
+
+  if (data) {
+    const currentCloud = data.currentCloud;
+    const regionSelect = document.getElementById(`${widgetId}-region`);
+    const monthlyNode = document.getElementById(`${widgetId}-monthly`);
+    const annualNode = document.getElementById(`${widgetId}-annual`);
+    const breakdownNode = document.getElementById(`${widgetId}-breakdown`);
+    const componentsNode = document.getElementById(`${widgetId}-components`);
+    const explanationNode = document.getElementById(`${widgetId}-explanation`);
+    const terraformNode = document.getElementById(`${widgetId}-terraform`);
+    const regionSummaryNode = document.getElementById(`${widgetId}-region-summary`);
+    const sizeSubheadNode = document.getElementById(`${widgetId}-size-subhead`);
+    const sizeDefinitionNode = document.getElementById(`${widgetId}-size-definition`);
+    const sourcesNode = document.getElementById(`${widgetId}-sources`);
+    const compareLink = document.getElementById(`${widgetId}-compare-link`);
+    const copyUrlButton = document.getElementById(`${widgetId}-copy-url`);
+    const copyTerraformButton = document.getElementById(`${widgetId}-copy-terraform`);
+
+    const currency = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const annual = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+
+    const state = {
+      size: "m",
+      ha: false,
+      term: "on-demand",
+      region: data.defaultRegions[currentCloud]
+    };
+
+    function formatDate(value) {
+      return new Intl.DateTimeFormat("en-CA", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      }).format(new Date(`${value}T00:00:00Z`));
+    }
+
+    function formatStorage(value) {
+      if (!value) {
+        return "—";
+      }
+
+      if (value >= 1000) {
+        return `${Number((value / 1000).toFixed(value % 1000 === 0 ? 0 : 1))} TB`;
+      }
+
+      return `${value} GB`;
+    }
+
+    function formatRoleLabel(value) {
+      return value
+        .split("-")
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
+    function formatUserRange(value) {
+      return value.replace(/\b(\d{4,})\b/g, (match) => {
+        const number = Number(match);
+        return number < 10000 ? match : new Intl.NumberFormat("en-US").format(number);
+      });
+    }
+
+    function buildKey() {
+      return [currentCloud, state.size, state.ha ? "ha" : "noha", state.term, state.region].join(":");
+    }
+
+    function searchString(nextCloud = currentCloud) {
+      const params = new URLSearchParams();
+      params.set("size", state.size);
+      params.set("ha", String(state.ha));
+      params.set("term", state.term);
+      params.set("region", nextCloud === currentCloud ? state.region : data.defaultRegions[nextCloud]);
+      return params.toString();
+    }
+
+    function render() {
+      const stateKey = buildKey();
+      const view = data.states[stateKey];
+
+      if (!view) {
+        return;
+      }
+
+      monthlyNode.textContent = currency.format(view.estimate.monthlyTotal);
+      annualNode.textContent = `${annual.format(view.estimate.annualTotal)}/year`;
+      if (regionSummaryNode) {
+        regionSummaryNode.textContent = state.region;
+      }
+      sizeSubheadNode.textContent = `${view.estimate.sizeLabel} — ${formatUserRange(data.sizes[state.size].rangeDescription)}`;
+      sizeDefinitionNode.innerHTML = `Maps to ${data.name}'s ${view.estimate.refArchTier} reference architecture. <a href="${data.refArchUrl}">Source</a>`;
+      explanationNode.textContent = view.explanation;
+      terraformNode.textContent = view.terraform || "Terraform export is available for Google Cloud at launch. AWS and Azure are deferred to v1.5.";
+      breakdownNode.innerHTML = `
+        <tr><td>Compute</td><td data-align="right" class="mono-data">${currency.format(view.estimate.computeTotal)}</td></tr>
+        <tr><td>Storage</td><td data-align="right" class="mono-data">${currency.format(view.estimate.storageTotal)}</td></tr>
+        <tr><td>Other</td><td data-align="right" class="mono-data">${currency.format(view.estimate.otherTotal)}</td></tr>
+      `;
+      componentsNode.innerHTML = view.estimate.components
+        .map((component) => `
+          <tr>
+            <td class="font-medium">${formatRoleLabel(component.role)}</td>
+            <td>${component.count} × <span class="mono-data">${component.instanceType}</span></td>
+            <td data-align="right" class="mono-data">${component.vcpu}</td>
+            <td data-align="right" class="mono-data">${component.memoryGb}</td>
+            <td data-align="right" class="mono-data">${formatStorage(component.storageGb)}</td>
+          </tr>
+        `)
+        .join("");
+      sourcesNode.innerHTML = `
+        <p>Reference architecture: ${data.name} for ${view.estimate.refArchTier}, version ${view.estimate.citations.refArchVersion}, retrieved ${formatDate(view.estimate.citations.refArchRetrievedDate)}.</p>
+        <p><a href="${view.estimate.citations.refArchUrl}">${view.estimate.citations.refArchUrl}</a></p>
+        <p>Pricing: ${data.clouds[currentCloud].name} pricing snapshot, retrieved ${formatDate(view.estimate.pricingSnapshotDate)}.</p>
+        <p class="text-subtle">Commercial pricing only. GovCloud, sovereign cloud, and discounts beyond those shown are not modelled.</p>
+      `;
+
+      document.querySelectorAll(`[data-size-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.sizeButton === state.size);
+      });
+      document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.haButton === String(state.ha));
+        button.setAttribute("aria-pressed", String(button.dataset.haButton === String(state.ha)));
+      });
+      document.querySelectorAll(`[data-term-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.termButton === state.term);
+      });
+
+      document.querySelectorAll(`[data-cloud-link]`).forEach((link) => {
+        const targetCloud = link.dataset.cloudLink;
+        link.dataset.active = String(targetCloud === currentCloud);
+        if (targetCloud === currentCloud) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+        link.href = `/sizing/${data.slug}/${targetCloud}?${searchString(targetCloud)}`;
+      });
+      document.querySelectorAll(`[data-related-cloud]`).forEach((link) => {
+        const targetCloud = link.dataset.relatedCloud;
+        link.href = `/sizing/${data.slug}/${targetCloud}?${searchString(targetCloud)}`;
+      });
+      compareLink.href = `/sizing/${data.slug}/compare?size=${state.size}&ha=${state.ha}&term=${state.term}`;
+      history.replaceState({}, "", `${location.pathname}?${searchString()}`);
+    }
+
+    document.querySelectorAll(`[data-size-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.size = button.dataset.sizeButton;
+        render();
+      });
+    });
+    document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.ha = button.dataset.haButton === "true";
+        render();
+      });
+    });
+    document.querySelectorAll(`[data-term-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.term = button.dataset.termButton;
+        render();
+      });
+    });
+    regionSelect?.addEventListener("change", (event) => {
+      state.region = event.target.value;
+      render();
+    });
+
+    copyUrlButton?.addEventListener("click", async () => {
+      const shareUrl = new URL(
+        `/share/${data.slug}/${currentCloud}/${[
+          `size-${state.size}`,
+          `ha-${state.ha}`,
+          `term-${state.term}`,
+          `region-${state.region}`
+        ].join("__")}`,
+        location.origin
+      ).toString();
+      await navigator.clipboard.writeText(shareUrl);
+      copyUrlButton.textContent = "Copied URL";
+      window.setTimeout(() => {
+        copyUrlButton.textContent = "Copy URL";
+      }, 1200);
+    });
+
+    copyTerraformButton?.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(terraformNode.textContent || "");
+      copyTerraformButton.textContent = "Copied Terraform";
+      window.setTimeout(() => {
+        copyTerraformButton.textContent = "Copy Terraform";
+      }, 1200);
+    });
+
+    const params = new URLSearchParams(location.search);
+    if (params.get("size") && data.sizes[params.get("size")]) {
+      state.size = params.get("size");
+    }
+    if (params.get("ha")) {
+      state.ha = params.get("ha") === "true";
+    }
+    if (params.get("term")) {
+      state.term = params.get("term");
+    }
+    if (params.get("region") && data.regionsByCloud[currentCloud].includes(params.get("region"))) {
+      state.region = params.get("region");
+      if (regionSelect) {
+        regionSelect.value = state.region;
+      }
+    }
+
+    render();
+  }
+</script>

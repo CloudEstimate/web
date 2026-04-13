@@ -1,0 +1,24 @@
+---
+import { siteConfig } from "@/lib/site";
+---
+
+<header class="border-b" style="border-color: var(--color-border-muted);">
+  <div class="page-shell flex items-center justify-between gap-6 py-4">
+    <a class="flex items-center gap-3 text-lg font-semibold no-underline" href="/" style="color: var(--color-fg-default);">
+      <img alt="" class="h-8 w-8 rounded-[10px]" decoding="async" height="32" src="/cloudestimate-logo.png" width="32" />
+      <span>CloudEstimate</span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="flex items-center gap-4 text-sm font-medium">
+        {siteConfig.nav.map((item) => (
+          <li>
+            <a class="link-quiet" href={item.href}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,82 @@
+{
+  "cloud": "azure",
+  "retrieved_at": "2026-04-12T02:00:00Z",
+  "regions": {
+    "eastus": {
+      "compute": {
+        "Standard_D2s_v5": {
+          "on_demand_hourly_usd": 0.104,
+          "reserved_1yr_hourly_usd": 0.072,
+          "reserved_3yr_hourly_usd": 0.052
+        },
+        "Standard_D4s_v5": {
+          "on_demand_hourly_usd": 0.208,
+          "reserved_1yr_hourly_usd": 0.144,
+          "reserved_3yr_hourly_usd": 0.104
+        },
+        "Standard_D8s_v5": {
+          "on_demand_hourly_usd": 0.416,
+          "reserved_1yr_hourly_usd": 0.288,
+          "reserved_3yr_hourly_usd": 0.208
+        },
+        "Standard_D16s_v5": {
+          "on_demand_hourly_usd": 0.832,
+          "reserved_1yr_hourly_usd": 0.576,
+          "reserved_3yr_hourly_usd": 0.416
+        },
+        "Standard_D32s_v5": {
+          "on_demand_hourly_usd": 1.664,
+          "reserved_1yr_hourly_usd": 1.152,
+          "reserved_3yr_hourly_usd": 0.832
+        }
+      },
+      "storage": {
+        "ssd_gb_month_usd": 0.12,
+        "hdd_gb_month_usd": 0.06,
+        "nvme_gb_month_usd": 0.14,
+        "object_gb_month_usd": 0.021
+      },
+      "other": {
+        "load_balancer_monthly_usd": 18
+      }
+    },
+    "westus3": {
+      "compute": {
+        "Standard_D2s_v5": {
+          "on_demand_hourly_usd": 0.112,
+          "reserved_1yr_hourly_usd": 0.078,
+          "reserved_3yr_hourly_usd": 0.056
+        },
+        "Standard_D4s_v5": {
+          "on_demand_hourly_usd": 0.224,
+          "reserved_1yr_hourly_usd": 0.156,
+          "reserved_3yr_hourly_usd": 0.112
+        },
+        "Standard_D8s_v5": {
+          "on_demand_hourly_usd": 0.448,
+          "reserved_1yr_hourly_usd": 0.312,
+          "reserved_3yr_hourly_usd": 0.224
+        },
+        "Standard_D16s_v5": {
+          "on_demand_hourly_usd": 0.896,
+          "reserved_1yr_hourly_usd": 0.624,
+          "reserved_3yr_hourly_usd": 0.448
+        },
+        "Standard_D32s_v5": {
+          "on_demand_hourly_usd": 1.792,
+          "reserved_1yr_hourly_usd": 1.248,
+          "reserved_3yr_hourly_usd": 0.896
+        }
+      },
+      "storage": {
+        "ssd_gb_month_usd": 0.125,
+        "hdd_gb_month_usd": 0.062,
+        "nvme_gb_month_usd": 0.145,
+        "object_gb_month_usd": 0.023
+      },
+      "other": {
+        "load_balancer_monthly_usd": 19
+      }
+    }
+  }
+}

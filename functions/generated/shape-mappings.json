@@ -1,0 +1,42 @@
+[
+  {
+    "profile": "general-2-8",
+    "vcpu": 2,
+    "memory_gb": 8,
+    "gcp": "n2-standard-2",
+    "aws": "m6i.large",
+    "azure": "Standard_D2s_v5"
+  },
+  {
+    "profile": "general-4-16",
+    "vcpu": 4,
+    "memory_gb": 16,
+    "gcp": "n2-standard-4",
+    "aws": "m6i.xlarge",
+    "azure": "Standard_D4s_v5"
+  },
+  {
+    "profile": "general-8-32",
+    "vcpu": 8,
+    "memory_gb": 32,
+    "gcp": "n2-standard-8",
+    "aws": "m6i.2xlarge",
+    "azure": "Standard_D8s_v5"
+  },
+  {
+    "profile": "general-16-64",
+    "vcpu": 16,
+    "memory_gb": 64,
+    "gcp": "n2-standard-16",
+    "aws": "m6i.4xlarge",
+    "azure": "Standard_D16s_v5"
+  },
+  {
+    "profile": "general-32-128",
+    "vcpu": 32,
+    "memory_gb": 128,
+    "gcp": "n2-standard-32",
+    "aws": "m6i.8xlarge",
+    "azure": "Standard_D32s_v5"
+  }
+]

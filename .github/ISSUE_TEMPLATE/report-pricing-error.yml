@@ -1,0 +1,20 @@
+name: Report a pricing error
+description: Report an estimate that looks wrong.
+title: "[Pricing] "
+labels:
+  - pricing
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Estimate URL
+      placeholder: https://cloudestimate.dev/sizing/...
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What looks wrong
+      description: Include the cloud, region, term, and expected pricing source if available.
+    validations:
+      required: true

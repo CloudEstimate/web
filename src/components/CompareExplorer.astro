@@ -1,0 +1,382 @@
+---
+import { getCompareExplanation } from "@/lib/explanations";
+import { buildCompareKey } from "@/lib/estimates";
+import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatUserRange } from "@/lib/format";
+import { cloudMeta, cloudOrder, termOrder, type CommitmentTerm, type SizeSlug } from "@/lib/site";
+import type { IsvEntry } from "@/lib/types";
+
+type CompareMatrix = Record<
+  string,
+  {
+    size: SizeSlug;
+    ha: boolean;
+    term: CommitmentTerm;
+    regions: Record<(typeof cloudOrder)[number], string>;
+    estimates: Record<(typeof cloudOrder)[number], import("@/lib/types").EstimateResult>;
+  }
+>;
+
+type Props = {
+  isv: IsvEntry;
+  initialState: {
+    size: SizeSlug;
+    ha: boolean;
+    term: CommitmentTerm;
+  };
+  compareMatrix: CompareMatrix;
+};
+
+const { isv, initialState, compareMatrix } = Astro.props;
+const slug = isv.data.slug;
+const widgetId = `compare-${slug}`;
+const sizeOptions = (["xs", "s", "m", "l", "xl"] as SizeSlug[]).filter((size) => Boolean(isv.data.sizes[size]));
+const initialKey = buildCompareKey(initialState);
+const initialView = compareMatrix[initialKey];
+const cheapestCloud = cloudOrder.reduce((winner, candidate) =>
+  initialView.estimates[candidate].monthlyTotal < initialView.estimates[winner].monthlyTotal ? candidate : winner
+);
+
+const clientData = {
+  slug,
+  name: isv.data.name,
+  defaultRegions: initialView.regions,
+  sizes: Object.fromEntries(
+    sizeOptions.map((size) => [
+      size,
+      {
+        label: isv.data.sizes[size]?.label,
+        rangeDescription: isv.data.sizes[size]?.range_description
+      }
+    ])
+  ),
+  states: Object.fromEntries(
+    Object.entries(compareMatrix).map(([key, view]) => [
+      key,
+      {
+        ...view,
+        explanation: getCompareExplanation({
+          isv,
+          size: view.size,
+          sizeLabel: isv.data.sizes[view.size]?.label ?? view.size.toUpperCase(),
+          rangeDescription: isv.data.sizes[view.size]?.range_description ?? "",
+          term: view.term,
+          ha: view.ha,
+          estimates: view.estimates
+        })
+      }
+    ])
+  ),
+  clouds: cloudMeta
+};
+
+---
+
+<section class="page-shell py-8 lg:py-10">
+  <div class="space-y-2">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
+      <a href="/">Home</a>
+      <span aria-hidden="true"> / </span>
+      <a href="/isvs">ISVs</a>
+      <span aria-hidden="true"> / </span>
+      <span>{isv.data.name}</span>
+    </nav>
+    <h1 class="text-[2rem] font-semibold tracking-tight">Compare {isv.data.name} across clouds</h1>
+    <p class="text-lg text-muted" id={`${widgetId}-subhead`}>
+      {isv.data.sizes[initialState.size]?.label ?? initialView.size.toUpperCase()} — {formatUserRange(isv.data.sizes[initialState.size]?.range_description ?? "")}
+    </p>
+  </div>
+
+  <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(260px,320px)_minmax(0,1fr)]">
+    <aside class="panel p-4">
+      <div class="space-y-5">
+        <div>
+          <span class="field-label">Size</span>
+          <div class="flex flex-wrap gap-2">
+            {sizeOptions.map((size) => (
+              <button class="button-chip" data-size-button={size} data-active={size === initialState.size ? "true" : "false"} type="button">
+                {size.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <span class="field-label">High availability</span>
+          <div class="flex gap-2">
+            <button aria-pressed={!initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="false" data-active={!initialState.ha ? "true" : "false"} type="button">Off</button>
+            <button aria-pressed={initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="true" data-active={initialState.ha ? "true" : "false"} type="button">On</button>
+          </div>
+        </div>
+
+        <div>
+          <span class="field-label">Commitment term</span>
+          <div class="flex flex-wrap gap-2">
+            {termOrder.map((term) => (
+              <button class="button-chip" data-term-button={term} data-active={term === initialState.term ? "true" : "false"} type="button">
+                {term === "on-demand" ? "On-demand" : term}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="space-y-6">
+      <div class="grid gap-4 xl:grid-cols-3" id={`${widgetId}-columns`}>
+        {cloudOrder.map((cloud) => {
+          const estimate = initialView.estimates[cloud];
+          const winner = cloud === cheapestCloud;
+          return (
+            <article class="panel overflow-hidden">
+              <div class="border-t-4 p-5" style={`border-top-color: ${cloudMeta[cloud].accent};`}>
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 class="text-lg font-semibold">{cloudMeta[cloud].name}</h2>
+                    <p class="mt-1 text-sm text-muted">Region <span class="mono-data">{initialView.regions[cloud]}</span></p>
+                  </div>
+                  {winner && <p class="text-sm font-semibold" style="color: var(--color-success);">Lowest monthly cost</p>}
+                </div>
+
+                <div class="mt-5 space-y-1">
+                  <p class="mono-data text-[2rem] font-semibold">{formatCurrency(estimate.monthlyTotal)}</p>
+                  <p class="mono-data text-sm text-muted">{formatRoundedAnnual(estimate.annualTotal)}</p>
+                </div>
+
+                <table class="data-table mt-5">
+                  <tbody>
+                    <tr>
+                      <td>Compute</td>
+                      <td data-align="right" class="mono-data">{formatCurrency(estimate.computeTotal)}</td>
+                    </tr>
+                    <tr>
+                      <td>Storage</td>
+                      <td data-align="right" class="mono-data">{formatCurrency(estimate.storageTotal)}</td>
+                    </tr>
+                    <tr>
+                      <td>Other</td>
+                      <td data-align="right" class="mono-data">{formatCurrency(estimate.otherTotal)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="mt-5">
+                  <p class="mb-2 text-sm font-semibold text-muted">Component summary</p>
+                  <ul class="space-y-2 text-sm">
+                    {estimate.components.slice(0, 5).map((component) => (
+                      <li>
+                        {component.count} × <span class="mono-data">{component.instanceType}</span> for {formatRoleLabel(component.role)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <section class="space-y-3">
+        <h2 class="section-heading">Why the totals differ</h2>
+        <p id={`${widgetId}-explanation`}>
+          {getCompareExplanation({
+            isv,
+            size: initialState.size,
+            sizeLabel: isv.data.sizes[initialState.size]?.label ?? initialState.size.toUpperCase(),
+            rangeDescription: isv.data.sizes[initialState.size]?.range_description ?? "",
+            term: initialState.term,
+            ha: initialState.ha,
+            estimates: initialView.estimates
+          })}
+        </p>
+      </section>
+
+      <section class="panel p-5">
+        <div class="flex flex-wrap gap-2">
+          <button class="button-secondary" id={`${widgetId}-copy-url`} type="button">Copy URL</button>
+          {cloudOrder.map((cloud) => (
+            <a
+              class="button-secondary"
+              data-cloud-link={cloud}
+              href={`/sizing/${slug}/${cloud}?size=${initialState.size}&ha=${initialState.ha}&term=${initialState.term}&region=${initialView.regions[cloud]}`}
+            >
+              Open {cloudMeta[cloud].name} estimate
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="section-heading">Sources</h2>
+        <div class="text-sm leading-6">
+          <p>
+            Reference architecture: {isv.data.name}, version {isv.data.ref_arch.version}, retrieved {formatDate(isv.data.ref_arch.retrieved_date)}.
+          </p>
+          <p><a href={isv.data.ref_arch.source_url}>{isv.data.ref_arch.source_url}</a></p>
+          <p>
+            Pricing: Google Cloud, AWS, and Azure pricing snapshots retrieved {formatDate(initialView.estimates.gcp.pricingSnapshotDate)}.
+          </p>
+          <p class="text-subtle">Commercial pricing only. GovCloud, sovereign cloud, and discounts beyond those shown are not modelled.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<script id={`${widgetId}-data`} is:inline set:html={JSON.stringify(clientData)} type="application/json"></script>
+
+<script is:inline define:vars={{ widgetId }}>
+  const root = document.getElementById(`${widgetId}-data`);
+  const data = root ? JSON.parse(root.textContent || "{}") : null;
+
+  if (data) {
+    const subheadNode = document.getElementById(`${widgetId}-subhead`);
+    const columnsNode = document.getElementById(`${widgetId}-columns`);
+    const explanationNode = document.getElementById(`${widgetId}-explanation`);
+    const copyUrlButton = document.getElementById(`${widgetId}-copy-url`);
+    const currency = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const annual = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+    const state = {
+      size: "m",
+      ha: false,
+      term: "on-demand"
+    };
+
+    function formatUserRange(value) {
+      return value.replace(/\b(\d{4,})\b/g, (match) => {
+        const number = Number(match);
+        return number < 10000 ? match : new Intl.NumberFormat("en-US").format(number);
+      });
+    }
+
+    function formatRoleLabel(value) {
+      return value
+        .split("-")
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
+    function buildKey() {
+      return [state.size, state.ha ? "ha" : "noha", state.term].join(":");
+    }
+
+    function render() {
+      const view = data.states[buildKey()];
+      if (!view) {
+        return;
+      }
+
+      const ranked = Object.entries(view.estimates).sort((left, right) => left[1].monthlyTotal - right[1].monthlyTotal);
+      const winner = ranked[0][0];
+      subheadNode.textContent = `${data.sizes[state.size].label} — ${formatUserRange(data.sizes[state.size].rangeDescription)}`;
+      explanationNode.textContent = view.explanation;
+      columnsNode.innerHTML = Object.entries(view.estimates)
+        .map(([cloud, estimate]) => `
+          <article class="panel overflow-hidden">
+            <div class="border-t-4 p-5" style="border-top-color: ${data.clouds[cloud].accent};">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-semibold">${data.clouds[cloud].name}</h2>
+                  <p class="mt-1 text-sm text-muted">Region <span class="mono-data">${view.regions[cloud]}</span></p>
+                </div>
+                ${cloud === winner ? '<p class="text-sm font-semibold" style="color: var(--color-success);">Lowest monthly cost</p>' : ""}
+              </div>
+              <div class="mt-5 space-y-1">
+                <p class="mono-data text-[2rem] font-semibold">${currency.format(estimate.monthlyTotal)}</p>
+                <p class="mono-data text-sm text-muted">${annual.format(estimate.annualTotal)}/year</p>
+              </div>
+              <table class="data-table mt-5">
+                <tbody>
+                  <tr><td>Compute</td><td data-align="right" class="mono-data">${currency.format(estimate.computeTotal)}</td></tr>
+                  <tr><td>Storage</td><td data-align="right" class="mono-data">${currency.format(estimate.storageTotal)}</td></tr>
+                  <tr><td>Other</td><td data-align="right" class="mono-data">${currency.format(estimate.otherTotal)}</td></tr>
+                </tbody>
+              </table>
+              <div class="mt-5">
+                <p class="mb-2 text-sm font-semibold text-muted">Component summary</p>
+                <ul class="space-y-2 text-sm">
+                  ${estimate.components.slice(0, 5).map((component) => `<li>${component.count} × <span class="mono-data">${component.instanceType}</span> for ${formatRoleLabel(component.role)}</li>`).join("")}
+                </ul>
+              </div>
+            </div>
+          </article>
+        `)
+        .join("");
+
+      document.querySelectorAll(`[data-size-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.sizeButton === state.size);
+      });
+      document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.haButton === String(state.ha));
+        button.setAttribute("aria-pressed", String(button.dataset.haButton === String(state.ha)));
+      });
+      document.querySelectorAll(`[data-term-button]`).forEach((button) => {
+        button.dataset.active = String(button.dataset.termButton === state.term);
+      });
+      document.querySelectorAll(`[data-cloud-link]`).forEach((link) => {
+        const targetCloud = link.dataset.cloudLink;
+        link.href = `/sizing/${data.slug}/${targetCloud}?size=${state.size}&ha=${state.ha}&term=${state.term}&region=${data.defaultRegions[targetCloud]}`;
+      });
+
+      history.replaceState({}, "", `${location.pathname}?size=${state.size}&ha=${state.ha}&term=${state.term}`);
+    }
+
+    document.querySelectorAll(`[data-size-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.size = button.dataset.sizeButton;
+        render();
+      });
+    });
+    document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.ha = button.dataset.haButton === "true";
+        render();
+      });
+    });
+    document.querySelectorAll(`[data-term-button]`).forEach((button) => {
+      button.addEventListener("click", () => {
+        state.term = button.dataset.termButton;
+        render();
+      });
+    });
+
+    copyUrlButton?.addEventListener("click", async () => {
+      const shareUrl = new URL(
+        `/share/${data.slug}/compare/${[
+          `size-${state.size}`,
+          `ha-${state.ha}`,
+          `term-${state.term}`
+        ].join("__")}`,
+        location.origin
+      ).toString();
+      await navigator.clipboard.writeText(shareUrl);
+      copyUrlButton.textContent = "Copied URL";
+      window.setTimeout(() => {
+        copyUrlButton.textContent = "Copy URL";
+      }, 1200);
+    });
+
+    const params = new URLSearchParams(location.search);
+    if (params.get("size") && data.sizes[params.get("size")]) {
+      state.size = params.get("size");
+    }
+    if (params.get("ha")) {
+      state.ha = params.get("ha") === "true";
+    }
+    if (params.get("term")) {
+      state.term = params.get("term");
+    }
+
+    render();
+  }
+</script>

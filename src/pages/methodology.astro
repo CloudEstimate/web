@@ -1,0 +1,40 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Methodology | CloudEstimate" canonical={buildCanonical("/methodology")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Methodology</h1>
+
+    <p>
+      Each estimate starts with a published vendor reference architecture. A size tier maps to a concrete set of components, those components are matched to cloud instance shapes, and cached pricing snapshots provide the monthly cost.
+    </p>
+
+    <h2>What is modelled</h2>
+    <ul>
+      <li>VM instance sizing by component role</li>
+      <li>Persistent storage sized from the component footprint</li>
+      <li>Region and commitment-term differences for commercial pricing</li>
+      <li>High-availability overhead when the source architecture requires extra nodes</li>
+    </ul>
+
+    <h2>What is not modelled</h2>
+    <ul>
+      <li>Vendor licensing and support contracts</li>
+      <li>Network egress, cross-region traffic, and DR topologies</li>
+      <li>Compliance controls, backups, and monitoring platforms</li>
+      <li>Managed-service alternatives and hybrid-use benefits</li>
+    </ul>
+
+    <h2>Refresh cadence</h2>
+    <p>
+      Pricing snapshots are intended to refresh nightly. Reference architectures refresh when vendors publish materially changed guidance. Dates are always shown on-page because dated numbers are more defensible than implied recency.
+    </p>
+
+    <h2>Reporting errors</h2>
+    <p>
+      If a route looks wrong, open an issue with the estimate URL, the cloud, the region, and the pricing source that disagrees. Contributions for new ISVs should follow the YAML schema and validation flow in the repository.
+    </p>
+  </section>
+</BaseLayout>

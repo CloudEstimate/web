@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+import CompareExplorer from "@/components/CompareExplorer.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCompareMatrix, getDefaultRegion, getDefaultSize } from "@/lib/estimates";
+import { buildCanonical, buildCompareDescription, buildCompareTitle, buildJsonLd } from "@/lib/seo";
+import { buildEstimate } from "@/lib/estimates";
+import { siteConfig } from "@/lib/site";
+import type { IsvEntry } from "@/lib/types";
+
+export async function getStaticPaths() {
+  const isvs = await getCollection("isvs");
+  return isvs.map((isv) => ({
+    params: {
+      isv: isv.data.slug
+    },
+    props: {
+      isv
+    }
+  }));
+}
+
+const { isv } = Astro.props as { isv: IsvEntry };
+const initialState = {
+  size: getDefaultSize(isv),
+  ha: false,
+  term: "on-demand" as const
+};
+const compareMatrix = buildCompareMatrix(isv);
+const initialEstimate = buildEstimate({
+  isv,
+  cloud: "gcp",
+  size: initialState.size,
+  ha: initialState.ha,
+  term: initialState.term,
+  region: getDefaultRegion("gcp")
+});
+const title = buildCompareTitle(isv);
+const description = buildCompareDescription(isv, initialEstimate);
+const canonical = buildCanonical(`/sizing/${isv.data.slug}/compare`);
+const image = `/og/${isv.data.slug}/compare.png`;
+const jsonLd = buildJsonLd({ title, description, canonical, image: new URL(image, siteConfig.url).toString() });
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} image={image} jsonLd={jsonLd}>
+  <CompareExplorer isv={isv} initialState={initialState} compareMatrix={compareMatrix} />
+</BaseLayout>

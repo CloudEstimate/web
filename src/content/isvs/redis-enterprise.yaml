@@ -1,0 +1,137 @@
+slug: redis-enterprise
+name: Redis Enterprise
+vendor: Redis Ltd.
+category: data-store
+description: >
+  Self-managed Redis Enterprise cluster for low-latency caching, session storage, and data services.
+ref_arch:
+  source_url: https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/
+  version: "7.22"
+  retrieved_date: "2026-04-12"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 50 GB working set
+    ref_arch_tier: dev-small
+    components:
+      - role: cluster-node
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: nvme
+      - role: admin-node
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+    ha_components:
+      - role: cluster-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: nvme
+  s:
+    label: Small
+    range_description: 50 to 200 GB working set
+    ref_arch_tier: prod-small
+    components:
+      - role: cluster-node
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 150
+        storage_type: nvme
+      - role: proxy
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+    ha_components:
+      - role: cluster-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 150
+        storage_type: nvme
+  m:
+    label: Medium
+    range_description: 200 to 500 GB working set
+    ref_arch_tier: prod-medium
+    components:
+      - role: cluster-node
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 400
+        storage_type: nvme
+      - role: proxy
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+    ha_components:
+      - role: cluster-node
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 400
+        storage_type: nvme
+  l:
+    label: Large
+    range_description: 500 GB to 1 TB working set
+    ref_arch_tier: prod-large
+    components:
+      - role: cluster-node
+        count: 5
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 750
+        storage_type: nvme
+      - role: proxy
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: cluster-node
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 750
+        storage_type: nvme
+  xl:
+    label: Extra Large
+    range_description: 1 to 2 TB working set
+    ref_arch_tier: prod-xl
+    components:
+      - role: cluster-node
+        count: 5
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 1500
+        storage_type: nvme
+      - role: proxy
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: cluster-node
+        count: 2
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 1500
+        storage_type: nvme
+notes:
+  - Redis Enterprise clusters need spare capacity to preserve failover headroom.
+  - NVMe-backed storage matters more than CPU once persistence and auto-tiering are enabled.
+disclaimers:
+  - Based on Redis Enterprise hardware guidance and encoded as a VM-based planning baseline.
+  - Estimate excludes Redis licensing, cross-region replication, backups, and network transfer.

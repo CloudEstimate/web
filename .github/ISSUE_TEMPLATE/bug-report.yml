@@ -1,0 +1,18 @@
+name: Bug report
+description: Report a site bug or broken route.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Route
+      placeholder: /sizing/gitlab/gcp

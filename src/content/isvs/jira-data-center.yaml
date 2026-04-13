@@ -1,0 +1,53 @@
+slug: jira-data-center
+name: Jira Data Center
+vendor: Atlassian
+category: other
+description: >
+  Self-managed Jira Data Center for enterprise issue tracking and service management workloads.
+ref_arch:
+  source_url: https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html
+  version: "Jira Data Center 9.12 benchmark guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  l:
+    label: Large
+    range_description: 600,000 to 2,000,000 issues or 10,000 to 100,000 users
+    ref_arch_tier: large
+    components:
+      - role: application
+        count: 2
+        vcpu: 8
+        memory_gb: 16
+      - role: database
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  xl:
+    label: Extra Large
+    range_description: above the Large Jira profile thresholds
+    ref_arch_tier: xlarge
+    components:
+      - role: application
+        count: 5
+        vcpu: 16
+        memory_gb: 32
+      - role: database
+        count: 1
+        vcpu: 16
+        memory_gb: 64
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - Large and XLarge shapes follow Atlassian's AWS infrastructure recommendations for Jira Data Center clustered deployments.
+  - The Large tier maps to the Jira 9.12 cost-effective recommendation, while the XLarge tier maps to the Jira 9.12 best-performance recommendation.
+disclaimers:
+  - Estimate excludes shared-home storage, managed database Multi-AZ overhead, Marketplace app overhead, and other supporting services not explicitly sized in the recommendation summary.
+  - The HA toggle models front-end load balancer overhead only; Atlassian Data Center clustering itself is already represented in the base node counts.

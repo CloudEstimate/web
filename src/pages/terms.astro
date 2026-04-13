@@ -1,0 +1,47 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Terms of use | CloudEstimate" canonical={buildCanonical("/terms")}>
+  <section class="page-shell-narrow prose-page py-10 lg:py-14">
+    <h1>Terms of use</h1>
+    <p>Last updated: April 12, 2026</p>
+
+    <p>
+      CloudEstimate is a free tool that provides estimated infrastructure sizing and cost figures for self-managed software workloads on Google Cloud, Amazon Web Services, and Microsoft Azure.
+    </p>
+
+    <p>
+      <strong>Informational only.</strong> Estimates are generated from publicly available vendor reference architectures and cloud pricing snapshots. Actual costs and sizing requirements vary with workload shape, support contracts, and factors not modelled by the site.
+    </p>
+
+    <p>
+      <strong>No warranty.</strong> The tool is provided &quot;as is&quot; without warranty of any kind, express or implied. Do not rely on CloudEstimate as the sole basis for procurement decisions.
+    </p>
+
+    <p>
+      <strong>Limitation of liability.</strong> To the fullest extent permitted by law, the operator is not liable for direct, indirect, incidental, consequential, or punitive damages arising from use of the site.
+    </p>
+
+    <p>
+      <strong>Acceptable use.</strong> Do not disrupt the service, automate access in ways that degrade the site for others, or misrepresent CloudEstimate output as official vendor guidance.
+    </p>
+
+    <p>
+      <strong>Third-party content.</strong> Documentation, trademarks, and pricing sources belong to their respective owners and are governed by their own terms.
+    </p>
+
+    <p>
+      <strong>Source code.</strong> CloudEstimate is open source under the MIT licence. Repository: <a href="https://github.com/CloudEstimate/web">https://github.com/CloudEstimate/web</a>.
+    </p>
+
+    <p>
+      <strong>Changes.</strong> These terms may be updated. The date above reflects the current version.
+    </p>
+
+    <p>
+      <strong>Contact.</strong> Questions can be raised through the project issue tracker or via the links on <a href="/about">About</a>.
+    </p>
+  </section>
+</BaseLayout>

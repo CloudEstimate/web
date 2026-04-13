@@ -1,0 +1,13 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical } from "@/lib/seo";
+---
+
+<BaseLayout title="Page not found | CloudEstimate" canonical={buildCanonical("/404")}>
+  <section class="page-shell-narrow py-16">
+    <h1 class="text-[2rem] font-semibold tracking-tight">This page doesn&apos;t exist.</h1>
+    <p class="mt-4 text-muted">
+      Try the <a href="/isvs">ISVs directory</a> or go back to the <a href="/">home page</a>.
+    </p>
+  </section>
+</BaseLayout>
