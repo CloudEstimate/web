@@ -1,0 +1,62 @@
+slug: neo4j-enterprise
+name: Neo4j Enterprise
+vendor: Neo4j, Inc.
+category: data-store
+description: >
+  Self-managed Neo4j Enterprise for transactional graph databases, path analysis, and graph-backed applications.
+ref_arch:
+  source_url: https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/
+  version: "Neo4j Operations Manual current clustering guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 100 GB graph store on a three-primary cluster
+    ref_arch_tier: three-primary-small
+    components:
+      - role: primary
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 100 GB to 500 GB graph store with read scale-out
+    ref_arch_tier: three-primary-two-replica
+    components:
+      - role: primary
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: ssd
+      - role: read-replica
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 500 GB to 2 TB graph store or heavier read-dominant graph workloads
+    ref_arch_tier: three-primary-four-replica
+    components:
+      - role: primary
+        count: 3
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: ssd
+      - role: read-replica
+        count: 4
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: ssd
+notes:
+  - Clustered Neo4j Enterprise requires three primaries, so the base tiers already include the core fault-tolerant topology.
+  - Memory-heavy node shapes reflect Neo4j's guidance to balance JVM heap and page cache against the hot graph dataset.
+disclaimers:
+  - Based on Neo4j Enterprise clustering guidance and translated into VM-based planning tiers for self-managed deployments.
+  - Estimate excludes backups, external load balancing, vector-search accelerators, and any separate analytics clusters.

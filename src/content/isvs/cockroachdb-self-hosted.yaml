@@ -1,0 +1,50 @@
+slug: cockroachdb-self-hosted
+name: CockroachDB Self-Hosted
+vendor: Cockroach Labs
+category: data-store
+description: >
+  Self-hosted CockroachDB for resilient SQL workloads that need distributed transactions and scale-out storage.
+ref_arch:
+  source_url: https://www.cockroachlabs.com/docs/stable/recommended-production-settings
+  version: "CockroachDB stable recommended production settings"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 1 TB replicated OLTP data on a three-node cluster
+    ref_arch_tier: three-node-small
+    components:
+      - role: node
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 1 to 5 TB replicated OLTP data on a five-node cluster
+    ref_arch_tier: five-node-medium
+    components:
+      - role: node
+        count: 5
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 5 to 20 TB replicated data or higher-concurrency regional SQL workloads
+    ref_arch_tier: seven-node-large
+    components:
+      - role: node
+        count: 7
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: ssd
+notes:
+  - CockroachDB production guidance starts at a three-node quorum, so redundancy is already reflected in the base topology.
+  - Node sizes align with the product's published CPU, memory, and SSD guidance for production clusters and are normalized to the nearest CloudEstimate VM shape.
+disclaimers:
+  - Based on CockroachDB self-hosted production recommendations and expressed as VM-based planning tiers.
+  - Estimate excludes load balancers, backups, changefeeds, geo-partitioned layouts, and network transfer between regions or zones.

@@ -1,0 +1,122 @@
+slug: apache-kafka-confluent-platform
+name: Apache Kafka via Confluent Platform
+vendor: Confluent, Inc.
+category: streaming
+description: >
+  Self-managed Apache Kafka deployed with Confluent Platform for event streaming, durable logs, and integration pipelines.
+ref_arch:
+  source_url: https://docs.confluent.io/platform/current/kafka/deployment.html
+  version: "Confluent Platform current self-managed deployment guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 50 MB/s ingress with short retention windows
+    ref_arch_tier: departmental-cluster
+    components:
+      - role: broker
+        count: 3
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: ssd
+      - role: kraft-controller
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: connect
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: schema-registry
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: control-center
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 50 to 150 MB/s ingress or larger retained topic footprints
+    ref_arch_tier: regional-cluster
+    components:
+      - role: broker
+        count: 3
+        vcpu: 32
+        memory_gb: 128
+        storage_gb: 4000
+        storage_type: ssd
+      - role: kraft-controller
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: connect
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: schema-registry
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: control-center
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 150 to 400 MB/s ingress with longer retention and more connectors
+    ref_arch_tier: large-cluster
+    components:
+      - role: broker
+        count: 6
+        vcpu: 32
+        memory_gb: 128
+        storage_gb: 8000
+        storage_type: ssd
+      - role: kraft-controller
+        count: 5
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: connect
+        count: 4
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: schema-registry
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: control-center
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: ssd
+notes:
+  - Broker, controller, Connect, and Control Center roles follow Confluent's published self-managed deployment guidance and are rounded to CloudEstimate's VM shape set.
+  - The base tiers already assume quorum and replication on the Kafka side, so HA overhead is baked into the baseline topology.
+disclaimers:
+  - Based on Confluent Platform self-managed deployment guidance and translated into VM-based planning tiers.
+  - Estimate excludes producer and consumer application hosts, ksqlDB, Flink services, tiered storage, network transfer, and Confluent licensing.

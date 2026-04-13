@@ -1,0 +1,68 @@
+slug: nomad
+name: Nomad
+vendor: HashiCorp, Inc.
+category: other
+description: >
+  Self-managed Nomad for workload orchestration across VM, container, and batch platforms.
+ref_arch:
+  source_url: https://developer.hashicorp.com/nomad/docs/install/production
+  version: "Nomad current production reference guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 50 small jobs on a starter production cluster
+    ref_arch_tier: starter-cluster
+    components:
+      - role: server
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: client
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 50 to 300 jobs on a small production scheduler footprint
+    ref_arch_tier: production-cluster
+    components:
+      - role: server
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: client
+        count: 10
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 300 to 1,000 jobs or a bootstrap platform for larger fleets
+    ref_arch_tier: scale-cluster
+    components:
+      - role: server
+        count: 5
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: client
+        count: 25
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 150
+        storage_type: ssd
+notes:
+  - The Nomad server quorum follows HashiCorp production guidance, while the client pools are generic starter capacity and not a substitute for sizing the workloads you run on top.
+  - This entry is most useful as a platform bootstrap estimate because the scheduled jobs themselves usually dominate total cost.
+disclaimers:
+  - Based on Nomad production guidance and translated into a VM-based control-plane plus starter-worker baseline.
+  - Estimate excludes Consul, Vault, external load balancers, persistent storage for stateful jobs, and the real resource needs of the applications scheduled by Nomad.

@@ -1,5 +1,235 @@
 [
   {
+    "slug": "apache-kafka-confluent-platform",
+    "name": "Apache Kafka via Confluent Platform",
+    "vendor": "Confluent, Inc.",
+    "category": "streaming",
+    "description": "Self-managed Apache Kafka deployed with Confluent Platform for event streaming, durable logs, and integration pipelines.\n",
+    "ref_arch": {
+      "source_url": "https://docs.confluent.io/platform/current/kafka/deployment.html",
+      "version": "Confluent Platform current self-managed deployment guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 50 MB/s ingress with short retention windows",
+        "ref_arch_tier": "departmental-cluster",
+        "components": [
+          {
+            "role": "broker",
+            "count": 3,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "kraft-controller",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connect",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "schema-registry",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "control-center",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "50 to 150 MB/s ingress or larger retained topic footprints",
+        "ref_arch_tier": "regional-cluster",
+        "components": [
+          {
+            "role": "broker",
+            "count": 3,
+            "vcpu": 32,
+            "memory_gb": 128,
+            "storage_gb": 4000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "kraft-controller",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connect",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "schema-registry",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "control-center",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "150 to 400 MB/s ingress with longer retention and more connectors",
+        "ref_arch_tier": "large-cluster",
+        "components": [
+          {
+            "role": "broker",
+            "count": 6,
+            "vcpu": 32,
+            "memory_gb": 128,
+            "storage_gb": 8000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "kraft-controller",
+            "count": 5,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connect",
+            "count": 4,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "schema-registry",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "control-center",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Broker, controller, Connect, and Control Center roles follow Confluent's published self-managed deployment guidance and are rounded to CloudEstimate's VM shape set.",
+      "The base tiers already assume quorum and replication on the Kafka side, so HA overhead is baked into the baseline topology."
+    ],
+    "disclaimers": [
+      "Based on Confluent Platform self-managed deployment guidance and translated into VM-based planning tiers.",
+      "Estimate excludes producer and consumer application hosts, ksqlDB, Flink services, tiered storage, network transfer, and Confluent licensing."
+    ]
+  },
+  {
+    "slug": "cockroachdb-self-hosted",
+    "name": "CockroachDB Self-Hosted",
+    "vendor": "Cockroach Labs",
+    "category": "data-store",
+    "description": "Self-hosted CockroachDB for resilient SQL workloads that need distributed transactions and scale-out storage.\n",
+    "ref_arch": {
+      "source_url": "https://www.cockroachlabs.com/docs/stable/recommended-production-settings",
+      "version": "CockroachDB stable recommended production settings",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 1 TB replicated OLTP data on a three-node cluster",
+        "ref_arch_tier": "three-node-small",
+        "components": [
+          {
+            "role": "node",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "1 to 5 TB replicated OLTP data on a five-node cluster",
+        "ref_arch_tier": "five-node-medium",
+        "components": [
+          {
+            "role": "node",
+            "count": 5,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "5 to 20 TB replicated data or higher-concurrency regional SQL workloads",
+        "ref_arch_tier": "seven-node-large",
+        "components": [
+          {
+            "role": "node",
+            "count": 7,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "CockroachDB production guidance starts at a three-node quorum, so redundancy is already reflected in the base topology.",
+      "Node sizes align with the product's published CPU, memory, and SSD guidance for production clusters and are normalized to the nearest CloudEstimate VM shape."
+    ],
+    "disclaimers": [
+      "Based on CockroachDB self-hosted production recommendations and expressed as VM-based planning tiers.",
+      "Estimate excludes load balancers, backups, changefeeds, geo-partitioned layouts, and network transfer between regions or zones."
+    ]
+  },
+  {
     "slug": "confluence-data-center",
     "name": "Confluence Data Center",
     "vendor": "Atlassian",
@@ -118,6 +348,482 @@
     "disclaimers": [
       "Estimate excludes shared-home EFS/NFS storage, collaborative editing proxy details, Marketplace app overhead, and managed database HA costs not captured in the benchmark summary.",
       "The HA toggle models load balancer overhead only; clustered Confluence application and Synchrony nodes are already represented in the base deployment."
+    ]
+  },
+  {
+    "slug": "consul",
+    "name": "Consul",
+    "vendor": "HashiCorp, Inc.",
+    "category": "other",
+    "description": "Self-managed Consul for service discovery, service mesh control, and network configuration across distributed workloads.\n",
+    "ref_arch": {
+      "source_url": "https://developer.hashicorp.com/consul/docs/architecture",
+      "version": "Consul current production architecture guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 500 registered services on a three-server control plane",
+        "ref_arch_tier": "three-server",
+        "components": [
+          {
+            "role": "server",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "500 to 5,000 registered services with ingress and mesh gateways",
+        "ref_arch_tier": "five-server-medium",
+        "components": [
+          {
+            "role": "server",
+            "count": 5,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "ingress-gateway",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "mesh-gateway",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "5,000 to 25,000 registered services with larger service-mesh control needs",
+        "ref_arch_tier": "five-server-large",
+        "components": [
+          {
+            "role": "server",
+            "count": 5,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "ingress-gateway",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "mesh-gateway",
+            "count": 4,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Consul sizing is focused on the control plane and common gateway roles; the client agents embedded on application hosts are not modelled as separate infrastructure here.",
+      "Odd-numbered server counts follow HashiCorp's quorum guidance for production control planes."
+    ],
+    "disclaimers": [
+      "Based on Consul production architecture guidance and translated into VM-based planning tiers.",
+      "Estimate excludes application workload nodes, external L7 gateways, network transfer, and any HCP-managed alternatives."
+    ]
+  },
+  {
+    "slug": "couchbase-server-enterprise",
+    "name": "Couchbase Server Enterprise",
+    "vendor": "Couchbase, Inc.",
+    "category": "data-store",
+    "description": "Self-managed Couchbase Server Enterprise for distributed JSON data, caching, and full-text search workloads.\n",
+    "ref_arch": {
+      "source_url": "https://docs.couchbase.com/server/current/install/sizing-general.html",
+      "version": "Couchbase Server current sizing guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 50 GB active data on a compact multi-service cluster",
+        "ref_arch_tier": "combined-services-small",
+        "components": [
+          {
+            "role": "cluster-node",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "50 to 250 GB active data with separated data, query, and index services",
+        "ref_arch_tier": "split-services-medium",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "index-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "query-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "250 GB to 1 TB active data on a larger dedicated-services cluster",
+        "ref_arch_tier": "split-services-large",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 6,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "index-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 750,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "query-node",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Data node memory follows Couchbase's published data-service sizing ratio, while query and index roles follow the vendor's CPU and RAM guidance per service.",
+      "The larger tiers assume bucket replication is already built into the base cluster, so the HA toggle does not add extra nodes."
+    ],
+    "disclaimers": [
+      "Based on Couchbase Server sizing guidance and translated into VM-oriented planning tiers for multi-cloud comparison.",
+      "Estimate excludes XDCR, backup service overhead, Analytics or Eventing nodes, and storage growth from replicas or compaction beyond the local disks shown."
+    ]
+  },
+  {
+    "slug": "edb-postgres-advanced-server",
+    "name": "EDB Postgres Advanced Server",
+    "vendor": "EnterpriseDB Corporation",
+    "category": "data-store",
+    "description": "Self-managed EDB Postgres Advanced Server for enterprise PostgreSQL workloads with optional primary-standby HA.\n",
+    "ref_arch": {
+      "source_url": "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/",
+      "version": "EPAS 18 requirements with current HA deployment guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 250 GB database size for light OLTP",
+        "ref_arch_tier": "single-primary-small",
+        "components": [
+          {
+            "role": "primary",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connection-pooler",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "standby",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "failover-manager",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "250 GB to 1 TB database size for mixed read and write OLTP",
+        "ref_arch_tier": "primary-standby-medium",
+        "components": [
+          {
+            "role": "primary",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connection-pooler",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "standby",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "failover-manager",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "1 to 5 TB database size or heavier mixed OLTP and reporting",
+        "ref_arch_tier": "primary-two-standby-large",
+        "components": [
+          {
+            "role": "primary",
+            "count": 1,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "connection-pooler",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "standby",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "failover-manager",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      }
+    },
+    "notes": [
+      "The documented installation minimums for EPAS are not meaningful production sizes, so these tiers are derived from EDB's primary-standby HA guidance and normalized to cloud VM shapes.",
+      "HA mode adds standbys, failover management, and connection-entry infrastructure rather than assuming those costs are present in the non-HA baseline."
+    ],
+    "disclaimers": [
+      "Based on EDB Postgres Advanced Server requirements and public high-availability guidance, translated into VM-based planning tiers.",
+      "Estimate excludes backup storage, WAL archiving, tuning-specific IOPS requirements, logical replication, and any separate management tooling."
+    ]
+  },
+  {
+    "slug": "elasticsearch-oss",
+    "name": "Elasticsearch OSS",
+    "vendor": "Elastic",
+    "category": "search",
+    "description": "Legacy-style self-managed Elasticsearch baseline for community and OSS estates running search and log analytics clusters.\n",
+    "ref_arch": {
+      "source_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html",
+      "version": "Current self-managed guidance; OSS distribution lineage froze at 7.10",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 100 GB hot index data on a single node",
+        "ref_arch_tier": "single-node",
+        "components": [
+          {
+            "role": "node",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "100 GB to 1 TB hot data on a dedicated master cluster",
+        "ref_arch_tier": "dedicated-master-medium",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "master-node",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "coordinating-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "1 to 5 TB hot data on a scale-out search cluster",
+        "ref_arch_tier": "scale-out-large",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "master-node",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "coordinating-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "The OSS distribution is a legacy concept after the 7.10 fork, so this entry should be read as a community-style self-managed Elasticsearch planning baseline.",
+      "Hot-tier node sizes follow Elasticsearch self-managed heap and storage guidance, normalized to the VM shapes available in CloudEstimate."
+    ],
+    "disclaimers": [
+      "Based on Elastic's public self-managed operational guidance and translated into a legacy OSS-style VM baseline.",
+      "Estimate excludes snapshots, warm or frozen tiers, security features tied to commercial distributions, machine learning nodes, and network transfer."
     ]
   },
   {
@@ -490,6 +1196,97 @@
     ]
   },
   {
+    "slug": "influxdb-enterprise",
+    "name": "InfluxDB Enterprise",
+    "vendor": "InfluxData, Inc.",
+    "category": "data-store",
+    "description": "Self-managed InfluxDB Enterprise for high-ingest time-series monitoring, telemetry, and operational analytics.\n",
+    "ref_arch": {
+      "source_url": "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/",
+      "version": "InfluxDB Enterprise v1 hardware sizing guidelines",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 100,000 writes per second and under 1 million series",
+        "ref_arch_tier": "small-rf2",
+        "components": [
+          {
+            "role": "meta-node",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "data-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "100,000 to 400,000 writes per second and 1 to 5 million series",
+        "ref_arch_tier": "medium-rf2",
+        "components": [
+          {
+            "role": "meta-node",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "data-node",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "400,000 to 750,000 plus writes per second and 5 to 10 million plus series",
+        "ref_arch_tier": "large-rf3",
+        "components": [
+          {
+            "role": "meta-node",
+            "count": 5,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "data-node",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 4000,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Meta nodes stay small and odd-numbered, while data nodes scale out in even counts to reflect the vendor's own cluster guidance.",
+      "Write-rate and series-cardinality bands are taken directly from InfluxDB Enterprise sizing guidance and normalized to CloudEstimate's billable VM shapes."
+    ],
+    "disclaimers": [
+      "Based on InfluxDB Enterprise hardware sizing guidance and translated into VM-based planning tiers.",
+      "Estimate excludes Kapacitor, query relays, backup infrastructure, object storage, and network transfer between zones or regions."
+    ]
+  },
+  {
     "slug": "jfrog-artifactory",
     "name": "JFrog Artifactory Self-Hosted",
     "vendor": "JFrog Ltd.",
@@ -719,6 +1516,402 @@
     ]
   },
   {
+    "slug": "keycloak",
+    "name": "Keycloak",
+    "vendor": "Keycloak",
+    "category": "identity",
+    "description": "Self-managed Keycloak for identity, authentication, SSO, and federation across internal and customer-facing apps.\n",
+    "ref_arch": {
+      "source_url": "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing",
+      "version": "Keycloak current high-availability sizing guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 25 peak logins per second",
+        "ref_arch_tier": "single-node-small",
+        "components": [
+          {
+            "role": "keycloak",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "keycloak",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "25 to 150 peak logins per second",
+        "ref_arch_tier": "two-node-medium",
+        "components": [
+          {
+            "role": "keycloak",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "150 to 500 peak logins per second or heavier federation and brokering",
+        "ref_arch_tier": "four-node-large",
+        "components": [
+          {
+            "role": "keycloak",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 150,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "database-replica",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Keycloak node counts follow the official HA guidance, while the backing database is represented as a conservative self-managed planning baseline instead of the managed Aurora examples used in some vendor docs.",
+      "CPU-heavy larger tiers reflect the project's guidance that production HA deployments benefit from at least four cores per Keycloak node."
+    ],
+    "disclaimers": [
+      "Based on Keycloak's official HA sizing concepts and translated into VM-based planning inputs for self-managed deployments.",
+      "Estimate excludes external IdPs, SMTP, user federation backends, separate caching infrastructure, and license costs for any commercial database choice."
+    ]
+  },
+  {
+    "slug": "minio",
+    "name": "MinIO",
+    "vendor": "MinIO, Inc.",
+    "category": "data-store",
+    "description": "Self-managed MinIO object storage for S3-compatible buckets, data lakes, and application blob storage.\n",
+    "ref_arch": {
+      "source_url": "https://min.io/docs/minio/linux/operations/installation.html",
+      "version": "Community install topologies with current MinIO reference hardware",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 20 TB usable capacity on a single multi-drive node",
+        "ref_arch_tier": "single-node-multi-drive",
+        "components": [
+          {
+            "role": "storage-node",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 24000,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "storage-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 24000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "20 to 100 TB usable capacity on a four-node erasure-coded cluster",
+        "ref_arch_tier": "four-node-erasure-coded",
+        "components": [
+          {
+            "role": "storage-node",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 30000,
+            "storage_type": "nvme"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "100 TB to 1 PiB usable capacity on an eight-node erasure-coded cluster",
+        "ref_arch_tier": "eight-node-erasure-coded",
+        "components": [
+          {
+            "role": "storage-node",
+            "count": 8,
+            "vcpu": 32,
+            "memory_gb": 128,
+            "storage_gb": 30000,
+            "storage_type": "nvme"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Production-oriented MinIO deployments generally start at an erasure-coded multi-node layout, so the HA toggle expands the smallest tier into a four-node cluster.",
+      "The published MinIO reference hardware for large-scale object storage is often beefier than the generic VM sizes available here, so these are conservative planning baselines rather than vendor-certified hardware clones."
+    ],
+    "disclaimers": [
+      "Based on MinIO community deployment topologies and public reference hardware guidance, translated into VM-based object-storage planning tiers.",
+      "Estimate excludes external load balancers beyond the small HA add-on, raw-to-usable erasure coding overhead, backups, replication, and high-bandwidth networking costs."
+    ]
+  },
+  {
+    "slug": "mongodb-enterprise-advanced",
+    "name": "MongoDB Enterprise Advanced",
+    "vendor": "MongoDB, Inc.",
+    "category": "data-store",
+    "description": "Self-managed MongoDB Enterprise Advanced for replicated document databases and sharded operational workloads.\n",
+    "ref_arch": {
+      "source_url": "https://www.mongodb.com/docs/manual/administration/production-notes/",
+      "version": "MongoDB Manual current self-managed production guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 250 GB working set on a replicated operational cluster",
+        "ref_arch_tier": "replica-set-small",
+        "components": [
+          {
+            "role": "replica-set-member",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "250 GB to 1 TB working set on a production replica set",
+        "ref_arch_tier": "replica-set-medium",
+        "components": [
+          {
+            "role": "replica-set-member",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "1 to 10 TB working set on a sharded cluster",
+        "ref_arch_tier": "sharded-cluster-large",
+        "components": [
+          {
+            "role": "shard-member",
+            "count": 9,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 4000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "config-server",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "mongos-router",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Replica-set and sharded-cluster tiers already include the redundant members needed for production fault tolerance.",
+      "Working-set bands are derived from MongoDB's RAM and storage guidance and normalized to the billable VM shapes CloudEstimate supports."
+    ],
+    "disclaimers": [
+      "Based on MongoDB self-managed production notes and common MongoDB production topologies, translated into VM-style planning baselines.",
+      "Estimate excludes Enterprise Advanced licensing, Ops Manager infrastructure, backups, analytics nodes, and cross-region disaster recovery."
+    ]
+  },
+  {
+    "slug": "neo4j-enterprise",
+    "name": "Neo4j Enterprise",
+    "vendor": "Neo4j, Inc.",
+    "category": "data-store",
+    "description": "Self-managed Neo4j Enterprise for transactional graph databases, path analysis, and graph-backed applications.\n",
+    "ref_arch": {
+      "source_url": "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/",
+      "version": "Neo4j Operations Manual current clustering guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 100 GB graph store on a three-primary cluster",
+        "ref_arch_tier": "three-primary-small",
+        "components": [
+          {
+            "role": "primary",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "100 GB to 500 GB graph store with read scale-out",
+        "ref_arch_tier": "three-primary-two-replica",
+        "components": [
+          {
+            "role": "primary",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "read-replica",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "500 GB to 2 TB graph store or heavier read-dominant graph workloads",
+        "ref_arch_tier": "three-primary-four-replica",
+        "components": [
+          {
+            "role": "primary",
+            "count": 3,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "read-replica",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Clustered Neo4j Enterprise requires three primaries, so the base tiers already include the core fault-tolerant topology.",
+      "Memory-heavy node shapes reflect Neo4j's guidance to balance JVM heap and page cache against the hot graph dataset."
+    ],
+    "disclaimers": [
+      "Based on Neo4j Enterprise clustering guidance and translated into VM-based planning tiers for self-managed deployments.",
+      "Estimate excludes backups, external load balancing, vector-search accelerators, and any separate analytics clusters."
+    ]
+  },
+  {
     "slug": "nexus-repository",
     "name": "Sonatype Nexus Repository",
     "vendor": "Sonatype, Inc.",
@@ -860,6 +2053,212 @@
     "disclaimers": [
       "Based on Sonatype Nexus Repository reference architectures and translated into VM-style planning inputs for multi-cloud estimation.",
       "Estimate excludes external object storage capacity, backup infrastructure, and multi-region disaster recovery."
+    ]
+  },
+  {
+    "slug": "nomad",
+    "name": "Nomad",
+    "vendor": "HashiCorp, Inc.",
+    "category": "other",
+    "description": "Self-managed Nomad for workload orchestration across VM, container, and batch platforms.\n",
+    "ref_arch": {
+      "source_url": "https://developer.hashicorp.com/nomad/docs/install/production",
+      "version": "Nomad current production reference guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 50 small jobs on a starter production cluster",
+        "ref_arch_tier": "starter-cluster",
+        "components": [
+          {
+            "role": "server",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "client",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "50 to 300 jobs on a small production scheduler footprint",
+        "ref_arch_tier": "production-cluster",
+        "components": [
+          {
+            "role": "server",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "client",
+            "count": 10,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "300 to 1,000 jobs or a bootstrap platform for larger fleets",
+        "ref_arch_tier": "scale-cluster",
+        "components": [
+          {
+            "role": "server",
+            "count": 5,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "client",
+            "count": 25,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 150,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "The Nomad server quorum follows HashiCorp production guidance, while the client pools are generic starter capacity and not a substitute for sizing the workloads you run on top.",
+      "This entry is most useful as a platform bootstrap estimate because the scheduled jobs themselves usually dominate total cost."
+    ],
+    "disclaimers": [
+      "Based on Nomad production guidance and translated into a VM-based control-plane plus starter-worker baseline.",
+      "Estimate excludes Consul, Vault, external load balancers, persistent storage for stateful jobs, and the real resource needs of the applications scheduled by Nomad."
+    ]
+  },
+  {
+    "slug": "opensearch",
+    "name": "OpenSearch",
+    "vendor": "The OpenSearch Project",
+    "category": "search",
+    "description": "Self-managed OpenSearch for full-text search, observability pipelines, and analytics clusters.\n",
+    "ref_arch": {
+      "source_url": "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/",
+      "version": "OpenSearch 2.17 cluster tuning guidance",
+      "retrieved_date": "2026-04-13"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 100 GB hot index data on a single node",
+        "ref_arch_tier": "single-node",
+        "components": [
+          {
+            "role": "node",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "100 GB to 1 TB hot data on a cluster with dedicated managers",
+        "ref_arch_tier": "dedicated-cluster-manager-medium",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "cluster-manager",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "coordinating-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "1 to 5 TB hot data on a larger scale-out cluster",
+        "ref_arch_tier": "scale-out-large",
+        "components": [
+          {
+            "role": "data-node",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "cluster-manager",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "coordinating-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "OpenSearch cluster-manager and data-node separation follows official cluster tuning patterns for production deployments.",
+      "NVMe-backed local disks are used for the hot data tier because search and ingest performance tends to be storage-latency sensitive."
+    ],
+    "disclaimers": [
+      "Based on OpenSearch cluster tuning and operational guidance, translated into VM-based planning tiers.",
+      "Estimate excludes warm or cold tiers, snapshots, machine-learning plugins, remote storage, and network transfer."
     ]
   },
   {

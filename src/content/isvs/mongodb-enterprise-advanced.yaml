@@ -1,0 +1,62 @@
+slug: mongodb-enterprise-advanced
+name: MongoDB Enterprise Advanced
+vendor: MongoDB, Inc.
+category: data-store
+description: >
+  Self-managed MongoDB Enterprise Advanced for replicated document databases and sharded operational workloads.
+ref_arch:
+  source_url: https://www.mongodb.com/docs/manual/administration/production-notes/
+  version: "MongoDB Manual current self-managed production guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 250 GB working set on a replicated operational cluster
+    ref_arch_tier: replica-set-small
+    components:
+      - role: replica-set-member
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 250 GB to 1 TB working set on a production replica set
+    ref_arch_tier: replica-set-medium
+    components:
+      - role: replica-set-member
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 1 to 10 TB working set on a sharded cluster
+    ref_arch_tier: sharded-cluster-large
+    components:
+      - role: shard-member
+        count: 9
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 4000
+        storage_type: ssd
+      - role: config-server
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: mongos-router
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+notes:
+  - Replica-set and sharded-cluster tiers already include the redundant members needed for production fault tolerance.
+  - Working-set bands are derived from MongoDB's RAM and storage guidance and normalized to the billable VM shapes CloudEstimate supports.
+disclaimers:
+  - Based on MongoDB self-managed production notes and common MongoDB production topologies, translated into VM-style planning baselines.
+  - Estimate excludes Enterprise Advanced licensing, Ops Manager infrastructure, backups, analytics nodes, and cross-region disaster recovery.

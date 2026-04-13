@@ -1,0 +1,107 @@
+slug: keycloak
+name: Keycloak
+vendor: Keycloak
+category: identity
+description: >
+  Self-managed Keycloak for identity, authentication, SSO, and federation across internal and customer-facing apps.
+ref_arch:
+  source_url: https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing
+  version: "Keycloak current high-availability sizing guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 25 peak logins per second
+    ref_arch_tier: single-node-small
+    components:
+      - role: keycloak
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: database
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: keycloak
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: database-replica
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: 25 to 150 peak logins per second
+    ref_arch_tier: two-node-medium
+    components:
+      - role: keycloak
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: database
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 200
+        storage_type: ssd
+    ha_components:
+      - role: database-replica
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 200
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  xl:
+    label: Extra Large
+    range_description: 150 to 500 peak logins per second or heavier federation and brokering
+    ref_arch_tier: four-node-large
+    components:
+      - role: keycloak
+        count: 4
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 150
+        storage_type: ssd
+      - role: database
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+    ha_components:
+      - role: database-replica
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+      - role: load-balancer
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+notes:
+  - Keycloak node counts follow the official HA guidance, while the backing database is represented as a conservative self-managed planning baseline instead of the managed Aurora examples used in some vendor docs.
+  - CPU-heavy larger tiers reflect the project's guidance that production HA deployments benefit from at least four cores per Keycloak node.
+disclaimers:
+  - Based on Keycloak's official HA sizing concepts and translated into VM-based planning inputs for self-managed deployments.
+  - Estimate excludes external IdPs, SMTP, user federation backends, separate caching infrastructure, and license costs for any commercial database choice.

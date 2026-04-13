@@ -1,0 +1,85 @@
+slug: opensearch
+name: OpenSearch
+vendor: The OpenSearch Project
+category: search
+description: >
+  Self-managed OpenSearch for full-text search, observability pipelines, and analytics clusters.
+ref_arch:
+  source_url: https://docs.opensearch.org/docs/2.17/tuning-your-cluster/
+  version: "OpenSearch 2.17 cluster tuning guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 100 GB hot index data on a single node
+    ref_arch_tier: single-node
+    components:
+      - role: node
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: nvme
+    ha_components:
+      - role: node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: 100 GB to 1 TB hot data on a cluster with dedicated managers
+    ref_arch_tier: dedicated-cluster-manager-medium
+    components:
+      - role: data-node
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: nvme
+      - role: cluster-manager
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: coordinating-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 1 to 5 TB hot data on a larger scale-out cluster
+    ref_arch_tier: scale-out-large
+    components:
+      - role: data-node
+        count: 6
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: nvme
+      - role: cluster-manager
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: coordinating-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+notes:
+  - OpenSearch cluster-manager and data-node separation follows official cluster tuning patterns for production deployments.
+  - NVMe-backed local disks are used for the hot data tier because search and ingest performance tends to be storage-latency sensitive.
+disclaimers:
+  - Based on OpenSearch cluster tuning and operational guidance, translated into VM-based planning tiers.
+  - Estimate excludes warm or cold tiers, snapshots, machine-learning plugins, remote storage, and network transfer.

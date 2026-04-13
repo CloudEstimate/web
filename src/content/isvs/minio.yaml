@@ -1,0 +1,61 @@
+slug: minio
+name: MinIO
+vendor: MinIO, Inc.
+category: data-store
+description: >
+  Self-managed MinIO object storage for S3-compatible buckets, data lakes, and application blob storage.
+ref_arch:
+  source_url: https://min.io/docs/minio/linux/operations/installation.html
+  version: "Community install topologies with current MinIO reference hardware"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 20 TB usable capacity on a single multi-drive node
+    ref_arch_tier: single-node-multi-drive
+    components:
+      - role: storage-node
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 24000
+        storage_type: nvme
+    ha_components:
+      - role: storage-node
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 24000
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+  m:
+    label: Medium
+    range_description: 20 to 100 TB usable capacity on a four-node erasure-coded cluster
+    ref_arch_tier: four-node-erasure-coded
+    components:
+      - role: storage-node
+        count: 4
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 30000
+        storage_type: nvme
+  xl:
+    label: Extra Large
+    range_description: 100 TB to 1 PiB usable capacity on an eight-node erasure-coded cluster
+    ref_arch_tier: eight-node-erasure-coded
+    components:
+      - role: storage-node
+        count: 8
+        vcpu: 32
+        memory_gb: 128
+        storage_gb: 30000
+        storage_type: nvme
+notes:
+  - Production-oriented MinIO deployments generally start at an erasure-coded multi-node layout, so the HA toggle expands the smallest tier into a four-node cluster.
+  - The published MinIO reference hardware for large-scale object storage is often beefier than the generic VM sizes available here, so these are conservative planning baselines rather than vendor-certified hardware clones.
+disclaimers:
+  - Based on MinIO community deployment topologies and public reference hardware guidance, translated into VM-based object-storage planning tiers.
+  - Estimate excludes external load balancers beyond the small HA add-on, raw-to-usable erasure coding overhead, backups, replication, and high-bandwidth networking costs.

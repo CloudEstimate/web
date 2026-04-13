@@ -1,0 +1,68 @@
+slug: influxdb-enterprise
+name: InfluxDB Enterprise
+vendor: InfluxData, Inc.
+category: data-store
+description: >
+  Self-managed InfluxDB Enterprise for high-ingest time-series monitoring, telemetry, and operational analytics.
+ref_arch:
+  source_url: https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/
+  version: "InfluxDB Enterprise v1 hardware sizing guidelines"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 100,000 writes per second and under 1 million series
+    ref_arch_tier: small-rf2
+    components:
+      - role: meta-node
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: data-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 1000
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 100,000 to 400,000 writes per second and 1 to 5 million series
+    ref_arch_tier: medium-rf2
+    components:
+      - role: meta-node
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: data-node
+        count: 4
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 400,000 to 750,000 plus writes per second and 5 to 10 million plus series
+    ref_arch_tier: large-rf3
+    components:
+      - role: meta-node
+        count: 5
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: data-node
+        count: 6
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 4000
+        storage_type: ssd
+notes:
+  - Meta nodes stay small and odd-numbered, while data nodes scale out in even counts to reflect the vendor's own cluster guidance.
+  - Write-rate and series-cardinality bands are taken directly from InfluxDB Enterprise sizing guidance and normalized to CloudEstimate's billable VM shapes.
+disclaimers:
+  - Based on InfluxDB Enterprise hardware sizing guidance and translated into VM-based planning tiers.
+  - Estimate excludes Kapacitor, query relays, backup infrastructure, object storage, and network transfer between zones or regions.

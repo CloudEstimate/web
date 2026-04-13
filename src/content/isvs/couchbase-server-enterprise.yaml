@@ -1,0 +1,74 @@
+slug: couchbase-server-enterprise
+name: Couchbase Server Enterprise
+vendor: Couchbase, Inc.
+category: data-store
+description: >
+  Self-managed Couchbase Server Enterprise for distributed JSON data, caching, and full-text search workloads.
+ref_arch:
+  source_url: https://docs.couchbase.com/server/current/install/sizing-general.html
+  version: "Couchbase Server current sizing guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 50 GB active data on a compact multi-service cluster
+    ref_arch_tier: combined-services-small
+    components:
+      - role: cluster-node
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 50 to 250 GB active data with separated data, query, and index services
+    ref_arch_tier: split-services-medium
+    components:
+      - role: data-node
+        count: 4
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: ssd
+      - role: index-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 500
+        storage_type: ssd
+      - role: query-node
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 250 GB to 1 TB active data on a larger dedicated-services cluster
+    ref_arch_tier: split-services-large
+    components:
+      - role: data-node
+        count: 6
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: ssd
+      - role: index-node
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 750
+        storage_type: ssd
+      - role: query-node
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+notes:
+  - Data node memory follows Couchbase's published data-service sizing ratio, while query and index roles follow the vendor's CPU and RAM guidance per service.
+  - The larger tiers assume bucket replication is already built into the base cluster, so the HA toggle does not add extra nodes.
+disclaimers:
+  - Based on Couchbase Server sizing guidance and translated into VM-oriented planning tiers for multi-cloud comparison.
+  - Estimate excludes XDCR, backup service overhead, Analytics or Eventing nodes, and storage growth from replicas or compaction beyond the local disks shown.

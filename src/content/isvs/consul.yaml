@@ -1,0 +1,74 @@
+slug: consul
+name: Consul
+vendor: HashiCorp, Inc.
+category: other
+description: >
+  Self-managed Consul for service discovery, service mesh control, and network configuration across distributed workloads.
+ref_arch:
+  source_url: https://developer.hashicorp.com/consul/docs/architecture
+  version: "Consul current production architecture guidance"
+  retrieved_date: "2026-04-13"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 500 registered services on a three-server control plane
+    ref_arch_tier: three-server
+    components:
+      - role: server
+        count: 3
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 500 to 5,000 registered services with ingress and mesh gateways
+    ref_arch_tier: five-server-medium
+    components:
+      - role: server
+        count: 5
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: ssd
+      - role: ingress-gateway
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: mesh-gateway
+        count: 2
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+  xl:
+    label: Extra Large
+    range_description: 5,000 to 25,000 registered services with larger service-mesh control needs
+    ref_arch_tier: five-server-large
+    components:
+      - role: server
+        count: 5
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 200
+        storage_type: ssd
+      - role: ingress-gateway
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: mesh-gateway
+        count: 4
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+notes:
+  - Consul sizing is focused on the control plane and common gateway roles; the client agents embedded on application hosts are not modelled as separate infrastructure here.
+  - Odd-numbered server counts follow HashiCorp's quorum guidance for production control planes.
+disclaimers:
+  - Based on Consul production architecture guidance and translated into VM-based planning tiers.
+  - Estimate excludes application workload nodes, external L7 gateways, network transfer, and any HCP-managed alternatives.
