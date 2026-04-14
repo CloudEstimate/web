@@ -12,7 +12,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://cloudestimate.dev' }}
       PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
       PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
     steps:
@@ -41,7 +41,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
-      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://cloudestimate.dev' }}
       PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
       PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
       CLOUDESTIMATE_CACHE_BUCKET: ${{ vars.CLOUDESTIMATE_CACHE_BUCKET }}
