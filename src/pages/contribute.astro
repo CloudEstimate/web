@@ -1,10 +1,18 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
+
+const title = "Contribute | CloudEstimate";
+const description = "How to add an ISV, validate the YAML schema, and open a pull request.";
+const jsonLd = buildPageJsonLd({
+  title: "Contribute to CloudEstimate",
+  description,
+  canonical: buildCanonical("/contribute")
+});
 ---
 
-<BaseLayout title="Contribute | CloudEstimate" canonical={buildCanonical("/contribute")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/contribute")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Contribute</h1>
 

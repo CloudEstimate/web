@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical } from "@/lib/seo";
+const title = "Page not found | CloudEstimate";
+const description = "The page you asked for is not here. Browse the ISV directory or return to the home page.";
 ---
 
-<BaseLayout title="Page not found | CloudEstimate" canonical={buildCanonical("/404")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/404")} robots="noindex,follow">
   <section class="page-shell-narrow py-16">
     <h1 class="text-[2rem] font-semibold tracking-tight">This page doesn&apos;t exist.</h1>
     <p class="mt-4 text-muted">

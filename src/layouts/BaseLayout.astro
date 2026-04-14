@@ -9,7 +9,7 @@ type Props = {
   description?: string;
   canonical?: string;
   image?: string;
-  jsonLd?: Record<string, unknown> | null;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[] | null;
   metaRefresh?: string;
   robots?: string;
 };
@@ -50,10 +50,12 @@ const searchConsoleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATIO
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical ?? Astro.url.toString()} />
     <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={title} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={title} />
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     {gaMeasurementId && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>}
     {gaMeasurementId && (

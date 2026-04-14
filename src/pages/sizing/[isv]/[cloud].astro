@@ -4,7 +4,7 @@ import EstimateExplorer from "@/components/EstimateExplorer.astro";
 import IsvCard from "@/components/IsvCard.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildEstimate, buildEstimateMatrix, getDefaultRegion, getDefaultSize } from "@/lib/estimates";
-import { buildCanonical, buildEstimateDescription, buildEstimateTitle, buildJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildCanonical, buildEstimateDescription, buildEstimateTitle, buildPageJsonLd } from "@/lib/seo";
 import { cloudOrder, cloudMeta, siteConfig, type CloudSlug } from "@/lib/site";
 import type { IsvEntry } from "@/lib/types";
 
@@ -44,7 +44,20 @@ const title = buildEstimateTitle(isv, cloud);
 const description = buildEstimateDescription(isv, cloud, initialEstimate);
 const canonical = buildCanonical(`/sizing/${isv.data.slug}/${cloud}`);
 const image = `/og/${isv.data.slug}/${cloud}.png`;
-const jsonLd = buildJsonLd({ title, description, canonical, image: new URL(image, siteConfig.url).toString() });
+const jsonLd = [
+  buildPageJsonLd({
+    title,
+    description,
+    canonical,
+    image: new URL(image, siteConfig.url).toString()
+  }),
+  buildBreadcrumbJsonLd([
+    { name: "Home", item: buildCanonical("/") },
+    { name: "ISVs", item: buildCanonical("/isvs") },
+    { name: isv.data.name, item: buildCanonical(`/sizing/${isv.data.slug}/compare`) },
+    { name: cloudMeta[cloud].name, item: canonical }
+  ])
+];
 const allIsvs = await getCollection("isvs");
 const relatedIsvs = allIsvs.filter((entry) => entry.data.slug !== isv.data.slug).slice(0, 3);
 ---

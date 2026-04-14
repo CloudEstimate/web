@@ -1,9 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+
+const title = "Changelog | CloudEstimate";
+const description = "Release history for new ISVs, pricing refreshes, and SEO improvements.";
+const jsonLd = buildPageJsonLd({
+  title: "CloudEstimate changelog",
+  description,
+  canonical: buildCanonical("/changelog")
+});
 ---
 
-<BaseLayout title="Changelog | CloudEstimate" canonical={buildCanonical("/changelog")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/changelog")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Changelog</h1>
 

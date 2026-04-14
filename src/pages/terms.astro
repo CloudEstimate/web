@@ -1,9 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+
+const title = "Terms of use | CloudEstimate";
+const description = "The rules and limitations that apply when using CloudEstimate estimates and source material.";
+const jsonLd = buildPageJsonLd({
+  title: "CloudEstimate terms of use",
+  description,
+  canonical: buildCanonical("/terms")
+});
 ---
 
-<BaseLayout title="Terms of use | CloudEstimate" canonical={buildCanonical("/terms")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/terms")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Terms of use</h1>
     <p>Last updated: April 12, 2026</p>

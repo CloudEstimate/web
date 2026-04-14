@@ -1,9 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+
+const title = "Privacy policy | CloudEstimate";
+const description = "What CloudEstimate collects, what it does not collect, and how analytics are used.";
+const jsonLd = buildPageJsonLd({
+  title: "CloudEstimate privacy policy",
+  description,
+  canonical: buildCanonical("/privacy")
+});
 ---
 
-<BaseLayout title="Privacy policy | CloudEstimate" canonical={buildCanonical("/privacy")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/privacy")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Privacy policy</h1>
     <p>Last updated: April 12, 2026</p>

@@ -1,9 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+
+const title = "Acknowledgements | CloudEstimate";
+const description = "Reference architectures, pricing sources, and open tools that make CloudEstimate possible.";
+const jsonLd = buildPageJsonLd({
+  title: "CloudEstimate acknowledgements",
+  description,
+  canonical: buildCanonical("/acknowledgements")
+});
 ---
 
-<BaseLayout title="Acknowledgements | CloudEstimate" canonical={buildCanonical("/acknowledgements")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/acknowledgements")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Acknowledgements</h1>
 

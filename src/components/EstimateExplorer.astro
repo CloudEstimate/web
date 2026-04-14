@@ -85,7 +85,9 @@ const clientData = {
       <span aria-hidden="true"> / </span>
       <a href="/isvs">ISVs</a>
       <span aria-hidden="true"> / </span>
-      <span>{isv.data.name}</span>
+      <a href={`/sizing/${slug}/compare`}>{isv.data.name}</a>
+      <span aria-hidden="true"> / </span>
+      <span>{cloudMeta[cloud].name}</span>
     </nav>
 
     <div class="space-y-2">
@@ -307,7 +309,7 @@ const clientData = {
             </a>
           ))}
           <a class="button-secondary" id={`${widgetId}-compare-link`} href={`/sizing/${slug}/compare?size=${initialState.size}&ha=${initialState.ha}&term=${initialState.term}`}>
-            Compare all three
+            Compare Google Cloud, AWS, and Azure
           </a>
         </div>
       </section>

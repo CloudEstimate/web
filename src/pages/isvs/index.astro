@@ -1,22 +1,41 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildItemListJsonLd, buildPageJsonLd } from "@/lib/seo";
 import { cloudOrder, cloudMeta } from "@/lib/site";
 
 const isvs = await getCollection("isvs");
+const description =
+  "Directory of supported self-managed workloads with Google Cloud, AWS, Azure, and compare routes.";
+const jsonLd = [
+  buildPageJsonLd({
+    type: "CollectionPage",
+    title: "Supported ISVs and cloud coverage",
+    description,
+    canonical: buildCanonical("/isvs")
+  }),
+  buildItemListJsonLd({
+    name: "CloudEstimate supported ISVs",
+    description: "Supported workloads and compare routes.",
+    items: isvs.map((isv) => ({
+      name: isv.data.name,
+      item: buildCanonical(`/sizing/${isv.data.slug}/compare`)
+    }))
+  })
+];
 ---
 
 <BaseLayout
-  title="Supported ISVs | CloudEstimate"
-  description="Directory of supported self-managed workloads and cloud coverage."
+  title="Supported ISVs and cloud coverage | CloudEstimate"
+  description={description}
   canonical={buildCanonical("/isvs")}
+  jsonLd={jsonLd}
 >
   <section class="page-shell py-10 lg:py-14">
     <div class="max-w-3xl space-y-4">
       <h1 class="text-[2rem] font-semibold tracking-tight">Supported ISVs</h1>
       <p class="text-lg text-muted">
-        Directory of workloads currently encoded from public reference architectures.
+        Directory of workloads currently encoded from public reference architectures and compare routes.
       </p>
     </div>
 
@@ -30,6 +49,7 @@ const isvs = await getCollection("isvs");
             {cloudOrder.map((cloud) => (
               <th data-align="right">{cloudMeta[cloud].name}</th>
             ))}
+            <th data-align="right">Compare</th>
           </tr>
         </thead>
         <tbody>
@@ -42,9 +62,12 @@ const isvs = await getCollection("isvs");
               <td>{isv.data.category}</td>
               {cloudOrder.map((cloud) => (
                 <td data-align="right">
-                  <a href={`/sizing/${isv.data.slug}/${cloud}`}>Yes</a>
+                  <a href={`/sizing/${isv.data.slug}/${cloud}`}>{cloudMeta[cloud].name}</a>
                 </td>
               ))}
+              <td data-align="right">
+                <a href={`/sizing/${isv.data.slug}/compare`}>Compare</a>
+              </td>
             </tr>
           ))}
         </tbody>

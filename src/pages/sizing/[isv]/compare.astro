@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import CompareExplorer from "@/components/CompareExplorer.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCompareMatrix, getDefaultRegion, getDefaultSize } from "@/lib/estimates";
-import { buildCanonical, buildCompareDescription, buildCompareTitle, buildJsonLd } from "@/lib/seo";
+import { buildBreadcrumbJsonLd, buildCanonical, buildCompareDescription, buildCompareTitle, buildPageJsonLd } from "@/lib/seo";
 import { buildEstimate } from "@/lib/estimates";
 import { siteConfig } from "@/lib/site";
 import type { IsvEntry } from "@/lib/types";
@@ -39,7 +39,20 @@ const title = buildCompareTitle(isv);
 const description = buildCompareDescription(isv, initialEstimate);
 const canonical = buildCanonical(`/sizing/${isv.data.slug}/compare`);
 const image = `/og/${isv.data.slug}/compare.png`;
-const jsonLd = buildJsonLd({ title, description, canonical, image: new URL(image, siteConfig.url).toString() });
+const jsonLd = [
+  buildPageJsonLd({
+    title,
+    description,
+    canonical,
+    image: new URL(image, siteConfig.url).toString()
+  }),
+  buildBreadcrumbJsonLd([
+    { name: "Home", item: buildCanonical("/") },
+    { name: "ISVs", item: buildCanonical("/isvs") },
+    { name: isv.data.name, item: buildCanonical(`/sizing/${isv.data.slug}/gcp`) },
+    { name: "Compare", item: canonical }
+  ])
+];
 ---
 
 <BaseLayout title={title} description={description} canonical={canonical} image={image} jsonLd={jsonLd}>

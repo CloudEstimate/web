@@ -78,9 +78,11 @@ const clientData = {
       <span aria-hidden="true"> / </span>
       <a href="/isvs">ISVs</a>
       <span aria-hidden="true"> / </span>
-      <span>{isv.data.name}</span>
+      <a href={`/sizing/${slug}/gcp`}>{isv.data.name}</a>
+      <span aria-hidden="true"> / </span>
+      <span>Compare</span>
     </nav>
-    <h1 class="text-[2rem] font-semibold tracking-tight">Compare {isv.data.name} across clouds</h1>
+    <h1 class="text-[2rem] font-semibold tracking-tight">Compare {isv.data.name} on Google Cloud, AWS, and Azure</h1>
     <p class="text-lg text-muted" id={`${widgetId}-subhead`}>
       {isv.data.sizes[initialState.size]?.label ?? initialView.size.toUpperCase()} — {formatUserRange(isv.data.sizes[initialState.size]?.range_description ?? "")}
     </p>

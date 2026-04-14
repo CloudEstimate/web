@@ -2,20 +2,31 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import IsvCard from "@/components/IsvCard.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 const isvs = await getCollection("isvs");
+const title = "Self-managed workload sizing across Google Cloud, AWS, and Azure | CloudEstimate";
+const description =
+  "Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure. Compare all three on one page.";
+const jsonLd = buildPageJsonLd({
+  type: "WebSite",
+  title: siteConfig.name,
+  description,
+  canonical: buildCanonical("/"),
+  image: new URL("/og/default.png", siteConfig.url).toString()
+});
 ---
 
 <BaseLayout
-  title="Size self-managed workloads across clouds. | CloudEstimate"
-  description={siteConfig.description}
+  title={title}
+  description={description}
   canonical={buildCanonical("/")}
+  jsonLd={jsonLd}
 >
   <section class="page-shell py-12 lg:py-16">
     <div class="home-hero">
-      <h1>Size self-managed workloads across clouds.</h1>
+      <h1>Size self-managed workloads across Google Cloud, AWS, and Azure.</h1>
       <p>
         Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure.
       </p>

@@ -1,9 +1,19 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { buildCanonical } from "@/lib/seo";
+import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+
+const title = "Methodology | CloudEstimate";
+const description =
+  "How CloudEstimate maps vendor reference architectures to cloud instance shapes, cached pricing snapshots, and dated cost estimates.";
+const jsonLd = buildPageJsonLd({
+  type: "TechArticle",
+  title: "CloudEstimate methodology",
+  description,
+  canonical: buildCanonical("/methodology")
+});
 ---
 
-<BaseLayout title="Methodology | CloudEstimate" canonical={buildCanonical("/methodology")}>
+<BaseLayout title={title} description={description} canonical={buildCanonical("/methodology")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Methodology</h1>
 

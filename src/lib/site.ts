@@ -1,6 +1,11 @@
+import { resolveSiteUrl } from "@/lib/site-url";
+
+const isProductionBuild =
+  process.env.CI === "true" || process.env.npm_lifecycle_event === "build" || process.argv.includes("build");
+
 export const siteConfig = {
   name: "CloudEstimate",
-  url: import.meta.env.PUBLIC_SITE_URL ?? "http://localhost:4321",
+  url: resolveSiteUrl(import.meta.env.PUBLIC_SITE_URL, !isProductionBuild),
   description:
     "Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure.",
   owner: {

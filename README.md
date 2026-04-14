@@ -66,6 +66,8 @@ Available local env vars:
 - `PUBLIC_GOOGLE_SITE_VERIFICATION`
 - `CLOUDESTIMATE_CACHE_BUCKET`
 
+`PUBLIC_SITE_URL` is required for production builds so canonical URLs, robots output, and the sitemap point at the real site. In local dev, the app falls back to `http://localhost:4321` if it is not set.
+
 In GitHub Actions, public configuration belongs in repository or environment variables. Secrets such as `GCP_SA_KEY` belong in GitHub Actions Secrets.
 
 ## Quality checks

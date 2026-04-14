@@ -1,12 +1,20 @@
 ---
 import type { IsvEntry } from "@/lib/types";
+import { cloudMeta, cloudOrder } from "@/lib/site";
 
 type Props = {
   isv: IsvEntry;
   href?: string;
 };
 
-const { isv, href = `/sizing/${isv.data.slug}/gcp` } = Astro.props;
+const { isv, href = `/sizing/${isv.data.slug}/compare` } = Astro.props;
+const primaryLabel = href.includes("/compare")
+  ? "Compare"
+  : href.includes("/aws")
+    ? "Open AWS estimate"
+    : href.includes("/azure")
+      ? "Open Azure estimate"
+      : "Open Google Cloud estimate";
 ---
 
 <article class="interactive-panel p-5">
@@ -30,7 +38,19 @@ const { isv, href = `/sizing/${isv.data.slug}/gcp` } = Astro.props;
     </div>
 
     <p class="pt-2 text-sm font-medium">
-      <a href={href}>Size on Google Cloud →</a>
+      <a href={href}>{primaryLabel} →</a>
     </p>
+
+    <div class="flex flex-wrap gap-2 text-xs font-medium">
+      {cloudOrder.map((cloud) => (
+        <a class="rounded-full border px-2 py-1 link-quiet" href={`/sizing/${isv.data.slug}/${cloud}`} style="border-color: var(--color-border);">
+          {cloudMeta[cloud].name}
+        </a>
+      ))}
+      <a class="rounded-full border px-2 py-1 link-quiet" href={`/sizing/${isv.data.slug}/compare`} style="border-color: var(--color-border);">
+        Compare
+      </a>
+    </div>
+
   </div>
 </article>
