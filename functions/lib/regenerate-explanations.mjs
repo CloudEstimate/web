@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { logger } from "firebase-functions/v2";
-import { requireEnv } from "./config.mjs";
+import { requireEnv, requireProjectId } from "./config.mjs";
 import { buildCompareTuples, buildEstimateTuples } from "./estimate-engine.mjs";
 import { buildComparePrompt, buildSinglePrompt, sharedSystemPrompt } from "./prompts.mjs";
 import { findLatestFile, getCacheBucket, readJson, writeJson } from "./storage.mjs";
@@ -10,8 +10,8 @@ import { getIsvCatalog } from "./runtime-data.mjs";
 export async function regenerateExplanationCaches() {
   const ai = new GoogleGenAI({
     vertexai: true,
-    project: requireEnv("GOOGLE_CLOUD_PROJECT"),
-    location: process.env.GOOGLE_CLOUD_LOCATION ?? "global"
+    project: requireProjectId(),
+    location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
   });
   const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-pro";
   const bucket = getCacheBucket();

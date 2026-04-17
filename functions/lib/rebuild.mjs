@@ -1,6 +1,6 @@
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { logger } from "firebase-functions/v2";
-import { requireEnv } from "./config.mjs";
+import { requireEnv, requireProjectId } from "./config.mjs";
 
 const secretManager = new SecretManagerServiceClient();
 let cachedGitHubToken = null;
@@ -38,7 +38,7 @@ async function getGitHubToken() {
     return cachedGitHubToken;
   }
 
-  const projectId = requireEnv("GOOGLE_CLOUD_PROJECT");
+  const projectId = requireProjectId();
   const [version] = await secretManager.accessSecretVersion({
     name: `projects/${projectId}/secrets/CLOUDESTIMATE_GITHUB_TOKEN/versions/latest`
   });

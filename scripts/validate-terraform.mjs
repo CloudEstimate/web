@@ -12,7 +12,8 @@ const shapeMappingsPath = path.join(root, "src/data/shape-mappings.yaml");
 const gcpPricingPath = path.join(root, "src/data/generated/pricing/gcp.json");
 const requiredTiers = ["xs", "m", "xl"];
 const mode = readMode();
-const terraformProjectId = process.env.TF_VAR_project_id ?? process.env.GOOGLE_CLOUD_PROJECT ?? "example-project-id";
+const terraformProjectId =
+  process.env.TF_VAR_project_id ?? process.env.CLOUDESTIMATE_GCP_PROJECT_ID ?? process.env.GCLOUD_PROJECT ?? "example-project-id";
 
 const shapeMappings = YAML.parse(await fs.readFile(shapeMappingsPath, "utf8"));
 const pricing = JSON.parse(await fs.readFile(gcpPricingPath, "utf8"));
