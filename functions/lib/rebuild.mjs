@@ -1,8 +1,14 @@
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { logger } from "firebase-functions/v2";
-import { getRuntimeConfig } from "./config.mjs";
+import { requireEnv } from "./config.mjs";
+
+const secretManager = new SecretManagerServiceClient();
+let cachedGitHubToken = null;
 
 export async function dispatchRebuild(reason) {
-  const { githubOwner: owner, githubRepo: repo, githubToken: token } = getRuntimeConfig();
+  const owner = requireEnv("CLOUDESTIMATE_GITHUB_OWNER");
+  const repo = requireEnv("CLOUDESTIMATE_GITHUB_REPO");
+  const token = await getGitHubToken();
   const url = `https://api.github.com/repos/${owner}/${repo}/dispatches`;
 
   const response = await fetch(url, {
@@ -25,4 +31,23 @@ export async function dispatchRebuild(reason) {
   }
 
   logger.info(`Triggered GitHub rebuild for ${reason}.`);
+}
+
+async function getGitHubToken() {
+  if (cachedGitHubToken) {
+    return cachedGitHubToken;
+  }
+
+  const projectId = requireEnv("GOOGLE_CLOUD_PROJECT");
+  const [version] = await secretManager.accessSecretVersion({
+    name: `projects/${projectId}/secrets/CLOUDESTIMATE_GITHUB_TOKEN/versions/latest`
+  });
+  const token = version.payload?.data?.toString("utf8").trim();
+
+  if (!token) {
+    throw new Error("Secret Manager returned an empty CLOUDESTIMATE_GITHUB_TOKEN payload.");
+  }
+
+  cachedGitHubToken = token;
+  return cachedGitHubToken;
 }

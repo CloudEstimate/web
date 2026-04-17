@@ -1,4 +1,5 @@
 node_modules
-.secret.local
-.secret.local.*
-!.secret.local.example
+.env
+.env.*
+!.env.example
+runtime-config.json

@@ -1,10 +1,10 @@
 import { Storage } from "@google-cloud/storage";
-import { getRuntimeConfig } from "./config.mjs";
+import { requireEnv } from "./config.mjs";
 
 const storage = new Storage();
 
 export function getCacheBucket() {
-  const { cacheBucket: bucketName } = getRuntimeConfig();
+  const bucketName = requireEnv("CLOUDESTIMATE_CACHE_BUCKET");
   return storage.bucket(bucketName);
 }
 
