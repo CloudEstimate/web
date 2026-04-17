@@ -1,1 +1,4 @@
 node_modules
+.secret.local
+.secret.local.*
+!.secret.local.example

@@ -1,6 +1,12 @@
+import { defineJsonSecret } from "firebase-functions/params";
+
 export const cloudOrder = ["gcp", "aws", "azure"];
 export const sizeOrder = ["xs", "s", "m", "l", "xl"];
 export const termOrder = ["on-demand", "1yr", "3yr"];
+
+// Keep the custom runtime settings in one Secret Manager JSON blob so deploys
+// and local emulation read the same shape.
+export const runtimeConfigSecret = defineJsonSecret("CLOUDESTIMATE_RUNTIME_CONFIG");
 
 export const cloudMeta = {
   gcp: {
@@ -50,7 +56,24 @@ export const providerTargets = {
   }
 };
 
-export function requireEnv(name) {
+export function getRuntimeConfig() {
+  const config = runtimeConfigSecret.value();
+
+  if (!config || typeof config !== "object" || Array.isArray(config)) {
+    throw new Error("CLOUDESTIMATE_RUNTIME_CONFIG must be a JSON object.");
+  }
+
+  return {
+    cacheBucket: requireRuntimeValue(config, "CLOUDESTIMATE_CACHE_BUCKET"),
+    googleCloudLocation: optionalRuntimeValue(config, "GOOGLE_CLOUD_LOCATION") ?? "global",
+    vertexModel: optionalRuntimeValue(config, "CLOUDESTIMATE_VERTEX_MODEL") ?? "gemini-2.5-pro",
+    githubOwner: requireRuntimeValue(config, "CLOUDESTIMATE_GITHUB_OWNER"),
+    githubRepo: requireRuntimeValue(config, "CLOUDESTIMATE_GITHUB_REPO"),
+    githubToken: requireRuntimeValue(config, "CLOUDESTIMATE_GITHUB_TOKEN")
+  };
+}
+
+export function requireProcessEnv(name) {
   const value = process.env[name];
 
   if (!value) {
@@ -58,4 +81,29 @@ export function requireEnv(name) {
   }
 
   return value;
+}
+
+function requireRuntimeValue(config, name) {
+  const value = optionalRuntimeValue(config, name);
+
+  if (!value) {
+    throw new Error(`Missing required Cloud Functions runtime config value: ${name}`);
+  }
+
+  return value;
+}
+
+function optionalRuntimeValue(config, name) {
+  const rawValue = config[name];
+
+  if (rawValue == null) {
+    return undefined;
+  }
+
+  if (typeof rawValue !== "string") {
+    throw new Error(`Cloud Functions runtime config value ${name} must be a string.`);
+  }
+
+  const normalizedValue = rawValue.trim();
+  return normalizedValue || undefined;
 }

@@ -1,10 +1,8 @@
 import { logger } from "firebase-functions/v2";
-import { requireEnv } from "./config.mjs";
+import { getRuntimeConfig } from "./config.mjs";
 
 export async function dispatchRebuild(reason) {
-  const owner = requireEnv("CLOUDESTIMATE_GITHUB_OWNER");
-  const repo = requireEnv("CLOUDESTIMATE_GITHUB_REPO");
-  const token = requireEnv("CLOUDESTIMATE_GITHUB_TOKEN");
+  const { githubOwner: owner, githubRepo: repo, githubToken: token } = getRuntimeConfig();
   const url = `https://api.github.com/repos/${owner}/${repo}/dispatches`;
 
   const response = await fetch(url, {

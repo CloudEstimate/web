@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { logger } from "firebase-functions/v2";
-import { requireEnv } from "./config.mjs";
+import { getRuntimeConfig, requireProcessEnv } from "./config.mjs";
 import { buildCompareTuples, buildEstimateTuples } from "./estimate-engine.mjs";
 import { buildComparePrompt, buildSinglePrompt, sharedSystemPrompt } from "./prompts.mjs";
 import { findLatestFile, getCacheBucket, readJson, writeJson } from "./storage.mjs";
@@ -8,12 +8,13 @@ import { validateExplanation } from "./validate-explanation.mjs";
 import { getIsvCatalog } from "./runtime-data.mjs";
 
 export async function regenerateExplanationCaches() {
+  const runtimeConfig = getRuntimeConfig();
   const ai = new GoogleGenAI({
     vertexai: true,
-    project: requireEnv("GOOGLE_CLOUD_PROJECT"),
-    location: process.env.GOOGLE_CLOUD_LOCATION ?? "global"
+    project: requireProcessEnv("GOOGLE_CLOUD_PROJECT"),
+    location: runtimeConfig.googleCloudLocation
   });
-  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-pro";
+  const model = runtimeConfig.vertexModel;
   const bucket = getCacheBucket();
   const pricingByCloud = await loadLatestPricing(bucket);
   const singleAggregate = {};
