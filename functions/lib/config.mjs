@@ -61,7 +61,11 @@ export function requireEnv(name) {
 }
 
 export function requireProjectId() {
-  const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT;
+  const projectId =
+    process.env.GOOGLE_CLOUD_PROJECT ||
+    process.env.GCLOUD_PROJECT ||
+    process.env.GCP_PROJECT ||
+    process.env.CLOUDESTIMATE_GCP_PROJECT_ID;
 
   if (!projectId) {
     throw new Error("Missing required Google Cloud project ID environment variable.");

@@ -76,7 +76,7 @@ async function findVmPricingFallback(region, instanceType) {
   const familyPrefix = instanceType.match(/^(Standard_[A-Z]+\d+)/i)?.[1];
 
   if (!familyPrefix) {
-    return null;
+    return findRegionalVmPricingFallback(region, instanceType);
   }
 
   const items = await fetchAzureItems(
@@ -88,8 +88,8 @@ async function findVmPricingFallback(region, instanceType) {
   const onDemand = candidates.find((item) => item.priceType === "Consumption");
 
   if (!onDemand) {
-    logger.warn(`Azure fallback query returned no on-demand price for ${instanceType} in ${region}.`);
-    return null;
+    logger.warn(`Azure fallback query returned no on-demand price for ${instanceType} in ${region}. Trying regional fallback.`);
+    return findRegionalVmPricingFallback(region, instanceType);
   }
 
   const reserved1yr = candidates.find((item) => item.priceType === "Reservation" && item.reservationTerm === "1 Year");
@@ -98,6 +98,39 @@ async function findVmPricingFallback(region, instanceType) {
   logger.warn(
     `Azure pricing fallback matched ${onDemand.armSkuName ?? "unknown"} for ${instanceType} in ${region}.`
   );
+
+  return {
+    on_demand_hourly_usd: onDemand.unitPrice,
+    reserved_1yr_hourly_usd: reserved1yr?.unitPrice ?? onDemand.unitPrice,
+    reserved_3yr_hourly_usd: reserved3yr?.unitPrice ?? reserved1yr?.unitPrice ?? onDemand.unitPrice
+  };
+}
+
+async function findRegionalVmPricingFallback(region, instanceType) {
+  const items = await fetchAzureItems(`serviceName eq 'Virtual Machines' and armRegionName eq '${region}'`);
+  const linuxItems = items.filter((item) => isLinuxItem(item));
+  const grouped = groupVmItemsBySku(linuxItems);
+  const ranked = Array.from(grouped.entries())
+    .map(([sku, skuItems]) => ({
+      sku,
+      skuItems,
+      score: scoreSkuMatch(sku, instanceType)
+    }))
+    .filter((entry) => entry.score < Number.POSITIVE_INFINITY)
+    .sort((left, right) => left.score - right.score);
+
+  const best = ranked.find((entry) => entry.skuItems.some((item) => item.priceType === "Consumption"));
+
+  if (!best) {
+    logger.warn(`Azure regional fallback found no usable VM pricing candidates for ${instanceType} in ${region}.`);
+    return null;
+  }
+
+  const onDemand = best.skuItems.find((item) => item.priceType === "Consumption");
+  const reserved1yr = best.skuItems.find((item) => item.priceType === "Reservation" && item.reservationTerm === "1 Year");
+  const reserved3yr = best.skuItems.find((item) => item.priceType === "Reservation" && item.reservationTerm === "3 Years");
+
+  logger.warn(`Azure regional fallback matched ${best.sku} for ${instanceType} in ${region}.`);
 
   return {
     on_demand_hourly_usd: onDemand.unitPrice,
@@ -173,6 +206,58 @@ function normalizeSkuName(value) {
     .toLowerCase()
     .replace(/\s+/g, "")
     .replace(/_/g, "");
+}
+
+function groupVmItemsBySku(items) {
+  const groups = new Map();
+
+  for (const item of items) {
+    const sku = item.armSkuName ?? item.skuName;
+
+    if (!sku) {
+      continue;
+    }
+
+    const existing = groups.get(sku) ?? [];
+    existing.push(item);
+    groups.set(sku, existing);
+  }
+
+  return groups;
+}
+
+function scoreSkuMatch(candidateSku, targetSku) {
+  const candidate = parseSku(candidateSku);
+  const target = parseSku(targetSku);
+
+  if (!candidate || !target) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  if (candidate.family !== target.family) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const versionPenalty = candidate.version === target.version ? 0 : 1000;
+  const variantPenalty = candidate.variant === target.variant ? 0 : 100;
+  const sizePenalty = Math.abs(candidate.size - target.size);
+  return versionPenalty + variantPenalty + sizePenalty;
+}
+
+function parseSku(value) {
+  const normalized = String(value ?? "").trim();
+  const match = normalized.match(/^Standard_([A-Za-z]+)(\d+)([A-Za-z]*)_v(\d+)$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  return {
+    family: match[1].toLowerCase(),
+    size: Number(match[2]),
+    variant: match[3].toLowerCase(),
+    version: Number(match[4])
+  };
 }
 
 function inferDiskSizeGb(item) {
