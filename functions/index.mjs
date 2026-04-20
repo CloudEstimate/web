@@ -8,7 +8,7 @@ import { refreshPricingCaches } from "./lib/refresh-pricing.mjs";
 setGlobalOptions({
   region: "us-central1",
   timeoutSeconds: 540,
-  memory: "1GiB"
+  memory: "2GiB"
 });
 
 export const refreshPricing = onSchedule("0 2 * * *", async () => {
