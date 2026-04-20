@@ -44,14 +44,65 @@ async function getVmPricing(region, instanceType) {
   const reserved1yr = linuxItems.find((item) => item.priceType === "Reservation" && item.reservationTerm === "1 Year");
   const reserved3yr = linuxItems.find((item) => item.priceType === "Reservation" && item.reservationTerm === "3 Years");
 
-  if (!onDemand || !reserved1yr || !reserved3yr) {
+  if (!onDemand) {
+    const fallback = await findVmPricingFallback(region, instanceType);
+
+    if (fallback) {
+      return fallback;
+    }
+
     throw new Error(`Missing Azure VM pricing for ${instanceType} in ${region}.`);
+  }
+
+  const reserved1yrPrice = reserved1yr?.unitPrice ?? onDemand.unitPrice;
+  const reserved3yrPrice = reserved3yr?.unitPrice ?? reserved1yrPrice;
+
+  if (!reserved1yr) {
+    logger.warn(`Missing Azure 1-year reservation price for ${instanceType} in ${region}; falling back to on-demand.`);
+  }
+
+  if (!reserved3yr) {
+    logger.warn(`Missing Azure 3-year reservation price for ${instanceType} in ${region}; falling back to ${reserved1yr ? "1-year reservation" : "on-demand"}.`);
   }
 
   return {
     on_demand_hourly_usd: onDemand.unitPrice,
-    reserved_1yr_hourly_usd: reserved1yr.unitPrice,
-    reserved_3yr_hourly_usd: reserved3yr.unitPrice
+    reserved_1yr_hourly_usd: reserved1yrPrice,
+    reserved_3yr_hourly_usd: reserved3yrPrice
+  };
+}
+
+async function findVmPricingFallback(region, instanceType) {
+  const familyPrefix = instanceType.match(/^(Standard_[A-Z]+\d+)/i)?.[1];
+
+  if (!familyPrefix) {
+    return null;
+  }
+
+  const items = await fetchAzureItems(
+    `serviceName eq 'Virtual Machines' and armRegionName eq '${region}' and contains(armSkuName, '${familyPrefix}')`
+  );
+  const linuxItems = items.filter((item) => isLinuxItem(item));
+  const exactSkuItems = linuxItems.filter((item) => normalizeSkuName(item.armSkuName) === normalizeSkuName(instanceType));
+  const candidates = exactSkuItems.length > 0 ? exactSkuItems : linuxItems;
+  const onDemand = candidates.find((item) => item.priceType === "Consumption");
+
+  if (!onDemand) {
+    logger.warn(`Azure fallback query returned no on-demand price for ${instanceType} in ${region}.`);
+    return null;
+  }
+
+  const reserved1yr = candidates.find((item) => item.priceType === "Reservation" && item.reservationTerm === "1 Year");
+  const reserved3yr = candidates.find((item) => item.priceType === "Reservation" && item.reservationTerm === "3 Years");
+
+  logger.warn(
+    `Azure pricing fallback matched ${onDemand.armSkuName ?? "unknown"} for ${instanceType} in ${region}.`
+  );
+
+  return {
+    on_demand_hourly_usd: onDemand.unitPrice,
+    reserved_1yr_hourly_usd: reserved1yr?.unitPrice ?? onDemand.unitPrice,
+    reserved_3yr_hourly_usd: reserved3yr?.unitPrice ?? reserved1yr?.unitPrice ?? onDemand.unitPrice
   };
 }
 
@@ -115,6 +166,13 @@ function isLinuxItem(item) {
   const productName = item.productName ?? "";
   const meterName = item.meterName ?? "";
   return !productName.includes("Windows") && !meterName.includes("Windows");
+}
+
+function normalizeSkuName(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/_/g, "");
 }
 
 function inferDiskSizeGb(item) {
