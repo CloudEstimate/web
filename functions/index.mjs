@@ -22,7 +22,7 @@ export const refreshPricing = onSchedule(
   async () => {
     ensureGoogleCloudProjectEnv();
     await refreshPricingCaches();
-    await dispatchRebuildBestEffort("pricing-refreshed");
+    await dispatchRebuild("pricing-refreshed");
   }
 );
 
@@ -45,13 +45,5 @@ function ensureGoogleCloudProjectEnv() {
     if (resolvedProjectId) {
       process.env.GOOGLE_CLOUD_PROJECT = resolvedProjectId;
     }
-  }
-}
-
-async function dispatchRebuildBestEffort(reason) {
-  try {
-    await dispatchRebuild(reason);
-  } catch (error) {
-    console.error(`Failed to dispatch GitHub rebuild for ${reason}.`, error);
   }
 }
