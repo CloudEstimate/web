@@ -37,8 +37,9 @@ export async function fetchAzurePricing({ regions, machineTypes }) {
 
 async function getVmPricing(region, instanceType) {
   const items = await fetchAzureItems(
-    `serviceName eq 'Virtual Machines' and armRegionName eq '${region}' and armSkuName eq '${instanceType}'`
+    `serviceName eq 'Virtual Machines' and armRegionName eq '${region}' and armSkuName eq '${instanceType}' and not contains(productName, 'Windows')`
   );
+  // Keep the linux filter as a defensive guard for any edge cases that slip through the API filter.
   const linuxItems = items.filter((item) => isLinuxItem(item));
   const onDemand = linuxItems.find((item) => item.priceType === "Consumption");
   const reserved1yr = linuxItems.find((item) => item.priceType === "Reservation" && item.reservationTerm === "1 Year");

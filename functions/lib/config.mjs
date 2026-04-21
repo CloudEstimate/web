@@ -61,15 +61,39 @@ export function requireEnv(name) {
 }
 
 export function requireProjectId() {
-  const projectId =
-    process.env.GOOGLE_CLOUD_PROJECT ||
-    process.env.GCLOUD_PROJECT ||
-    process.env.GCP_PROJECT ||
-    process.env.CLOUDESTIMATE_GCP_PROJECT_ID;
+  const projectId = resolveProjectId();
 
   if (!projectId) {
     throw new Error("Missing required Google Cloud project ID environment variable.");
   }
 
+  if (!process.env.GOOGLE_CLOUD_PROJECT) {
+    process.env.GOOGLE_CLOUD_PROJECT = projectId;
+  }
+
   return projectId;
+}
+
+export function resolveProjectId() {
+  return (
+    process.env.GOOGLE_CLOUD_PROJECT ||
+    process.env.GCLOUD_PROJECT ||
+    process.env.GCP_PROJECT ||
+    process.env.CLOUDESTIMATE_GCP_PROJECT_ID ||
+    readProjectIdFromFirebaseConfig()
+  );
+}
+
+function readProjectIdFromFirebaseConfig() {
+  const raw = process.env.FIREBASE_CONFIG;
+
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(raw).projectId ?? null;
+  } catch {
+    return null;
+  }
 }

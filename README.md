@@ -72,6 +72,47 @@ In GitHub Actions, public configuration belongs in repository or environment var
 
 If you are working on Cloud Functions, use plain function env vars for non-sensitive runtime config and store only `CLOUDESTIMATE_GITHUB_TOKEN` in Google Cloud Secret Manager. A starter file for the non-sensitive values lives at `functions/.env.example`, and the full runtime setup is documented in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
+## Scheduled data refresh architecture
+
+Pricing and explanation caches are refreshed in GitHub Actions and committed into `src/data/generated/**`:
+
+- Daily pricing snapshot: `.github/workflows/refresh-pricing.yml`
+- Weekly explanation snapshot: `.github/workflows/regenerate-explanations.yml`
+
+Manual local equivalents:
+
+```bash
+npm run refresh:pricing:snapshot
+npm run regenerate:explanations:snapshot
+```
+
+### GitHub Actions variables for the snapshot architecture
+
+Required repository variables:
+
+- `CLOUDESTIMATE_GCP_PROJECT_ID` (used by deploy and weekly explanation regeneration)
+- `PUBLIC_SITE_URL` (recommended for canonical production build output)
+
+Optional repository variables:
+
+- `CLOUDESTIMATE_GCP_LOCATION` (defaults to `global`)
+- `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-2.5-pro`)
+- `PUBLIC_GA4_MEASUREMENT_ID`
+- `PUBLIC_GOOGLE_SITE_VERIFICATION`
+
+Required repository secrets:
+
+- `GCP_SA_KEY` (used by deploy and scheduled snapshot workflows for Google auth)
+
+No longer needed for the scheduled snapshot path:
+
+- `WIF_PROVIDER`
+- `GCP_SA_EMAIL`
+- `CLOUDESTIMATE_CACHE_BUCKET` (for CI/CD path)
+- `CLOUDESTIMATE_GITHUB_OWNER`
+- `CLOUDESTIMATE_GITHUB_REPO`
+- `CLOUDESTIMATE_GITHUB_TOKEN` (Secret Manager secret for repository dispatch)
+
 ## Quality checks
 
 ```bash

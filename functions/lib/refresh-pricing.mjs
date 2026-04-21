@@ -14,19 +14,14 @@ export async function refreshPricingCaches() {
   const awsMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.aws))];
   const azureMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.azure))];
 
-  const [gcpPricing, awsPricing, azurePricing] = await Promise.all([
-    fetchGcpPricing({ regions: providerTargets.gcp.regions, machineTypes: gcpMachineTypes }),
-    fetchAwsPricing({ regions: providerTargets.aws.regions, machineTypes: awsMachineTypes }),
-    fetchAzurePricing({ regions: providerTargets.azure.regions, machineTypes: azureMachineTypes })
-  ]);
+  const providers = [
+    ["gcp", () => fetchGcpPricing({ regions: providerTargets.gcp.regions, machineTypes: gcpMachineTypes })],
+    ["aws", () => fetchAwsPricing({ regions: providerTargets.aws.regions, machineTypes: awsMachineTypes })],
+    ["azure", () => fetchAzurePricing({ regions: providerTargets.azure.regions, machineTypes: azureMachineTypes })]
+  ];
 
-  const payloads = {
-    gcp: gcpPricing,
-    aws: awsPricing,
-    azure: azurePricing
-  };
-
-  for (const [cloud, payload] of Object.entries(payloads)) {
+  for (const [cloud, fetchPricing] of providers) {
+    const payload = await fetchPricing();
     await writeJson(bucket.file(`pricing/${cloud}-${today}.json`), payload);
     await writeJson(bucket.file(`site-build/pricing-${cloud}.json`), payload);
     logger.info(`Wrote pricing cache for ${cloud}.`);
