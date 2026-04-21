@@ -22,18 +22,14 @@ export const refreshPricing = onSchedule(
   async () => {
     ensureGoogleCloudProjectEnv();
     await refreshPricingCaches();
-    await dispatchRebuildBestEffort("pricing-refreshed");
+    await dispatchRebuild("pricing-refreshed");
   }
 );
 
 export const regenerateExplanations = onSchedule("0 3 * * *", async () => {
   ensureGoogleCloudProjectEnv();
   await regenerateExplanationCaches();
-  try {
-    await dispatchRebuild("explanations-regenerated");
-  } catch (error) {
-    logger.warn("Rebuild dispatch failed after explanation regeneration; continuing.", { error });
-  }
+  await dispatchRebuildBestEffort("explanations-regenerated");
 });
 
 export const triggerRebuild = onRequest(async (_request, response) => {
@@ -49,13 +45,5 @@ function ensureGoogleCloudProjectEnv() {
     if (resolvedProjectId) {
       process.env.GOOGLE_CLOUD_PROJECT = resolvedProjectId;
     }
-  }
-}
-
-async function dispatchRebuildBestEffort(reason) {
-  try {
-    await dispatchRebuild(reason);
-  } catch (error) {
-    console.error(`Failed to dispatch GitHub rebuild for ${reason}.`, error);
   }
 }
