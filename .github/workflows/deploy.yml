@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-  repository_dispatch:
-    types: [cache-updated]
   workflow_dispatch:
 
 jobs:
@@ -44,7 +42,6 @@ jobs:
       PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://cloudestimate.dev' }}
       PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.PUBLIC_GA4_MEASUREMENT_ID }}
       PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
-      CLOUDESTIMATE_CACHE_BUCKET: ${{ vars.CLOUDESTIMATE_CACHE_BUCKET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -66,10 +63,9 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
       - run: npm install -g firebase-tools
-      - run: npm run fetch:caches
       - run: npm run build
       - run: npm run validate:terraform -- --mode=plan
         env:
           TF_VAR_project_id: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
-      - name: Deploy Hosting and Functions
-        run: firebase deploy --only hosting,functions --project ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }} --non-interactive
+      - name: Deploy Hosting
+        run: firebase deploy --only hosting --project ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }} --non-interactive

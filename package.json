@@ -20,6 +20,8 @@
     "validate:terraform": "node scripts/validate-terraform.mjs",
     "check:functions": "npm --prefix functions run check",
     "fetch:caches": "node scripts/fetch-caches.mjs",
+    "refresh:pricing:snapshot": "node functions/scripts/refresh-pricing-snapshot.mjs",
+    "regenerate:explanations:snapshot": "node functions/scripts/regenerate-explanations-snapshot.mjs",
     "generate:assets": "node scripts/generate-assets.mjs",
     "ensure:caches": "node scripts/ensure-generated-caches.mjs",
     "sync:functions-data": "node scripts/sync-functions-data.mjs"

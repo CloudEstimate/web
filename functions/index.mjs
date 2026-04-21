@@ -1,6 +1,6 @@
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onRequest } from "firebase-functions/v2/https";
-import { setGlobalOptions } from "firebase-functions/v2";
+import { logger, setGlobalOptions } from "firebase-functions/v2";
 import { dispatchRebuild } from "./lib/rebuild.mjs";
 import { resolveProjectId } from "./lib/config.mjs";
 import { regenerateExplanationCaches } from "./lib/regenerate-explanations.mjs";
