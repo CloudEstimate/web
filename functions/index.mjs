@@ -29,7 +29,7 @@ export const refreshPricing = onSchedule(
 export const regenerateExplanations = onSchedule("0 3 * * *", async () => {
   ensureGoogleCloudProjectEnv();
   await regenerateExplanationCaches();
-  await dispatchRebuild("explanations-regenerated");
+  await dispatchRebuildBestEffort("explanations-regenerated");
 });
 
 export const triggerRebuild = onRequest(async (_request, response) => {
