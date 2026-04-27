@@ -1,1 +1,11 @@
-{}
+{
+  "gitlab:s:noha:1yr": {
+    "key": "gitlab:s:noha:1yr",
+    "generated_at": "2026-04-27T21:21:21.801Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS offers the lowest monthly cost at $859.10 for this GitLab Small tier, making it $173 cheaper than Azure and $547 cheaper than Google Cloud. This difference is primarily driven by AWS's no-upfront reserved",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  }
+}

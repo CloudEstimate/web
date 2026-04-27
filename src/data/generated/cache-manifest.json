@@ -1,13 +1,13 @@
 {
-  "source": "repository-seeded",
-  "generated_at": "2026-04-12T00:00:00Z",
+  "source": "github-actions-explanations-cron",
+  "generated_at": "2026-04-27T21:40:22.021Z",
   "pricing": {
     "gcp": "gcp-2026-04-12.json",
     "aws": "aws-2026-04-12.json",
     "azure": "azure-2026-04-12.json"
   },
   "explanations": {
-    "single": null,
-    "compare": null
+    "single": "src/data/generated/explanations/single.json",
+    "compare": "src/data/generated/explanations/compare.json"
   }
 }

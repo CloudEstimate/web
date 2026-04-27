@@ -1,1 +1,236 @@
-{}
+{
+  "cockroachdb-self-hosted:gcp:xs:noha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-27T21:13:25.145Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provisions three n2-standard-4 instances, each with 4 vCPU, 16 GB RAM, and 500 GB SSD, to support up to 1 TB of replicated OLTP data. Compute is the primary cost driver at $587 monthly, significantly more than the $255 allocated for storage. A key consideration for this three-node setup",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:aws:xs:ha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-27T21:13:47.268Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small CockroachDB configuration supports up to 1 TB of replicated OLTP data across a three-node cluster, utilizing `m6i.xlarge` instances for high availability. Compute is the primary cost driver, accounting for $420.48 monthly",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:xs:ha:eastus": {
+    "key": "cockroachdb-self-hosted:azure:xs:ha:eastus",
+    "generated_at": "2026-04-27T21:13:50.150Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 1 TB of replicated OLTP data across a three-node CockroachDB cluster, providing high availability on Azure. The primary cost driver is compute, which accounts for over 70% of the $635.52 monthly total. This configuration prioritizes the distributed nature and resilience of CockroachDB with 3x Standard_D4s_v5 instances, each providing 4 vCPU and 16 GB RAM, over raw storage capacity.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "confluence-data-center:gcp:xl:noha:us-central1": {
+    "key": "confluence-data-center:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-27T21:14:49.778Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports an Extra Large Confluence Data Center deployment, handling 10 to 25 million content items or 700,000 to 1,000,000 HTTP calls per hour. The dominant cost driver for this configuration is compute, totaling $3717.16 monthly, provided",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "confluence-data-center:aws:m:noha:us-east-1": {
+    "key": "confluence-data-center:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-27T21:14:57.577Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Confluence Data Center deployment managing 500,000 to 2.5 million content items or up to 350,000 HTTP calls per hour. Compute instances are the sole cost driver for this tier, totaling $420.48 monthly for 12 vCPUs and 28 GB RAM across four instances.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "confluence-data-center:aws:xl:noha:us-east-1": {
+    "key": "confluence-data-center:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-27T21:15:08.144Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports an Extra Large Confluence Data Center instance, designed for 10 to 25 million content items or up to 1 million HTTP calls per hour. Compute instances, comprising 4x m6i.4xlarge, 1x m6i.2xlarge",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "confluence-data-center:azure:l:noha:eastus": {
+    "key": "confluence-data-center:azure:l:noha:eastus",
+    "generated_at": "2026-04-27T21:15:36.241Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Confluence Data Center deployment, handling 2.5 million to 10 million content items or 350,000 to 700,000 HTTP calls per hour. Compute instances are the sole cost driver for this configuration, totaling $12",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "consul:gcp:m:noha:us-central1": {
+    "key": "consul:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-27T21:15:50.557Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Consul sizing supports 500 to 5,000 registered services, including ingress and mesh gateways, utilizing 5 primary n2-standard-2 servers and 4 additional n2-standard-2 instances. Compute instances are the dominant cost driver at $880.38 monthly, comprising 88% of the $999.38 total.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:aws:xs:noha:us-east-1": {
+    "key": "consul:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-27T21:15:51.856Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Consul deployment supports up to 500 registered services using three m6i.large instances. Compute instances are the primary cost driver, accounting for over 90% of the $222 monthly total. A key consideration for this tier is the disabled high availability, meaning the control plane is not resilient to single server failures.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "couchbase-server-enterprise:azure:xs:noha:eastus": {
+    "key": "couchbase-server-enterprise:azure:xs:noha:eastus",
+    "generated_at": "2026-04-27T21:17:08.517Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Couchbase deployment supports up to 50 GB of active data on a compact multi-service cluster, provisioned with three Standard_D4s_v5 instances. Compute costs are the primary driver, accounting for $455.52 of the $63",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "jfrog-artifactory:gcp:m:noha:us-central1": {
+    "key": "jfrog-artifactory:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-27T21:23:03.946Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports JFrog Artifactory deployments handling up to 100,000 requests per minute, aligning with the \"Medium\" tier. Compute resources, totaling $4304.08 monthly, are the dominant cost driver, significantly outweighing",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jira-data-center:gcp:l:ha:us-central1": {
+    "key": "jira-data-center:gcp:l:ha:us-central1",
+    "generated_at": "2026-04-27T21:24:03.677Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Jira Data Center deployment, accommodating 600,000 to 2,000,000 issues or up to 100,000 users. The primary cost driver for this configuration is compute, accounting for over 98% of the monthly expenditure at $1076.0",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "kong-gateway:gcp:m:noha:us-central1": {
+    "key": "kong-gateway:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-27T21:25:45.890Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Kong Gateway deployment handling up to 10,000 configured entities and 10,000 requests per second. The primary cost driver is compute, accounting for $587 of the $655 monthly total. A key consideration is that high availability is disabled, meaning this configuration lacks redundancy for the gateway instances despite provisioning three n2-standard-4 machines.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:aws:xl:noha:us-east-1": {
+    "key": "kong-gateway:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-27T21:26:02.894Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large sizing supports a central production gateway cluster managing 10,000 to over 50,000 configured entities. The primary cost driver is compute, accounting for over 96% of the $1457.60 monthly on-demand total. Provisioning without high availability for a production cluster of this scale introduces a single point of failure, impacting service uptime despite the substantial resource allocation.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "neo4j-enterprise:gcp:xs:ha:us-central1": {
+    "key": "neo4j-enterprise:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-27T21:29:11.356Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports an Extra Small Neo4j cluster, accommodating up to 100 GB of graph data across three primary nodes. The primary cost driver is compute, accounting for $587 monthly, significantly more than the $255 for storage. The architecture provisions three `n2-standard-4` instances for high availability, meaning the cost of three full compute nodes is incurred even for this relatively small 100 GB",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:azure:xs:ha:eastus": {
+    "key": "neo4j-enterprise:azure:xs:ha:eastus",
+    "generated_at": "2026-04-27T21:29:21.619Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Neo4j cluster supports a graph store up to 100 GB using a three-primary high-availability configuration. Compute, at $455 per month, is the dominant cost driver, significantly exceeding the $180 monthly storage cost. The architecture provisions 1.5 TB of SSD storage",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "nexus-repository:gcp:xs:noha:us-central1": {
+    "key": "nexus-repository:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-27T21:30:16.308Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Google Cloud deployment supports Sonatype Nexus Repository for workloads up to 50 requests per second. The primary cost driver is compute, accounting for over 70% of the $264 monthly total. This configuration explicitly disables high availability, meaning the single n2-standard-4 instance represents a single point of failure.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:m:noha:eastus": {
+    "key": "nexus-repository:azure:m:noha:eastus",
+    "generated_at": "2026-04-27T21:30:47.527Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports Sonatype Nexus Repository at up to 900 requests per second using 3x Standard_D8s_v5 and 1x Standard_D16s_v5 instances on Azure. Compute is the primary cost driver, accounting for over 89% of the $1698.40 monthly total. A key consideration for this tier is the disabled high availability, meaning no redundancy is provisioned for the application instances.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nomad:gcp:m:noha:us-central1": {
+    "key": "nomad:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-27T21:31:48.080Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports a medium Nomad production cluster, managing 50 to 300 jobs on a small scheduler footprint. The primary cost driver is compute, accounting for over 90% of the $2764.32 monthly total, with 13 n2-standard-4 instances provisioned. A key consideration for this production tier is the disabled high availability, which introduces a single point of failure for the Nomad server",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "opensearch:gcp:xs:noha:us-central1": {
+    "key": "opensearch:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-27T21:32:46.749Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small OpenSearch configuration supports up to 100 GB of hot index data on a single node. The primary cost driver is compute, accounting for $196 monthly, significantly more than the $95 for storage. This single-node setup lacks high availability, making it unsuitable for production workloads requiring fault tolerance.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "redpanda:aws:xl:noha:us-east-1": {
+    "key": "redpanda:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-27T21:35:59.336Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Redpanda tier, comprising six m6i.4xlarge instances, is designed for production workloads requiring high ingest rates and extended data retention. Compute is the primary cost driver at $3363.8",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:xs:ha:eastus": {
+    "key": "redpanda:azure:xs:ha:eastus",
+    "generated_at": "2026-04-27T21:36:10.433Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Redpanda cluster provides a three-broker production environment for durable event streaming. Compute and high-performance NVMe storage are the primary cost drivers, each contributing nearly half of the $875 monthly total. The 1 TB NVMe per broker ensures high-throughput, low-latency I/O performance, but represents a substantial portion of the total cost for this starter configuration.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "teleport:gcp:m:noha:us-central1": {
+    "key": "teleport:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-27T21:36:39.829Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports up to 10,000 SSH nodes or equivalent protected resources, utilizing a mix of n2-standard instances across 2x 8-vCPU, 2x 4-vCPU, and 3x 2-vCPU machines. Compute instances are the primary cost driver, accounting for over 90% of the $1569.3",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:gcp:xs:noha:us-central1": {
+    "key": "teleport:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-27T21:36:47.742Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small sizing provides a starter self-hosted Teleport control plane suitable for smaller Teleport estates. The primary cost driver is compute, accounting for over 95% of the $612 monthly total. This configuration uses a single control plane instance and a single auxiliary instance, meaning high availability is disabled and there is no redundancy for critical services.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:azure:m:noha:eastus": {
+    "key": "teleport:azure:m:noha:eastus",
+    "generated_at": "2026-04-27T21:36:59.417Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Teleport deployment managing up to 10,000 SSH nodes or equivalent protected resources. Compute instances are the primary cost driver, accounting for over 90% of the monthly expenditure at $1138.80. A key consideration for this scale is the explicit disabling of high availability, which impacts resilience despite the \"10k-ha\" tier name.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "victoria-metrics:gcp:xs:noha:us-central1": {
+    "key": "victoria-metrics:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-27T21:37:31.891Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports VictoriaMetrics single-node deployments for ingestion rates under 1 million samples per second. Compute is the primary cost driver at $391, closely followed by storage at $340, together comprising the entire monthly cost of $731. The single-node architecture with disabled high availability means there is no redundancy for data or service uptime.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  }
+}
