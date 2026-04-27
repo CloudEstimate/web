@@ -7,7 +7,7 @@
     "node": "20"
   },
   "scripts": {
-    "check": "node --check index.mjs",
+    "check": "node --check index.mjs && for file in lib/*.mjs lib/providers/*.mjs scripts/*.mjs; do node --check \"$file\"; done",
     "sync:data": "node ../scripts/sync-functions-data.mjs"
   },
   "dependencies": {

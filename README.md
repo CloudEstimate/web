@@ -81,6 +81,8 @@ Pricing and explanation caches are refreshed in GitHub Actions and committed int
 - Daily pricing snapshot: `.github/workflows/refresh-pricing.yml`
 - Weekly explanation snapshot: `.github/workflows/regenerate-explanations.yml`
 
+The pricing workflow calls the Google Cloud Billing Catalog API first, then public AWS and Azure pricing APIs. The Google Cloud project used by `GCP_SA_KEY` / `CLOUDESTIMATE_GCP_PROJECT_ID` must have `cloudbilling.googleapis.com` enabled or the snapshot fails before AWS/Azure are refreshed.
+
 Manual local equivalents:
 
 ```bash
@@ -92,19 +94,23 @@ npm run regenerate:explanations:snapshot
 
 Required repository variables:
 
-- `CLOUDESTIMATE_GCP_PROJECT_ID` (used by deploy and weekly explanation regeneration)
+- `CLOUDESTIMATE_GCP_PROJECT_ID` (used by deploy, pricing refresh, and explanation regeneration)
 - `PUBLIC_SITE_URL` (recommended for canonical production build output)
 
 Optional repository variables:
 
 - `CLOUDESTIMATE_GCP_LOCATION` (defaults to `global`)
 - `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-2.5-pro`)
+- `CLOUDESTIMATE_EXPLANATION_LIMIT` (defaults to `50` new explanations per weekly run)
+- `CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS` (defaults to `3900000`, just under 65 minutes)
 - `PUBLIC_GA4_MEASUREMENT_ID`
 - `PUBLIC_GOOGLE_SITE_VERIFICATION`
 
 Required repository secrets:
 
 - `GCP_SA_KEY` (used by deploy and scheduled snapshot workflows for Google auth)
+
+The service account behind `GCP_SA_KEY` needs access to the configured project and the project must have these APIs enabled for the snapshot/deploy workflows: Cloud Billing API, Vertex AI API, Firebase/Cloud Functions/Cloud Run APIs, and Service Usage API if you want CI to verify enabled services with `gcloud`.
 
 No longer needed for the scheduled snapshot path:
 

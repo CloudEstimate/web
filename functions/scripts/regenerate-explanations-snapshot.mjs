@@ -20,12 +20,38 @@ async function main() {
   });
   const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-pro";
   const pricingByCloud = await loadPricing();
-  const singleAggregate = {};
-  const compareAggregate = {};
+  const singleAggregate = await loadAggregate("single.json");
+  const compareAggregate = await loadAggregate("compare.json");
+  const options = readGenerationOptions();
+  const startedAt = Date.now();
+  let attempted = 0;
+  let generated = 0;
+  let skippedExisting = 0;
+  let validationFailures = 0;
 
+  const canAttemptMore = () => {
+    if (options.maxNewExplanations > 0 && attempted >= options.maxNewExplanations) {
+      return false;
+    }
+
+    return !(options.timeBudgetMs > 0 && Date.now() - startedAt >= options.timeBudgetMs);
+  };
+
+  outer:
   for (const isv of getIsvCatalog()) {
     for (const tuple of buildEstimateTuples(isv, pricingByCloud)) {
       const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.term, tuple.region].join(":");
+
+      if (singleAggregate[key]?.explanation) {
+        skippedExisting += 1;
+        continue;
+      }
+
+      if (!canAttemptMore()) {
+        break outer;
+      }
+
+      attempted += 1;
       const explanation = await generateWithValidation(
         ai,
         model,
@@ -48,11 +74,25 @@ async function main() {
           explanation,
           source_refs: [isv.ref_arch.source_url]
         };
+        generated += 1;
+      } else {
+        validationFailures += 1;
       }
     }
 
     for (const tuple of buildCompareTuples(isv, pricingByCloud)) {
       const key = [isv.slug, tuple.size, tuple.ha ? "ha" : "noha", tuple.term].join(":");
+
+      if (compareAggregate[key]?.explanation) {
+        skippedExisting += 1;
+        continue;
+      }
+
+      if (!canAttemptMore()) {
+        break outer;
+      }
+
+      attempted += 1;
       const explanation = await generateWithValidation(
         ai,
         model,
@@ -73,6 +113,9 @@ async function main() {
           explanation,
           source_refs: [isv.ref_arch.source_url]
         };
+        generated += 1;
+      } else {
+        validationFailures += 1;
       }
     }
   }
@@ -81,7 +124,9 @@ async function main() {
   await fs.writeFile(path.join(explanationsDir, "single.json"), `${JSON.stringify(singleAggregate, null, 2)}\n`);
   await fs.writeFile(path.join(explanationsDir, "compare.json"), `${JSON.stringify(compareAggregate, null, 2)}\n`);
   await upsertManifest();
-  console.log("Explanation snapshot regeneration complete.");
+  console.log(
+    `Explanation snapshot regeneration complete. Attempted ${attempted}, generated ${generated}, skipped ${skippedExisting} existing, validation failures ${validationFailures}.`
+  );
 }
 
 async function loadPricing() {
@@ -93,6 +138,37 @@ async function loadPricing() {
   }
 
   return pricingByCloud;
+}
+
+async function loadAggregate(filename) {
+  try {
+    return JSON.parse(await fs.readFile(path.join(explanationsDir, filename), "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+function readGenerationOptions() {
+  return {
+    maxNewExplanations: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_LIMIT"),
+    timeBudgetMs: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS")
+  };
+}
+
+function readPositiveIntegerEnv(name) {
+  const raw = process.env[name];
+
+  if (!raw) {
+    return 0;
+  }
+
+  const parsed = Number(raw);
+
+  if (!Number.isInteger(parsed) || parsed < 0) {
+    throw new Error(`${name} must be a positive integer when set.`);
+  }
+
+  return parsed;
 }
 
 async function generateWithValidation(ai, model, userPrompt) {

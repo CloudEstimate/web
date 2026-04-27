@@ -33,6 +33,14 @@ export async function dispatchRebuild(reason) {
   logger.info(`Triggered GitHub rebuild for ${reason}.`);
 }
 
+export async function dispatchRebuildBestEffort(reason) {
+  try {
+    await dispatchRebuild(reason);
+  } catch (error) {
+    logger.warn(`Failed to trigger GitHub rebuild for ${reason}.`, error);
+  }
+}
+
 async function getGitHubToken() {
   if (cachedGitHubToken) {
     return cachedGitHubToken;

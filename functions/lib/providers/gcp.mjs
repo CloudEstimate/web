@@ -87,7 +87,8 @@ async function fetchGoogleJson(url, headers) {
   });
 
   if (!response.ok) {
-    throw new Error(`Google Cloud Billing request failed: ${response.status} ${response.statusText}`);
+    const errorBody = await response.text();
+    throw new Error(`Google Cloud Billing request failed: ${response.status} ${response.statusText}. ${errorBody}`);
   }
 
   return response.json();

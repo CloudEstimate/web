@@ -5,9 +5,14 @@ on:
     - cron: "0 3 * * 1"
   workflow_dispatch:
 
+concurrency:
+  group: regenerate-explanations-main
+  cancel-in-progress: false
+
 jobs:
   regenerate-explanations:
     runs-on: ubuntu-latest
+    timeout-minutes: 75
     permissions:
       contents: write
     steps:
@@ -30,15 +35,23 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
       - name: Regenerate explanation snapshot
-        run: node functions/scripts/regenerate-explanations-snapshot.mjs
+        run: npm run regenerate:explanations:snapshot
         env:
           CLOUDESTIMATE_GCP_PROJECT_ID: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
+          GOOGLE_CLOUD_QUOTA_PROJECT: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
           CLOUDESTIMATE_GCP_LOCATION: ${{ vars.CLOUDESTIMATE_GCP_LOCATION || 'global' }}
           CLOUDESTIMATE_VERTEX_MODEL: ${{ vars.CLOUDESTIMATE_VERTEX_MODEL || 'gemini-2.5-pro' }}
+          CLOUDESTIMATE_EXPLANATION_LIMIT: ${{ vars.CLOUDESTIMATE_EXPLANATION_LIMIT || '50' }}
+          CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS: ${{ vars.CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS || '3900000' }}
       - name: Commit explanation updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add src/data/generated/explanations src/data/generated/cache-manifest.json
-          git diff --staged --quiet || git commit -m "chore: regenerate explanations snapshot $(date -u +%Y-%m-%d)"
+          if git diff --staged --quiet; then
+            echo "No explanation updates to commit."
+            exit 0
+          fi
+          git commit -m "chore: regenerate explanations snapshot $(date -u +%Y-%m-%d)"
+          git pull --rebase origin main
           git push origin main

@@ -34,9 +34,9 @@ export const providerTargets = {
       "us-west-2": "US West (Oregon)"
     },
     storageProducts: {
-      ssd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "gp3" },
-      hdd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "st1" },
-      nvme: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "io2" },
+      ssd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "gp3" && product.attributes?.usagetype?.includes("VolumeUsage") },
+      hdd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "st1" && product.attributes?.usagetype?.includes("VolumeUsage") },
+      nvme: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "io2" && product.attributes?.usagetype?.includes("VolumeUsage") },
       object: {
         serviceCode: "AmazonS3",
         matcher: (product) =>
