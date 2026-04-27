@@ -184,7 +184,7 @@ function readGenerationOptions() {
   return {
     maxNewExplanations: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_LIMIT"),
     timeBudgetMs: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS"),
-    concurrency: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_CONCURRENCY") || 8
+    concurrency: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_CONCURRENCY") || 12
   };
 }
 
@@ -218,7 +218,8 @@ async function generateWithValidation(ai, model, userPrompt) {
           config: {
             systemInstruction: sharedSystemPrompt,
             temperature: 0.2,
-            maxOutputTokens: 384
+            maxOutputTokens: 384,
+            thinkingConfig: { thinkingBudget: 0 }
           }
         }),
         REQUEST_TIMEOUT_MS
