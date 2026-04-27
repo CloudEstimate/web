@@ -2,7 +2,7 @@ name: Regenerate Explanation Snapshot
 
 on:
   schedule:
-    - cron: "0 3 * * 1"
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -41,7 +41,6 @@ jobs:
           GOOGLE_CLOUD_QUOTA_PROJECT: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
           CLOUDESTIMATE_GCP_LOCATION: ${{ vars.CLOUDESTIMATE_GCP_LOCATION || 'global' }}
           CLOUDESTIMATE_VERTEX_MODEL: ${{ vars.CLOUDESTIMATE_VERTEX_MODEL || 'gemini-2.5-pro' }}
-          CLOUDESTIMATE_EXPLANATION_LIMIT: ${{ vars.CLOUDESTIMATE_EXPLANATION_LIMIT || '50' }}
           CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS: ${{ vars.CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS || '3900000' }}
       - name: Commit explanation updates
         run: |
