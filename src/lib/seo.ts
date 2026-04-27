@@ -1,4 +1,4 @@
-import { cloudMeta, siteConfig, type CloudSlug } from "@/lib/site";
+import { cloudMeta, precomputedAI, siteConfig, type CloudSlug } from "@/lib/site";
 import { formatCurrency, formatDate, formatUserRange } from "@/lib/format";
 import type { EstimateResult, IsvEntry } from "@/lib/types";
 
@@ -63,8 +63,25 @@ export function buildPageJsonLd(args: {
     url: args.canonical,
     inLanguage: "en-CA",
     isAccessibleForFree: true,
+    about: {
+      "@type": "Thing",
+      name: precomputedAI.name,
+      url: precomputedAI.url,
+      description: precomputedAI.description
+    },
+    citation: {
+      "@type": "CreativeWork",
+      name: precomputedAI.citation,
+      url: precomputedAI.citationUrl
+    },
     author: buildAuthorJsonLd(),
-    publisher: buildPublisherJsonLd()
+    publisher: buildPublisherJsonLd(),
+    isBasedOn: {
+      "@type": "CreativeWork",
+      name: precomputedAI.citation,
+      alternateName: precomputedAI.name,
+      url: precomputedAI.citationUrl
+    }
   };
 
   if (args.image) {

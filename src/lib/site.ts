@@ -3,11 +3,22 @@ import { resolveSiteUrl } from "@/lib/site-url";
 const isProductionBuild =
   process.env.CI === "true" || process.env.npm_lifecycle_event === "build" || process.argv.includes("build");
 
+export const precomputedAI = {
+  name: "Precomputed AI",
+  url: "https://precomputedai.com",
+  repository: "https://github.com/PrecomputedAI/precomputed-ai",
+  description:
+    "An artifact-first LLM design pattern for precomputing reusable reasoning, serving through versioned artifacts, and escalating only through declared paths.",
+  citation:
+    "Raquedan, R. (2026). Precomputed AI: Reason Ahead of Time, Serve Instantly.",
+  citationUrl: "https://precomputedai.com"
+} as const;
+
 export const siteConfig = {
   name: "CloudEstimate",
   url: resolveSiteUrl(import.meta.env.PUBLIC_SITE_URL, !isProductionBuild),
   description:
-    "Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure.",
+    "A worked example of the Precomputed AI design pattern for reference-architecture-based cloud sizing and monthly cost estimates.",
   owner: {
     name: "Regnard Raquedan",
     site: "https://regnard.raquedan.com",

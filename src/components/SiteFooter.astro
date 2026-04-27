@@ -1,7 +1,7 @@
 ---
 import { formatDate } from "@/lib/format";
 import { getPricingSnapshotDate } from "@/lib/estimates";
-import { cloudOrder, siteConfig } from "@/lib/site";
+import { cloudOrder, precomputedAI, siteConfig } from "@/lib/site";
 
 const pricingDate = [...cloudOrder]
   .map((cloud) => getPricingSnapshotDate(cloud))
@@ -16,6 +16,7 @@ const pricingDate = [...cloudOrder]
         Built by <a href={siteConfig.owner.site}>{siteConfig.owner.name}</a>. Free and open —
         <a href={siteConfig.owner.github}>contribute on GitHub</a>.
       </p>
+      <p>A worked example of the <a href={precomputedAI.url}>{precomputedAI.name}</a> design pattern.</p>
     </div>
 
     <div class="space-y-2">

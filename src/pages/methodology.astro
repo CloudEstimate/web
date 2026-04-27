@@ -1,10 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
+import { precomputedAI } from "@/lib/site";
 
 const title = "Methodology | CloudEstimate";
 const description =
-  "How CloudEstimate maps vendor reference architectures to cloud instance shapes, cached pricing snapshots, and dated cost estimates.";
+  "How CloudEstimate uses the Precomputed AI design pattern through reference architecture artifacts, pricing snapshots, and dated estimates.";
 const jsonLd = buildPageJsonLd({
   type: "TechArticle",
   title: "CloudEstimate methodology",
@@ -19,6 +20,18 @@ const jsonLd = buildPageJsonLd({
 
     <p>
       Each estimate starts with a published vendor reference architecture. A size tier maps to a concrete set of components, those components are matched to cloud instance shapes, and cached pricing snapshots provide the monthly cost.
+    </p>
+
+    <h2>Precomputed AI design pattern</h2>
+    <p>
+      CloudEstimate is a worked example of the <a href={precomputedAI.url}>Precomputed AI</a> design pattern
+      for artifact-first LLM systems. Reference architectures, shape mappings, pricing snapshots and
+      generated explanation caches are versioned artifacts produced ahead of time and served without
+      live model inference. Snapshot dates are shown on every page because dated numbers are more
+      defensible than implied recency.
+    </p>
+    <p>
+      Methodology citation: <cite>{precomputedAI.citation}</cite> <a href={precomputedAI.citationUrl}>{precomputedAI.citationUrl}</a>.
     </p>
 
     <h2>What is modelled</h2>

@@ -3,12 +3,12 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import IsvCard from "@/components/IsvCard.astro";
 import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import { precomputedAI, siteConfig } from "@/lib/site";
 
 const isvs = await getCollection("isvs");
 const title = "Self-managed workload sizing across Google Cloud, AWS, and Azure | CloudEstimate";
 const description =
-  "Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure. Compare all three on one page.";
+  "A worked example of the Precomputed AI design pattern for reference-architecture-based sizing across Google Cloud, AWS, and Azure.";
 const jsonLd = buildPageJsonLd({
   type: "WebSite",
   title: siteConfig.name,
@@ -28,7 +28,7 @@ const jsonLd = buildPageJsonLd({
     <div class="home-hero">
       <h1>Size self-managed workloads across Google Cloud, AWS, and Azure.</h1>
       <p>
-        Reference-architecture-based sizing and monthly cost estimates for Google Cloud, AWS, and Azure.
+        Reference-architecture-based sizing and monthly cost estimates, served from precomputed artifacts.
       </p>
     </div>
 
@@ -69,7 +69,7 @@ const jsonLd = buildPageJsonLd({
           <p class="insight-card-kicker">How it works</p>
           <h2>Reference architecture in, estimate out.</h2>
           <p>
-            Published vendor reference architectures are mapped to cloud instance shapes, then priced against cached regional snapshots. The page loads with a default estimate and keeps the full state in the URL.
+            Published vendor reference architectures are mapped to cloud instance shapes, then priced against cached regional snapshots. This follows the <a href={precomputedAI.url}>Precomputed AI</a> design pattern: versioned artifacts serve the common path instantly.
           </p>
         </section>
         <section class="insight-card">
@@ -85,7 +85,7 @@ const jsonLd = buildPageJsonLd({
           <p class="insight-card-kicker">Who built this</p>
           <h2>Built as a focused, opinionated utility.</h2>
           <p>
-            CloudEstimate is a personal project by Regnard Raquedan. The short version and the links are on <a href="/about">About</a>.
+            CloudEstimate is a personal project by Regnard Raquedan and a worked example of the <a href={precomputedAI.url}>Precomputed AI</a> design pattern. The short version and citations are on <a href="/about">About</a>.
           </p>
         </section>
       </div>

@@ -1,7 +1,7 @@
 {
   "name": "cloudestimate-web",
   "version": "0.1.0",
-  "description": "Static utility for sizing self-managed enterprise workloads across Google Cloud, AWS, and Azure.",
+  "description": "Worked example of the Precomputed AI design pattern for sizing self-managed enterprise workloads across Google Cloud, AWS, and Azure.",
   "repository": {
     "type": "git",
     "url": "https://github.com/CloudEstimate/web.git"

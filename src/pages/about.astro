@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import { precomputedAI, siteConfig } from "@/lib/site";
 
 const title = "About | CloudEstimate";
-const description = "Why CloudEstimate exists, who built it, and what the tool deliberately does not model.";
+const description = "Why CloudEstimate exists and how it uses the Precomputed AI design pattern.";
 const jsonLd = buildPageJsonLd({
   type: "AboutPage",
   title: "About CloudEstimate",
@@ -27,6 +27,18 @@ const jsonLd = buildPageJsonLd({
 
     <p>
       CloudEstimate is a personal project. It is free, open source, and intentionally narrow. Every estimate cites its source reference architecture and pricing snapshot date so the number can stand up in a Slack thread or an email review.
+    </p>
+
+    <p>
+      CloudEstimate is a worked example of the <a href={precomputedAI.url}>Precomputed AI</a> design pattern.
+      The pattern moves reusable reasoning into versioned artifacts, then serves those artifacts
+      instantly without live inference on the normal path. In CloudEstimate, those artifacts
+      are the mapped reference architectures, instance-shape tables, pricing snapshots and generated
+      explanation caches. Every estimate is served from those artifacts instead of a live model call.
+    </p>
+
+    <p>
+      Cite the pattern as <cite>{precomputedAI.citation}</cite> <a href={precomputedAI.citationUrl}>{precomputedAI.citationUrl}</a>.
     </p>
 
     <p>

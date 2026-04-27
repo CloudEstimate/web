@@ -4,7 +4,7 @@ export function GET() {
   return new Response(
     new Uint8Array(renderOgPng({
       title: "CloudEstimate",
-      subtitle: "Sizing self-managed workloads across Google Cloud, AWS, and Azure",
+      subtitle: "Precomputed AI worked example for cloud sizing",
       costLabel: "Reference estimates",
       accent: "#575d8d"
     })),
