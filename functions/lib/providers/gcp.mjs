@@ -7,6 +7,11 @@ const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/cloud-billing.readonly"]
 });
 
+const n2OnDemandCoreMatchers = ["N2 Instance Core", "N2 Predefined Instance Core"];
+const n2OnDemandRamMatchers = ["N2 Instance Ram", "N2 Predefined Instance Ram"];
+const n2CommittedCoreMatchers = ["N2 Predefined Instance Core", "N2 Instance Core", /\bN2 Cpu\b/i];
+const n2CommittedRamMatchers = ["N2 Predefined Instance Ram", "N2 Instance Ram", /\bN2 Ram\b/i];
+
 export async function fetchGcpPricing({ regions, machineTypes }) {
   const headers = await getGoogleHeaders();
   const services = await fetchGoogleJson("https://cloudbilling.googleapis.com/v1/services", headers);
@@ -42,14 +47,14 @@ export async function fetchGcpPricing({ regions, machineTypes }) {
             const spec = machineSpecs[machineType];
             const rates = {
               on_demand_hourly_usd:
-                getComputeRate(computeSkus, region, "OnDemand", ["N2 Instance Core", "N2 Predefined Instance Core"], spec.vcpu) +
-                getComputeRate(computeSkus, region, "OnDemand", ["N2 Instance Ram", "N2 Predefined Instance Ram"], spec.memoryGb),
+                getComputeRate(computeSkus, region, "OnDemand", n2OnDemandCoreMatchers, spec.vcpu) +
+                getComputeRate(computeSkus, region, "OnDemand", n2OnDemandRamMatchers, spec.memoryGb),
               reserved_1yr_hourly_usd:
-                getComputeRate(computeSkus, region, "Commit1Yr", ["N2 Predefined Instance Core", "N2 Instance Core"], spec.vcpu) +
-                getComputeRate(computeSkus, region, "Commit1Yr", ["N2 Predefined Instance Ram", "N2 Instance Ram"], spec.memoryGb),
+                getComputeRate(computeSkus, region, "Commit1Yr", n2CommittedCoreMatchers, spec.vcpu) +
+                getComputeRate(computeSkus, region, "Commit1Yr", n2CommittedRamMatchers, spec.memoryGb),
               reserved_3yr_hourly_usd:
-                getComputeRate(computeSkus, region, "Commit3Yr", ["N2 Predefined Instance Core", "N2 Instance Core"], spec.vcpu) +
-                getComputeRate(computeSkus, region, "Commit3Yr", ["N2 Predefined Instance Ram", "N2 Instance Ram"], spec.memoryGb)
+                getComputeRate(computeSkus, region, "Commit3Yr", n2CommittedCoreMatchers, spec.vcpu) +
+                getComputeRate(computeSkus, region, "Commit3Yr", n2CommittedRamMatchers, spec.memoryGb)
             };
 
             return [machineType, rates];
@@ -113,13 +118,13 @@ async function fetchAllGoogleSkus(serviceName, headers) {
   return items;
 }
 
-function getComputeRate(skus, region, usageType, descriptionPrefixes, multiplier) {
-  const prefixes = Array.isArray(descriptionPrefixes) ? descriptionPrefixes : [descriptionPrefixes];
+function getComputeRate(skus, region, usageType, descriptionMatchers, multiplier) {
+  const matchers = Array.isArray(descriptionMatchers) ? descriptionMatchers : [descriptionMatchers];
 
-  for (const prefix of prefixes) {
+  for (const matcher of matchers) {
     const sku = skus.find(
       (candidate) =>
-        candidate.description?.includes(prefix) &&
+        matchesSkuDescription(candidate.description, matcher) &&
         !candidate.description?.includes("Custom") &&
         candidate.category?.usageType === usageType &&
         candidate.serviceRegions?.includes(region)
@@ -128,14 +133,26 @@ function getComputeRate(skus, region, usageType, descriptionPrefixes, multiplier
     if (sku) return getSkuUnitPrice(sku) * multiplier;
   }
 
+  const matcherLabels = matchers.map(formatSkuDescriptionMatcher);
+
   const available = [...new Set(
     skus
       .filter((s) => s.description?.includes("N2") && s.serviceRegions?.includes(region) && s.category?.usageType === usageType)
       .map((s) => s.description)
   )];
-  logger.info(`No match for [${prefixes.join(", ")}] in ${region} (${usageType}). Available N2 SKUs: ${JSON.stringify(available)}`);
+  logger.info(`No match for [${matcherLabels.join(", ")}] in ${region} (${usageType}). Available N2 SKUs: ${JSON.stringify(available)}`);
 
-  throw new Error(`Missing Google Cloud SKU for ${prefixes[0]} in ${region} (${usageType}).`);
+  throw new Error(`Missing Google Cloud SKU for ${matcherLabels[0]} in ${region} (${usageType}).`);
+}
+
+function matchesSkuDescription(description, matcher) {
+  if (!description) return false;
+  if (matcher instanceof RegExp) return matcher.test(description);
+  return description.includes(matcher);
+}
+
+function formatSkuDescriptionMatcher(matcher) {
+  return matcher instanceof RegExp ? matcher.toString() : matcher;
 }
 
 function findSkuRate(skus, region, usageType, includePatterns, excludePatterns = []) {

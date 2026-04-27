@@ -38,8 +38,8 @@ Current roster (24 ISVs). Links point to the official product or documentation p
 - Static Astro site for estimate, comparison, share, and policy pages
 - Schema-validated ISV catalog in `src/content/isvs/`
 - Shared sizing and Terraform generation logic in `shared/`
-- Firebase Hosting and Cloud Functions deploy wiring
-- Build-time pricing and explanation cache fetch pipeline
+- Firebase Hosting deploy wiring
+- Build-time generated pricing and explanation cache pipeline
 
 ## Getting started
 
@@ -58,7 +58,7 @@ npm run sync:functions-data
 
 ## Local configuration
 
-This repo intentionally avoids hardcoded production IDs.
+This repo intentionally avoids hardcoded production IDs, except for the public production URL fallback used by GitHub Actions when `PUBLIC_SITE_URL` is not configured.
 
 Copy `.env.example` to `.env` if you want to test canonical URLs, analytics tags, Search Console verification, or remote cache downloads.
 
@@ -72,16 +72,18 @@ Available local env vars:
 
 In GitHub Actions, public configuration belongs in repository or environment variables. Secrets such as `GCP_SA_KEY` belong in GitHub Actions Secrets.
 
-If you are working on Cloud Functions, use plain function env vars for non-sensitive runtime config and store only `CLOUDESTIMATE_GITHUB_TOKEN` in Google Cloud Secret Manager. A starter file for the non-sensitive values lives at `functions/.env.example`, and the full runtime setup is documented in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+If you are working on the legacy Cloud Functions rebuild-dispatch path, use plain function env vars for non-sensitive runtime config and store only `CLOUDESTIMATE_GITHUB_TOKEN` in Google Cloud Secret Manager. A starter file for the non-sensitive values lives at `functions/.env.example`, and the full runtime setup is documented in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
 ## Scheduled data refresh architecture
 
-Pricing and explanation caches are refreshed in GitHub Actions and committed into `src/data/generated/**`:
+Pricing and explanation caches are refreshed in GitHub Actions and committed into `src/data/generated/**`. The build reads those committed JSON files and `npm run build` first runs `npm run ensure:caches` so local builds have seeded fallback cache files when generated files are missing.
 
 - Daily pricing snapshot: `.github/workflows/refresh-pricing.yml`
-- Weekly explanation snapshot: `.github/workflows/regenerate-explanations.yml`
+- Daily explanation snapshot: `.github/workflows/regenerate-explanations.yml`
 
 The pricing workflow calls the Google Cloud Billing Catalog API first, then public AWS and Azure pricing APIs. The Google Cloud project used by `GCP_SA_KEY` / `CLOUDESTIMATE_GCP_PROJECT_ID` must have `cloudbilling.googleapis.com` enabled or the snapshot fails before AWS/Azure are refreshed.
+
+The explanation workflow uses Vertex AI through `@google/genai`. The workflow default model is `gemini-2.5-flash`; override it with `CLOUDESTIMATE_VERTEX_MODEL` when needed.
 
 Manual local equivalents:
 
@@ -100,9 +102,10 @@ Required repository variables:
 Optional repository variables:
 
 - `CLOUDESTIMATE_GCP_LOCATION` (defaults to `global`)
-- `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-2.5-pro`)
-- `CLOUDESTIMATE_EXPLANATION_LIMIT` (defaults to `50` new explanations per weekly run)
+- `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-2.5-flash` in the GitHub Actions workflow)
+- `CLOUDESTIMATE_EXPLANATION_LIMIT` (optional cap on new explanations per run; unset means no count cap)
 - `CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS` (defaults to `3900000`, just under 65 minutes)
+- `CLOUDESTIMATE_EXPLANATION_CONCURRENCY` (defaults to `12`)
 - `PUBLIC_GA4_MEASUREMENT_ID`
 - `PUBLIC_GOOGLE_SITE_VERIFICATION`
 
@@ -110,7 +113,7 @@ Required repository secrets:
 
 - `GCP_SA_KEY` (used by deploy and scheduled snapshot workflows for Google auth)
 
-The service account behind `GCP_SA_KEY` needs access to the configured project and the project must have these APIs enabled for the snapshot/deploy workflows: Cloud Billing API, Vertex AI API, Firebase/Cloud Functions/Cloud Run APIs, and Service Usage API if you want CI to verify enabled services with `gcloud`.
+The service account behind `GCP_SA_KEY` needs access to the configured project and the project must have these APIs enabled for the snapshot/deploy workflows: Cloud Billing API, Vertex AI API, Firebase Hosting APIs, and Service Usage API if you want CI to verify enabled services with `gcloud`. Cloud Functions and Cloud Run APIs are only needed if you also deploy the legacy Functions path.
 
 No longer needed for the scheduled snapshot path:
 

@@ -24,6 +24,8 @@ If you touch Functions, generated runtime data, or shared sizing logic, also run
 npm run sync:functions-data
 ```
 
+`npm run build` runs `npm run ensure:caches` before asset generation and Astro. That keeps local builds working from seeded cache files, while the active scheduled workflows commit refreshed generated caches under `src/data/generated/**`.
+
 ## Adding or updating an ISV
 
 1. Add or edit the YAML file in `src/content/isvs/`.
@@ -48,6 +50,7 @@ npm run lint
 npm run test
 npm run check:functions
 npm run validate:terraform -- --mode=generate-only
+npm run build
 ```
 
 PRs should:
