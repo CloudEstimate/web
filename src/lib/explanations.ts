@@ -26,6 +26,10 @@ export function getSizingExplanation(args: {
   ha: boolean;
   estimate: EstimateResult;
 }) {
+  if (args.term !== "on-demand") {
+    return buildSizingExplanationFallback(args);
+  }
+
   const key = buildSingleKey(args);
   return singleCache[key]?.explanation ?? buildSizingExplanationFallback(args);
 }
@@ -48,17 +52,9 @@ export function buildSingleKey(args: {
   cloud: CloudSlug;
   size: string;
   region: string;
-  term: string;
   ha: boolean;
 }) {
-  return [
-    args.isv.data.slug,
-    args.cloud,
-    args.size,
-    args.ha ? "ha" : "noha",
-    args.term,
-    args.region
-  ].join(":");
+  return [args.isv.data.slug, args.cloud, args.size, args.ha ? "ha" : "noha", args.region].join(":");
 }
 
 export function buildCompareKey(args: {

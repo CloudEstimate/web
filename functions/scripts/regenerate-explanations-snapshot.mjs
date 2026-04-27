@@ -12,13 +12,16 @@ const pricingDir = path.join(repoRoot, "src/data/generated/pricing");
 const explanationsDir = path.join(repoRoot, "src/data/generated/explanations");
 const manifestPath = path.join(repoRoot, "src/data/generated/cache-manifest.json");
 
+const CHECKPOINT_INTERVAL = 25;
+const REQUEST_TIMEOUT_MS = 30_000;
+
 async function main() {
   const ai = new GoogleGenAI({
     vertexai: true,
     project: requireProjectId(),
     location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
   });
-  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-pro";
+  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-flash";
   const pricingByCloud = await loadPricing();
   const singleAggregate = await loadAggregate("single.json");
   const compareAggregate = await loadAggregate("compare.json");
@@ -28,6 +31,8 @@ async function main() {
   let generated = 0;
   let skippedExisting = 0;
   let validationFailures = 0;
+  let checkpointing = false;
+  let sinceCheckpoint = 0;
 
   const canAttemptMore = () => {
     if (options.maxNewExplanations > 0 && attempted >= options.maxNewExplanations) {
@@ -37,95 +42,116 @@ async function main() {
     return !(options.timeBudgetMs > 0 && Date.now() - startedAt >= options.timeBudgetMs);
   };
 
-  outer:
+  const workItems = buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, (n) => { skippedExisting += n; });
+
+  await runWithConcurrency(workItems, options.concurrency, async (item) => {
+    if (!canAttemptMore()) return;
+
+    attempted += 1;
+    const explanation = await generateWithValidation(ai, model, buildPrompt(item));
+
+    if (explanation) {
+      const payload = {
+        key: item.key,
+        generated_at: new Date().toISOString(),
+        model,
+        explanation,
+        source_refs: [item.isv.ref_arch.source_url]
+      };
+
+      if (item.type === "single") {
+        singleAggregate[item.key] = payload;
+      } else {
+        compareAggregate[item.key] = payload;
+      }
+
+      generated += 1;
+      sinceCheckpoint += 1;
+
+      if (!checkpointing && sinceCheckpoint >= CHECKPOINT_INTERVAL) {
+        checkpointing = true;
+        sinceCheckpoint = 0;
+        await writeAggregates(singleAggregate, compareAggregate);
+        checkpointing = false;
+      }
+    } else {
+      validationFailures += 1;
+    }
+  });
+
+  await writeAggregates(singleAggregate, compareAggregate);
+  await upsertManifest();
+  console.log(
+    `Explanation snapshot regeneration complete. Attempted ${attempted}, generated ${generated}, skipped ${skippedExisting} existing, validation failures ${validationFailures}.`
+  );
+}
+
+function buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, onSkip) {
+  const workItems = [];
+  let skipped = 0;
+
   for (const isv of getIsvCatalog()) {
     for (const tuple of buildEstimateTuples(isv, pricingByCloud)) {
-      const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.term, tuple.region].join(":");
+      if (tuple.term !== "on-demand") continue;
+
+      const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.region].join(":");
 
       if (singleAggregate[key]?.explanation) {
-        skippedExisting += 1;
+        skipped += 1;
         continue;
       }
 
-      if (!canAttemptMore()) {
-        break outer;
-      }
-
-      attempted += 1;
-      const explanation = await generateWithValidation(
-        ai,
-        model,
-        buildSinglePrompt({
-          isv,
-          size: isv.sizes[tuple.size],
-          cloudName: tuple.cloud === "gcp" ? "Google Cloud" : tuple.cloud === "aws" ? "AWS" : "Azure",
-          region: tuple.region,
-          ha: tuple.ha,
-          term: tuple.term,
-          estimate: tuple.estimate
-        })
-      );
-
-      if (explanation) {
-        singleAggregate[key] = {
-          key,
-          generated_at: new Date().toISOString(),
-          model,
-          explanation,
-          source_refs: [isv.ref_arch.source_url]
-        };
-        generated += 1;
-      } else {
-        validationFailures += 1;
-      }
+      workItems.push({ type: "single", isv, tuple, key });
     }
 
     for (const tuple of buildCompareTuples(isv, pricingByCloud)) {
       const key = [isv.slug, tuple.size, tuple.ha ? "ha" : "noha", tuple.term].join(":");
 
       if (compareAggregate[key]?.explanation) {
-        skippedExisting += 1;
+        skipped += 1;
         continue;
       }
 
-      if (!canAttemptMore()) {
-        break outer;
-      }
-
-      attempted += 1;
-      const explanation = await generateWithValidation(
-        ai,
-        model,
-        buildComparePrompt({
-          isv,
-          size: isv.sizes[tuple.size],
-          ha: tuple.ha,
-          term: tuple.term,
-          estimates: tuple.estimates
-        })
-      );
-
-      if (explanation) {
-        compareAggregate[key] = {
-          key,
-          generated_at: new Date().toISOString(),
-          model,
-          explanation,
-          source_refs: [isv.ref_arch.source_url]
-        };
-        generated += 1;
-      } else {
-        validationFailures += 1;
-      }
+      workItems.push({ type: "compare", isv, tuple, key });
     }
   }
 
-  await fs.mkdir(explanationsDir, { recursive: true });
-  await fs.writeFile(path.join(explanationsDir, "single.json"), `${JSON.stringify(singleAggregate, null, 2)}\n`);
-  await fs.writeFile(path.join(explanationsDir, "compare.json"), `${JSON.stringify(compareAggregate, null, 2)}\n`);
-  await upsertManifest();
-  console.log(
-    `Explanation snapshot regeneration complete. Attempted ${attempted}, generated ${generated}, skipped ${skippedExisting} existing, validation failures ${validationFailures}.`
+  onSkip(skipped);
+  return workItems;
+}
+
+function buildPrompt(item) {
+  if (item.type === "single") {
+    return buildSinglePrompt({
+      isv: item.isv,
+      size: item.isv.sizes[item.tuple.size],
+      cloudName: item.tuple.cloud === "gcp" ? "Google Cloud" : item.tuple.cloud === "aws" ? "AWS" : "Azure",
+      region: item.tuple.region,
+      ha: item.tuple.ha,
+      term: item.tuple.term,
+      estimate: item.tuple.estimate
+    });
+  }
+
+  return buildComparePrompt({
+    isv: item.isv,
+    size: item.isv.sizes[item.tuple.size],
+    ha: item.tuple.ha,
+    term: item.tuple.term,
+    estimates: item.tuple.estimates
+  });
+}
+
+async function runWithConcurrency(items, concurrency, processor) {
+  const queue = [...items];
+
+  await Promise.all(
+    Array.from({ length: concurrency }, async () => {
+      while (queue.length > 0) {
+        const item = queue.shift();
+        await processor(item);
+      }
+    })
   );
 }
 
@@ -148,10 +174,17 @@ async function loadAggregate(filename) {
   }
 }
 
+async function writeAggregates(singleAggregate, compareAggregate) {
+  await fs.mkdir(explanationsDir, { recursive: true });
+  await fs.writeFile(path.join(explanationsDir, "single.json"), `${JSON.stringify(singleAggregate, null, 2)}\n`);
+  await fs.writeFile(path.join(explanationsDir, "compare.json"), `${JSON.stringify(compareAggregate, null, 2)}\n`);
+}
+
 function readGenerationOptions() {
   return {
     maxNewExplanations: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_LIMIT"),
-    timeBudgetMs: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS")
+    timeBudgetMs: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS"),
+    concurrency: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_CONCURRENCY") || 8
   };
 }
 
@@ -173,22 +206,35 @@ function readPositiveIntegerEnv(name) {
 
 async function generateWithValidation(ai, model, userPrompt) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await ai.models.generateContent({
-      model,
-      contents: userPrompt,
-      config: {
-        systemInstruction: sharedSystemPrompt
-      }
-    });
-    const text = response.text?.trim();
-
-    if (!text) {
-      continue;
+    if (attempt > 0) {
+      await sleep(attempt * 2000);
     }
 
-    const validation = validateExplanation(text);
-    if (validation.ok) {
-      return text;
+    try {
+      const response = await withTimeout(
+        ai.models.generateContent({
+          model,
+          contents: userPrompt,
+          config: {
+            systemInstruction: sharedSystemPrompt,
+            temperature: 0.2,
+            maxOutputTokens: 384
+          }
+        }),
+        REQUEST_TIMEOUT_MS
+      );
+      const text = response.text?.trim();
+
+      if (!text) {
+        continue;
+      }
+
+      const validation = validateExplanation(text);
+      if (validation.ok) {
+        return text;
+      }
+    } catch {
+      // timeout or transient API error — retry with backoff
     }
   }
 
@@ -215,6 +261,19 @@ async function upsertManifest() {
 
   await fs.mkdir(path.dirname(manifestPath), { recursive: true });
   await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`Vertex request timed out after ${ms}ms`)), ms)
+    )
+  ]);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 main().catch((error) => {
