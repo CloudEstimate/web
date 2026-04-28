@@ -72,7 +72,7 @@ Available local env vars:
 
 In GitHub Actions, public configuration belongs in repository or environment variables. Secrets such as `GCP_SA_KEY` belong in GitHub Actions Secrets.
 
-If you are working on the legacy Cloud Functions rebuild-dispatch path, use plain function env vars for non-sensitive runtime config and store only `CLOUDESTIMATE_GITHUB_TOKEN` in Google Cloud Secret Manager. A starter file for the non-sensitive values lives at `functions/.env.example`, and the full runtime setup is documented in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+The `functions/` directory retains a `triggerRebuild` HTTP function and shared library code. The scheduled `refreshPricing` and `regenerateExplanations` Cloud Functions exports have been removed; that work runs entirely in GitHub Actions. See [`docs/OPERATIONS.md`](docs/OPERATIONS.md) for the current pipeline.
 
 ## Scheduled data refresh architecture
 
