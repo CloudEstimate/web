@@ -232,5 +232,2075 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "apache-kafka-confluent-platform:gcp:m:noha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T05:57:47.815Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-tier Kafka deployment, handling 50 to 150 MB/s ingress or larger retained topic footprints, without high availability. The primary cost driver is compute, specifically the three n2-standard-32 instances, which account for the majority of the $0.76 monthly cost. A key consideration is the disabled high availability, which significantly reduces cost but introduces a single point of failure for the entire cluster.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:gcp:xl:ha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T05:57:47.923Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Kafka deployment supports 150 to 400 MB/s ingress with extended retention and additional connectors, as specified by the Confluent Platform large-cluster reference architecture. The primary cost driver is compute, accounting for 100% of the $1.49 monthly total. This configuration prioritizes high throughput and data retention, utilizing 6 large n2-standard-32 instances for Kafka brokers, which represents a significant resource allocation for performance.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:gcp:m:ha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T05:57:48.028Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-scale Confluent Platform deployment, handling 50 to 150 MB/s ingress or larger retained topic footprints, with high availability enabled in Google Cloud's us-central1 region. The primary cost driver is compute, specifically the three n2-standard-32 instances which provide 96 vCPUs and 384 GB RAM for Kafka brokers. A key consideration at this scale is balancing the high compute and memory requirements of the brokers with the significantly smaller resource needs of the other platform components.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:azure:m:noha:westus3": {
+    "key": "apache-kafka-confluent-platform:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T05:57:49.155Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-tier Kafka deployment on Azure, handling 50 to 150 MB/s ingress or larger retained topic footprints. Compute instances, specifically the three Standard_D32s_v5 brokers, are the primary cost driver, accounting for over 70% of the monthly expenditure. This configuration prioritizes high throughput and storage capacity for Kafka brokers, but lacks high availability, which is a significant consideration for production workloads. The substantial storage cost reflects the provisioned 4000 GB SSDs per broker, necessary for retaining large topic footprints.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:azure:m:ha:westus3": {
+    "key": "apache-kafka-confluent-platform:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T05:57:54.255Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-scale Apache Kafka deployment on Azure, handling 50 to 150 MB/s ingress or substantial data retention. Compute instances, specifically the three large D32s_v5 machines, represent the dominant cost driver at $4134.72 monthly, significantly outweighing storage costs. The architecture prioritizes high availability with multiple instances for each component, which contributes to the overall compute expenditure.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:gcp:xl:noha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T05:57:56.189Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Confluent Platform deployment supports 150 to 400 MB/s ingress with extended retention and numerous connectors. The primary cost driver is compute, specifically the 6 n2-standard-32 instances, which account for nearly all of the $1.49 monthly cost. This configuration prioritizes high throughput and data processing capabilities over storage costs, as indicated by the negligible storage expense.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:gcp:xs:ha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T05:57:56.416Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Confluent Platform deployment supports up to 50 MB/s ingress with short retention, utilizing 11 virtual machines across three distinct instance types for high availability. The primary cost driver for this tier is compute, accounting for the entire $0.42 monthly cost. A key consideration is the minimal storage provisioned, indicating suitability only for use cases with very short data retention requirements.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:aws:m:noha:us-east-1": {
+    "key": "apache-kafka-confluent-platform:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T05:57:56.556Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-tier Confluent Platform deployment, handling 50 to 150 MB/s ingress or larger retained topic footprints without high availability. The primary cost driver is compute, accounting for over 80% of the total monthly expenditure. The absence of high availability significantly reduces infrastructure complexity and cost, but introduces a single point of failure for the entire cluster.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:azure:xl:ha:westus3": {
+    "key": "apache-kafka-confluent-platform:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T05:57:57.198Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 150 to 400 MB/s ingress with extended retention and additional connectors, aligning with the Confluent Platform's \"large-cluster\" guidance. Storage is the primary cost driver, accounting for 42% of the total monthly expenditure at $5958. The architecture provisions 6 large D32s_v5 instances with 8000 GB SSDs each, indicating a strong emphasis on high-throughput, high-capacity data retention for Kafka brokers. This scale prioritizes data durability and accessibility over minimizing compute resources.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "apache-kafka-confluent-platform:azure:xs:noha:westus3": {
+    "key": "apache-kafka-confluent-platform:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T05:57:57.550Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Kafka deployment supports up to 50 MB/s ingress with short retention, suitable for departmental use cases. Compute instances, specifically the 3x Standard_D16s_v5 brokers, are the primary cost driver, accounting for over 70% of the total monthly expenditure. The architecture prioritizes a minimal footprint by disabling high availability, which significantly reduces cost but introduces a single point of failure. The 2000 GB SSDs on the brokers provide ample storage for the specified short retention windows.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "cockroachdb-self-hosted:gcp:xs:ha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T05:58:02.295Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 1 TB of replicated OLTP data across a three-node CockroachDB cluster. The primary cost driver is the compute instances, specifically three n2-standard-4 machines, which account for the entire $0.08 monthly cost. This configuration prioritizes high availability with three nodes, but the small instance sizes and storage allocation indicate suitability for workloads with low transactional volume and modest data retention needs.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:gcp:m:noha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T05:58:03.233Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node cluster supports 1 to 5 TB of replicated OLTP data, utilizing n2-standard-8 instances with 8 vCPUs and 32 GB RAM each. The primary cost driver is compute, accounting for the entire $0.26 monthly cost. This on-demand configuration, with disabled high availability, prioritizes minimal cost for a single-region deployment over resilience to zone failures.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:gcp:m:ha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T05:58:04.292Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node CockroachDB cluster is sized for 1 to 5 TB of replicated OLTP data, providing high availability with n2-standard-8 instances. The primary cost driver is compute, accounting for $0.26 monthly for the five nodes. At this scale, the architecture prioritizes data replication and resilience over raw storage capacity, as evidenced by the 1 TB SSD per node supporting the 1-5 TB data range.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "apache-kafka-confluent-platform:azure:xl:noha:westus3": {
+    "key": "apache-kafka-confluent-platform:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T05:58:04.685Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Confluent Platform sizing supports 150-400 MB/s ingress with extended retention and numerous connectors, aligning with the \"large-cluster\" reference architecture. Storage is the dominant cost driver, accounting for 42% of the total monthly cost at $5958. The significant storage allocation, totaling 48000 GB across 6 instances, directly supports the requirement for longer data retention. Disabling high availability reduces compute and storage redundancy, lowering costs but increasing risk of downtime.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "cockroachdb-self-hosted:gcp:xl:ha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T05:58:05.792Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 5 to 20 TB of replicated data or high-concurrency regional SQL workloads, leveraging 7 `n2-standard-16` instances, each with 16 vCPUs and 64 GB RAM. Compute is the sole cost driver at $0.72 per month, as storage and other costs are negligible. The significant compute resources are provisioned to handle the demanding performance requirements of large-scale, highly concurrent CockroachDB deployments.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:xs:ha:westus3": {
+    "key": "cockroachdb-self-hosted:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T05:58:09.582Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 1 TB of replicated OLTP data across a three-node CockroachDB cluster. Compute instances, specifically three Standard_D4s_v5 VMs, are the primary cost driver, accounting for 70% of the $600.48 monthly total. This configuration prioritizes high availability with three nodes, but the 500 GB SSDs per node mean storage capacity is limited to 1 TB total replicated data.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:aws:m:ha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T05:58:10.328Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node cluster, with 8 vCPU and 32 GB RAM per node, supports 1 to 5 TB of replicated OLTP data. Compute instances are the dominant cost driver, accounting for 78% of the $1801.60 monthly total. The architecture prioritizes high availability and performance for OLTP workloads, utilizing 1000 GB SSD per node for fast I/O at a higher storage cost.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:gcp:xl:noha:us-central1": {
+    "key": "cockroachdb-self-hosted:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T05:58:13.764Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports CockroachDB deployments with 5 to 20 TB of replicated data or high-concurrency regional SQL workloads. The primary cost driver is compute, with 7 n2-standard-16 instances (16 vCPU, 64 GB RAM) costing $0.72 monthly. This configuration prioritizes high performance and capacity, but disabling high availability means the architecture is not resilient to single-node failures.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:xs:noha:westus3": {
+    "key": "cockroachdb-self-hosted:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T05:58:16.631Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 1 TB of replicated OLTP data on a three-node CockroachDB cluster. Compute instances are the dominant cost driver, accounting for $420 of the $600 monthly total. The architecture provisions 3x Standard_D4s_v5 instances, each with 4 vCPU and 16 GB RAM, alongside 500 GB of SSD storage per node. This configuration prioritizes compute over storage capacity, with storage costing $180 monthly.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:xl:ha:westus3": {
+    "key": "cockroachdb-self-hosted:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T05:58:19.465Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 5-20 TB of replicated data or high-concurrency regional SQL workloads using 7 Standard_D16s_v5 nodes. Compute is the dominant cost driver, accounting for 70% of the $5604.48 monthly total. The architecture prioritizes high availability and performance with 7 nodes, leading to higher compute costs compared to storage.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:m:ha:westus3": {
+    "key": "cockroachdb-self-hosted:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T05:58:19.565Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node cluster supports 1 to 5 TB of replicated OLTP data, utilizing 8 vCPU and 32 GB RAM per node. Compute is the dominant cost driver, accounting for 70% of the total monthly expenditure at $1401.60. The architecture prioritizes high availability and performance for OLTP workloads, with 1 TB of SSD storage provisioned per node to meet I/O demands.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "cockroachdb-self-hosted:aws:m:noha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T05:58:44.358Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node CockroachDB cluster supports 1 to 5 TB of replicated OLTP data. Compute instances are the primary cost driver, accounting for 78% of the $1801.60 monthly total. The architecture prioritizes data capacity and processing power, but disabling high availability means the cluster is not resilient to node failures.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "confluence-data-center:aws:xl:ha:us-east-1": {
+    "key": "confluence-data-center:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T05:58:45.654Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Confluence Data Center deployment supports 10-25 million content items or 700,000-1,000,000 HTTP calls per hour, leveraging a mix of m6i instances for high availability. Compute instances, specifically four m6i.4xlarge nodes, are the dominant cost driver, accounting for over 99% of the $2749 monthly total. The architecture prioritizes high availability and performance for large-scale Confluence usage, reflected in the substantial compute allocation.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "confluence-data-center:azure:xl:noha:westus3": {
+    "key": "confluence-data-center:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T05:58:47.835Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This extra-large Confluence Data Center deployment supports 10-25 million content items or 700,000-1,000,000 HTTP calls per hour. Compute instances, specifically four Standard_D16s_v5 machines, are the sole cost driver at $2663.04 monthly. The architecture prioritizes raw processing power for high throughput over storage or high availability, which is disabled.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "consul:gcp:xs:noha:us-central1": {
+    "key": "consul:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T05:59:07.929Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Consul deployment supports up to 500 registered services on a three-server control plane. The primary cost driver is the compute instances, totaling $0.04 monthly for three n2-standard-2 machines. This configuration explicitly disables high availability, meaning a single server failure will disrupt service.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:gcp:xs:ha:us-central1": {
+    "key": "consul:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T05:59:08.660Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Consul deployment supports up to 500 registered services on a three-server control plane, providing high availability. The primary cost driver is compute, accounting for the entire $0.04 monthly cost for three n2-standard-2 instances. This configuration is suitable for minimal workloads, as scaling beyond 500 services will necessitate a larger, more expensive control plane.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:gcp:xl:noha:us-central1": {
+    "key": "consul:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T05:59:08.986Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 5,000 to 25,000 registered services, accommodating larger service-mesh control requirements. The primary cost driver is compute, specifically the five n2-standard-4 instances allocated for Consul servers. Disabling high availability reduces instance count and complexity, but removes redundancy for critical Consul server operations.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:gcp:m:ha:us-central1": {
+    "key": "consul:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T05:59:12.559Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Consul deployment managing 500 to 5,000 services, including ingress and mesh gateways, with high availability enabled. The primary cost driver is compute, accounting for the entire $0.12 monthly cost. The architecture provisions five n2-standard-2 instances for Consul servers and two sets of two n2-standard-2 instances for gateways, all with 2 vCPUs and 8 GB RAM, indicating a focus on CPU and memory for Consul's operational needs.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:aws:m:ha:us-east-1": {
+    "key": "consul:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T05:59:13.694Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Consul deployment supports 500 to 5,000 registered services, including ingress and mesh gateways, with high availability enabled. Compute instances for the five Consul servers and four gateway nodes are the primary cost driver, accounting for over 90% of the monthly expenditure. The architecture dedicates 10 m6i.large instances to maintain performance and redundancy for this service load, with each server node allocated 100 GB of SSD storage compared to 50 GB for gateway nodes.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:azure:xs:noha:westus3": {
+    "key": "consul:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T05:59:17.154Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Consul deployment supports up to 500 registered services using a three-server control plane. The primary cost driver is compute, accounting for over 90% of the total monthly cost at $210.24. This configuration prioritizes minimal cost for a small service footprint, but lacks high availability, making it unsuitable for production environments requiring fault tolerance.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:aws:xs:ha:us-east-1": {
+    "key": "consul:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T05:59:17.888Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Consul deployment supports up to 500 registered services using a three-server control plane for high availability. The primary cost driver is compute, accounting for over 90% of the $222.24 monthly total. This configuration prioritizes resilience and service discovery for a modest workload, accepting higher compute costs per service compared to larger, more consolidated deployments.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:aws:m:noha:us-east-1": {
+    "key": "consul:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T05:59:18.906Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Consul deployment of 500 to 5,000 registered services, including ingress and mesh gateways, in AWS us-east-1. The primary cost driver is compute, accounting for over 90% of the total monthly cost. This configuration prioritizes cost efficiency by disabling high availability, which means the deployment is not resilient to zone-level outages.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:azure:m:noha:westus3": {
+    "key": "consul:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T05:59:19.957Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Consul deployment managing 500 to 5,000 services, including ingress and mesh gateways, in Azure's westus3 region without high availability. Compute instances are the dominant cost driver, accounting for over 88% of the total monthly expenditure at $630.72. The absence of high availability significantly reduces infrastructure complexity and cost but introduces a single point of failure for the Consul service.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:azure:m:ha:westus3": {
+    "key": "consul:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T05:59:20.373Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Consul deployment managing 500 to 5,000 services, including ingress and mesh gateways, with high availability enabled across 9 instances. Compute instances are the primary cost driver, accounting for over 88% of the total monthly cost at $630.72. The architecture prioritizes high availability and service capacity over minimizing instance count, utilizing 9 instances to distribute the workload and ensure resilience.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "consul:azure:xl:noha:westus3": {
+    "key": "consul:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T05:59:26.238Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 5,000 to 25,000 registered services, with the five Consul servers (Standard_D4s_v5) driving the $1261.44 monthly compute cost. The architecture prioritizes server capacity for large service mesh control, allocating 4 vCPU and 16 GB RAM per server. A key consideration is the disabled high availability, which reduces compute costs but introduces a single point of failure risk for the Consul cluster.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "couchbase-server-enterprise:gcp:xs:noha:us-central1": {
+    "key": "couchbase-server-enterprise:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T05:59:30.870Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 50 GB of active data on a compact multi-service Couchbase cluster, utilizing three n2-standard-4 instances. The primary cost driver is compute, accounting for the entire $0.08 monthly cost. This configuration prioritizes minimal cost and resource footprint over high availability, as indicated by the disabled HA setting.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:gcp:xs:ha:us-central1": {
+    "key": "couchbase-server-enterprise:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T05:59:31.765Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a compact, highly available Couchbase cluster for up to 50 GB of active data, utilizing three n2-standard-4 instances. The dominant cost driver is compute, accounting for the entire $0.08 monthly cost. This configuration prioritizes high availability and data locality within a single cluster, trading off against potential cost savings from separate service nodes.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:gcp:m:noha:us-central1": {
+    "key": "couchbase-server-enterprise:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T05:59:32.685Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Couchbase deployment with 50-250 GB of active data, utilizing separate nodes for data, query, and index services. The primary cost driver is compute, accounting for $0.31 of the total monthly cost. This configuration, with 8 total nodes, prioritizes service isolation over minimizing node count, which would be a consideration for smaller deployments.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:gcp:xl:ha:us-central1": {
+    "key": "couchbase-server-enterprise:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T05:59:33.903Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Couchbase deployment supports 250 GB to 1 TB of active data on a dedicated-services cluster. The architecture provisions 12 instances across three distinct roles, with the six n2-standard-8 data nodes being the primary resource consumers. At this scale, compute resources are the sole cost driver, with storage costs being negligible. The split-services approach dedicates resources to specific Couchbase roles, enhancing performance and isolation for larger datasets.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:aws:m:noha:us-east-1": {
+    "key": "couchbase-server-enterprise:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T05:59:36.101Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Couchbase deployment with 50-250 GB of active data, utilizing separate nodes for data, query, and index services. Compute instances are the primary cost driver, accounting for over 80% of the total monthly cost at $1681.92. The architecture provisions 4 data nodes with 1TB storage each, 2 query nodes with 500GB, and 2 index nodes with 100GB, reflecting a strategy to scale storage and compute independently for different service roles.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:aws:xs:noha:us-east-1": {
+    "key": "couchbase-server-enterprise:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T05:59:36.984Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports up to 50 GB of active data on a compact multi-service Couchbase cluster. The primary cost driver is compute, accounting for 78% of the total monthly cost. This tier disables high availability, meaning a single node failure will result in downtime.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:azure:xs:noha:westus3": {
+    "key": "couchbase-server-enterprise:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T05:59:38.027Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provides 12 vCPUs, 48 GB RAM, and 1.5 TB of SSD storage across three nodes, supporting up to 50 GB of active data on a compact multi-service Couchbase cluster. Compute instances are the primary cost driver, accounting for 70% of the $600 monthly total. This configuration disables high availability, meaning a single node failure will disrupt service.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:azure:m:noha:westus3": {
+    "key": "couchbase-server-enterprise:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T05:59:39.169Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Couchbase deployment with 50-250 GB of active data, separating data, query, and index services across different node types. Compute instances are the primary cost driver, accounting for 73% of the total monthly cost. The architecture dedicates 4x D8s_v5 instances for data services, providing 32 vCPU and 128 GB RAM for data operations, while smaller D4s_v5 instances handle query and index services. This split-service approach optimizes resource allocation for distinct workloads, but increases the total number of instances compared to a consolidated deployment.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:azure:m:ha:westus3": {
+    "key": "couchbase-server-enterprise:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T05:59:39.431Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Couchbase deployment with 50 to 250 GB of active data, utilizing separate nodes for data, query, and index services for improved performance and isolation. Compute instances are the primary cost driver, accounting for over 70% of the total monthly expenditure. The architecture dedicates 4 D8s_v5 instances for data services, providing substantial memory and SSD storage (1 TB per node) to handle the active dataset and ensure high availability.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:gcp:m:ha:us-central1": {
+    "key": "couchbase-server-enterprise:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T05:59:41.493Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Couchbase sizing supports a medium-scale deployment with 50-250 GB of active data, separating data, query, and index services across 8 instances for high availability. The primary cost driver is compute, accounting for $0.31 monthly, while storage costs are negligible. This configuration prioritizes service isolation and resilience over minimizing instance count, utilizing smaller, specialized nodes.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:aws:xl:noha:us-east-1": {
+    "key": "couchbase-server-enterprise:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T05:59:45.669Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Couchbase deployment supports 250 GB to 1 TB of active data on a dedicated-services cluster. Compute instances, primarily the 6 data nodes, drive 72% of the $4107.36 monthly cost. The architecture prioritizes dedicated resources for data and query services, leading to higher compute costs compared to storage.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "edb-postgres-advanced-server:gcp:xs:noha:us-central1": {
+    "key": "edb-postgres-advanced-server:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T05:59:59.343Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to a 250 GB database for light OLTP workloads on a single primary instance. The primary cost driver is the n2-standard-4 compute instance, which provides 4 vCPUs and 16 GB RAM. A key tradeoff is the absence of high availability, meaning no automatic failover in case of instance failure. The n2-standard-2 instance is likely for a management or utility function, given its smaller size and minimal cost contribution.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:gcp:m:noha:us-central1": {
+    "key": "edb-postgres-advanced-server:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:00.295Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a single n2-standard-8 instance for a 250 GB to 1 TB EDB Postgres database, suitable for mixed read/write OLTP workloads without high availability. The primary cost driver is the compute instance, accounting for the entire $0.08 monthly cost. The two n2-standard-2 instances are provisioned but incur no cost, indicating they are likely for non-production or minimal-use components not contributing to the primary database's operational cost.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:gcp:xl:noha:us-central1": {
+    "key": "edb-postgres-advanced-server:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:01.515Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a single n2-standard-16 instance for the primary database, suitable for 1-5 TB databases or heavy mixed workloads, and two smaller n2-standard-4 instances for other components. The primary cost driver is the compute instance, which accounts for the entire $0.15 monthly cost. The disabled high availability configuration means there are no standby instances, reducing complexity and cost but eliminating failover capabilities.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:gcp:xs:ha:us-central1": {
+    "key": "edb-postgres-advanced-server:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:00:08.249Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports EDB Postgres Advanced Server for light OLTP workloads up to 250 GB, utilizing a single primary and two standby nodes for high availability. The primary cost driver is \"Other\" at $18.00 monthly, which includes networking and operational overhead. While compute instances are provisioned, their cost is negligible, indicating a significant portion of the total cost is fixed infrastructure or managed service fees.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:aws:m:noha:us-east-1": {
+    "key": "edb-postgres-advanced-server:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:00:09.944Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-sized EDB Postgres Advanced Server database, specifically for OLTP workloads between 250 GB and 1 TB, without high availability. The primary cost driver is compute, accounting for over 80% of the total monthly cost at $420.48. A key consideration is the absence of HA, which significantly reduces infrastructure complexity and cost but introduces a single point of failure for the database.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:azure:xl:noha:westus3": {
+    "key": "edb-postgres-advanced-server:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:00:11.293Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 1 to 5 TB databases or heavy mixed OLTP and reporting workloads on EDB Postgres Advanced Server. The primary instance, a D16s_v5, provides 16 vCPUs and 64 GB RAM, while two smaller D4s_v5 instances are provisioned for other components. Compute is the dominant cost driver at $841 monthly, representing 76% of the total, with storage contributing $264 for 2200 GB across all instances. The absence of HA significantly reduces complexity and cost but introduces a single point of failure for the database.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:azure:xs:noha:westus3": {
+    "key": "edb-postgres-advanced-server:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:00:12.526Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 250 GB for light OLTP workloads, utilizing a Standard_D4s_v5 primary and a Standard_D2s_v5 for other functions. Compute is the dominant cost driver, accounting for over 75% of the total monthly cost at $210.24. The primary tradeoff is the absence of high availability, which significantly reduces cost but introduces a single point of failure.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "edb-postgres-advanced-server:azure:xs:ha:westus3": {
+    "key": "edb-postgres-advanced-server:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:00:18.298Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 250 GB for light OLTP workloads, utilizing two 4 vCPU/16 GB RAM instances for primary and standby, along with three smaller instances for quorum and monitoring. Compute is the dominant cost driver at $490.56 monthly, representing 76% of the total. The architecture prioritizes high availability with dedicated standby and quorum nodes, which increases instance count and compute costs relative to a single-node deployment.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "elasticsearch-oss:gcp:xs:noha:us-central1": {
+    "key": "elasticsearch-oss:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:25.136Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch OSS node, suitable for development or minimal workloads. The primary cost driver is the n2-standard-4 compute instance, though its on-demand cost is negligible at $0.03/month due to the very short assumed runtime. A key consideration is the lack of high availability, meaning a single point of failure for the entire deployment.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:gcp:xs:ha:us-central1": {
+    "key": "elasticsearch-oss:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:00:26.278Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch OSS node, suitable for development or minimal production workloads. The primary cost driver is the \"Other\" category at $18.00, which likely covers managed service overhead or licensing not detailed in compute/storage. While high availability is enabled, the single data node limits true fault tolerance for the Elasticsearch cluster itself.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:gcp:m:noha:us-central1": {
+    "key": "elasticsearch-oss:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:26.388Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Elasticsearch OSS deployment with 100 GB to 1 TB of hot data, using a dedicated master cluster architecture. The primary cost driver is compute, specifically the three n2-standard-8 instances, which account for the entire $0.24 monthly cost. This configuration prioritizes dedicated resources for master nodes and data nodes, but disables high availability, making it unsuitable for production workloads requiring fault tolerance.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:gcp:xl:noha:us-central1": {
+    "key": "elasticsearch-oss:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:27.351Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large configuration supports 1 to 5 TB of hot data on a scale-out Elasticsearch cluster, utilizing 6 data nodes, 3 master nodes, and 2 ingest nodes. The primary cost driver is compute, specifically the 6 n2-standard-16 instances which provide 96 vCPUs and 384 GB RAM for data processing. A key consideration is the absence of high availability, which reduces cost but introduces a single point of failure risk for the cluster.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:aws:m:ha:us-east-1": {
+    "key": "elasticsearch-oss:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:00:30.972Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports an Elasticsearch OSS deployment with 100 GB to 1 TB of hot data, utilizing a dedicated master cluster for stability. The primary cost driver is compute, accounting for over 75% of the total monthly expenditure. The architecture dedicates 3x m6i.2xlarge instances for data nodes, providing 3 TB of NVMe storage, while master and client nodes use smaller instances with SSDs.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:azure:xs:noha:westus3": {
+    "key": "elasticsearch-oss:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:00:31.897Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch OSS node, suitable for basic development or testing. The primary cost driver is compute, accounting for over 75% of the total monthly cost. This single-node configuration lacks high availability, meaning any node failure will result in downtime for the Elasticsearch instance.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:gcp:xl:ha:us-central1": {
+    "key": "elasticsearch-oss:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:00:32.071Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large configuration supports 1 to 5 TB of hot data on a scale-out Elasticsearch cluster, aligning with the self-managed guidance for the 7.10 OSS distribution. The primary cost driver is compute, specifically the six n2-standard-16 instances which provide 96 vCPUs and 384 GB RAM for data nodes. This setup prioritizes high availability and performance for large datasets, with the tradeoff of higher compute resource allocation compared to smaller tiers.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:azure:xs:ha:westus3": {
+    "key": "elasticsearch-oss:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:00:36.199Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch node, utilizing a total of 10 vCPUs and 40 GB RAM across three VMs. Compute is the dominant cost driver at $490.56 monthly, representing 78% of the total. The architecture includes two data nodes for high availability, but the 500 GB NVMe storage per data node is significantly underutilized for the 100 GB data limit.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:azure:m:noha:westus3": {
+    "key": "elasticsearch-oss:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:00:37.152Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Elasticsearch cluster with 100 GB to 1 TB of hot data, utilizing a dedicated master architecture. Compute instances, specifically the three D8s_v5 nodes, are the dominant cost driver, accounting for over 80% of the total monthly expenditure. The architecture provisions 3 TB of NVMe storage across these nodes, significantly exceeding the 1 TB hot data requirement, which offers ample headroom for data growth or high I/O workloads. This configuration does not include high availability, which reduces cost but introduces a single point of failure risk.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "elasticsearch-oss:azure:xl:noha:westus3": {
+    "key": "elasticsearch-oss:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:00:42.391Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 1 to 5 TB of hot data on a scale-out Elasticsearch OSS cluster, aligning with the 7.10 distribution's self-managed guidance. Compute instances, specifically the six Standard_D16s_v5 nodes, are the primary cost driver, accounting for over 79% of the monthly expense. The architecture prioritizes high-performance local NVMe storage on data nodes, providing 12 TB total, but this configuration disables high availability.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "gitlab:gcp:xl:noha:us-central1": {
+    "key": "gitlab:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:00:58.617Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 10,000 to 25,000 users, utilizing a total of 240 vCPUs and 960 GB RAM across 15 N2-series VMs. The primary cost driver for this on-demand Google Cloud deployment is compute, accounting for $1.08 of the total monthly cost. A key consideration at this scale is the distribution of storage, with 14,000 GB of SSDs allocated across 12 VMs and an additional 6,000 GB of object storage for a single VM.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:aws:s:ha:us-east-1": {
+    "key": "gitlab:aws:s:ha:us-east-1",
+    "generated_at": "2026-04-28T06:01:12.229Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 500 to 2,000 users with high availability enabled on AWS. The primary cost driver is compute, accounting for over 85% of the total monthly cost at $1892.16. The architecture utilizes a mix of m6i instances, with several 2xlarge instances contributing significantly to both compute and storage costs, reflecting the need for substantial resources to support this user scale and HA configuration.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:aws:xl:ha:us-east-1": {
+    "key": "gitlab:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:01:13.011Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 10,000 to 25,000 users with high availability enabled. Compute instances, specifically the 15 m6i instances, are the primary cost driver, accounting for over 70% of the total monthly cost at $7708.80. A key consideration for this scale is the substantial storage provisioned, including 27 TB of SSD and 6 TB of object storage, contributing over $3100 monthly.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:aws:xl:noha:us-east-1": {
+    "key": "gitlab:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T06:01:18.940Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 10,000 to 25,000 users on AWS, utilizing a mix of 15 `m6i` instances. Compute is the primary cost driver, accounting for 73% of the total monthly expenditure at $5886.72. The architecture prioritizes a large number of instances and substantial SSD storage across several nodes, with 4 instances alone contributing 20TB of SSD, indicating a focus on I/O performance and data capacity for this user scale.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:azure:m:ha:westus3": {
+    "key": "gitlab:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:01:19.852Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a highly available GitLab Self-Managed instance for 2,000 to 5,000 users on Azure. Compute instances are the primary cost driver, accounting for over 80% of the total monthly expenditure. The architecture prioritizes high availability and performance for a medium-sized user base, utilizing a variety of D-series VMs with a significant allocation of SSD storage across multiple components.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:azure:xl:noha:westus3": {
+    "key": "gitlab:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:01:21.131Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 10,000 to 25,000 users on Azure, without high availability. Compute and storage are the primary cost drivers, with compute accounting for 65% of the total monthly cost and storage for 35%. The architecture utilizes a mix of 15 D-series VMs, with the largest 4 VMs providing 64 vCPU and 256 GB RAM, indicating a significant investment in compute resources to handle the user load. The absence of high availability reduces complexity and cost, but introduces a single point of failure risk.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:gcp:xs:noha:us-central1": {
+    "key": "gitlab:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:01:26.223Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small GitLab deployment supports up to 500 users with no high availability. The primary cost driver is compute, specifically the four n2-standard instances. The architecture includes two n2-standard-4 instances for core services and two n2-standard-2 instances for supporting roles, reflecting a distributed but non-redundant setup. This configuration prioritizes minimal cost over resilience or scalability beyond 500 users.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:azure:m:noha:westus3": {
+    "key": "gitlab:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:01:27.974Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 2,000 to 5,000 users on Azure in `westus3` without high availability. Compute instances, totaling $2,383 monthly, are the primary cost driver, accounting for 77% of the total. The architecture utilizes a mix of D-series VMs, with the largest being a `Standard_D16s_v5`, indicating a focus on balancing CPU and memory for various GitLab services. The absence of high availability reduces complexity and cost but introduces a single point of failure.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "influxdb-enterprise:gcp:m:ha:us-central1": {
+    "key": "influxdb-enterprise:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:01:44.241Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports InfluxDB Enterprise for 100,000 to 400,000 writes per second and 1 to 5 million series. The primary cost driver is compute, specifically the four n2-standard-8 instances which provide the bulk of the vCPU and RAM. The architecture prioritizes high availability with three n2-standard-2 meta nodes and data redundancy across the four n2-standard-8 data nodes. The negligible storage cost indicates that the 2TB SSDs are either underutilized or priced very favorably in this on-demand scenario.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "influxdb-enterprise:gcp:xl:ha:us-central1": {
+    "key": "influxdb-enterprise:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:01:45.552Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 400,000 to 750,000+ writes per second and 5 to 10 million+ series. The primary cost driver is compute, specifically the 6 n2-standard-16 instances, which provide the bulk of the 96 vCPUs and 384 GB RAM for data nodes. This configuration prioritizes high write and series cardinality throughput, with a minimal storage cost of $0.00, indicating storage is either negligible or included in compute pricing for this specific breakdown.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "influxdb-enterprise:gcp:xl:noha:us-central1": {
+    "key": "influxdb-enterprise:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:01:48.070Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 400,000 to 750,000+ writes per second and 5 to 10 million+ series, utilizing 5 smaller nodes for metadata and 6 larger nodes for data. The dominant cost driver is compute, specifically the 6 data nodes, which account for the majority of the 112 vCPUs and 416 GB RAM provisioned. The architecture prioritizes high write throughput and series cardinality, allocating 4 TB of SSD storage per data node to accommodate the data volume. This configuration is for on-demand usage in `us-central1` with HA disabled.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "jfrog-artifactory:gcp:s:noha:us-central1": {
+    "key": "jfrog-artifactory:gcp:s:noha:us-central1",
+    "generated_at": "2026-04-28T06:02:12.641Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports up to 50,000 requests per minute for JFrog Artifactory, utilizing a total of 40 vCPUs and 112 GB RAM across five instances. The primary cost driver is compute, accounting for the entire $0.26 monthly cost. This configuration prioritizes a small, on-demand compute footprint, trading off high availability for minimal expenditure.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:gcp:xs:noha:us-central1": {
+    "key": "jfrog-artifactory:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:02:14.636Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 6,000 requests per minute for JFrog Artifactory. The primary cost driver is the single n2-standard-8 instance, which provides 8 vCPUs and 32 GB RAM. This configuration prioritizes compute resources for the application, with storage costs being negligible at this scale. The absence of high availability means a single point of failure exists for this low-cost deployment.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:aws:s:noha:us-east-1": {
+    "key": "jfrog-artifactory:aws:s:noha:us-east-1",
+    "generated_at": "2026-04-28T06:02:17.421Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"Small\" tier supports up to 50,000 requests per minute for JFrog Artifactory, utilizing a total of 40 vCPUs and 136 GB RAM across five m6i instances. Compute instances are the primary cost driver, accounting for over 90% of the $1481.60 monthly on-demand cost. This configuration prioritizes compute resources for request handling, accepting the lack of high availability for a lower operational cost.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:gcp:m:ha:us-central1": {
+    "key": "jfrog-artifactory:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:02:18.705Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large JFrog Artifactory deployment handling up to 100,000 requests per minute, with high availability enabled. The primary cost driver is \"Other\" at $18.00, indicating that the compute and storage costs are negligible for the specified on-demand commitment. A key consideration at this scale is the distribution of resources across multiple instance types, including three n2-standard-16 instances for core services and additional instances for supporting roles.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:aws:m:noha:us-east-1": {
+    "key": "jfrog-artifactory:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:02:18.735Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"large\" tier Artifactory deployment supports up to 100,000 requests per minute on AWS us-east-1, utilizing a total of 88 vCPUs and 264 GB RAM across six instances. Compute instances represent the dominant cost driver at $3083.52 monthly, comprising 93% of the total. The architecture prioritizes compute power for request handling, but operates without high availability, introducing a single point of failure for cost savings.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "influxdb-enterprise:azure:xs:ha:westus3": {
+    "key": "influxdb-enterprise:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:02:21.718Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small InfluxDB Enterprise deployment on Azure, configured for high availability, supports up to 100,000 writes per second and under 1 million series. Compute instances, specifically the three D2s_v5 data nodes and two D4s_v5 query nodes, are the primary cost driver, accounting for 65% of the $748.56 monthly total. The architecture balances performance and redundancy with 5 instances, where the D4s_v5 instances provide 2x the vCPU and RAM of the D2s_v5 instances, alongside 20x more storage.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "jfrog-artifactory:aws:m:ha:us-east-1": {
+    "key": "jfrog-artifactory:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:02:23.359Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Artifactory deployment handling up to 100,000 requests per minute with high availability enabled. Compute instances are the dominant cost driver, accounting for over 94% of the total monthly expenditure. The architecture utilizes a mix of instance types, with the largest instances (m6i.8xlarge) providing significant processing power for core services, balancing performance and cost for this request volume.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:aws:s:ha:us-east-1": {
+    "key": "jfrog-artifactory:aws:s:ha:us-east-1",
+    "generated_at": "2026-04-28T06:02:27.221Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Artifactory deployment handling up to 50,000 requests per minute, leveraging a mix of m6i instances for high availability. Compute instances are the primary cost driver, accounting for over 95% of the $2128 monthly total. The architecture utilizes multiple instance types, including two m6i.2xlarge instances for core services, balancing performance and cost for this request volume.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:azure:xs:noha:westus3": {
+    "key": "jfrog-artifactory:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:02:28.395Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 6,000 requests per minute for JFrog Artifactory, utilizing three Azure D-series VMs with a total of 20 vCPUs and 72 GB RAM. Compute instances are the dominant cost driver, accounting for over 90% of the $760.80 monthly total. This configuration prioritizes cost efficiency for smaller workloads by disabling high availability, meaning a single point of failure exists for the application.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:azure:s:noha:westus3": {
+    "key": "jfrog-artifactory:azure:s:noha:westus3",
+    "generated_at": "2026-04-28T06:02:31.161Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure deployment supports up to 50,000 requests per minute for JFrog Artifactory, utilizing a total of 40 vCPUs and 136 GB RAM across five VMs. Compute instances are the dominant cost driver, accounting for over 90% of the $1521.60 monthly total. The architecture prioritizes compute power for request handling, trading off high availability for a lower operational cost at this scale.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:aws:xs:noha:us-east-1": {
+    "key": "jfrog-artifactory:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T06:02:47.822Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"Extra Small\" Artifactory deployment supports up to 6,000 requests per minute with three m6i instances, totaling 20 vCPUs and 72 GB RAM. Compute costs, at $700.80 monthly, are the dominant expense, representing over 90% of the total. The architecture prioritizes dedicated resources for Artifactory, PostgreSQL, and an Nginx reverse proxy, but lacks high availability, making it unsuitable for production workloads requiring uptime guarantees.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jira-data-center:gcp:xl:ha:us-central1": {
+    "key": "jira-data-center:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:02:51.394Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Jira Data Center deployment supports high availability for a user base exceeding the Large profile thresholds. The primary cost driver is the \"Other\" category, accounting for 97% of the total monthly cost at $18.00, indicating significant licensing or managed service expenses. The architecture dedicates 5 nodes for application processing, 1 node for search, and a smaller node for a database, demonstrating a clear separation of concerns for performance and resilience.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "jira-data-center:azure:l:noha:westus3": {
+    "key": "jira-data-center:azure:l:noha:westus3",
+    "generated_at": "2026-04-28T06:02:56.146Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Jira Data Center deployment, accommodating 600,000 to 2,000,000 issues or 10,000 to 100,000 users, by provisioning two D8s_v5 nodes and one D4s_v5 node. Compute instances are the sole cost driver at $700.80 monthly, as storage and other costs are not present in this on-demand, non-HA configuration. The absence of high availability means this setup lacks redundancy, which is a significant tradeoff for a large-scale production system.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "jfrog-artifactory:azure:m:noha:westus3": {
+    "key": "jfrog-artifactory:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:02:56.490Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure \"Large\" Artifactory deployment supports up to 100,000 requests per minute. The primary cost driver is compute, accounting for 90% of the $3443.52 monthly total. This configuration prioritizes compute capacity with 3x D16s_v5 instances for Artifactory, 2x D4s_v5 for the database, and 1x D32s_v5 for search, reflecting a tradeoff of higher compute spend for performance at this request volume.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jira-data-center:gcp:l:noha:us-central1": {
+    "key": "jira-data-center:gcp:l:noha:us-central1",
+    "generated_at": "2026-04-28T06:02:57.463Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Jira Data Center deployment, accommodating 600,000 to 2,000,000 issues or 10,000 to 100,000 users, with two n2-standard-8 nodes and one n2-standard-4 node. The primary cost driver is compute, accounting for the entire $0.13 monthly cost. This configuration prioritizes a large user/issue count over high availability, as HA is disabled, which significantly reduces infrastructure complexity and cost.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "jira-data-center:azure:xl:ha:westus3": {
+    "key": "jira-data-center:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:02:57.702Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Jira Data Center deployment on Azure, utilizing 7 virtual machines, is sized for high availability and performance beyond the Large profile thresholds. The primary cost driver is compute, accounting for over 99% of the monthly expenditure at $3433.92. The architecture dedicates 5 nodes with 16 vCPU and 32GB RAM each for application processing, alongside a single 16 vCPU, 64GB RAM node, indicating a preference for horizontal scaling with substantial individual node capacity.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "jira-data-center:azure:l:ha:westus3": {
+    "key": "jira-data-center:azure:l:ha:westus3",
+    "generated_at": "2026-04-28T06:03:00.045Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure deployment supports a large Jira Data Center instance, accommodating up to 2 million issues or 100,000 users, with high availability enabled. The primary cost driver is compute, accounting for over 97% of the monthly on-demand expenditure. The architecture utilizes a mix of D8s_v5, D4s_v5, and D2s_v5 instances, balancing processing power across application nodes and supporting services.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "keycloak:gcp:m:noha:us-central1": {
+    "key": "keycloak:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:03:11.897Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Keycloak sizing supports 25 to 150 peak logins per second using two n2-standard-4 instances for Keycloak and one n2-standard-4 for the database. The primary cost driver is compute, accounting for the entire $0.08 monthly cost. This configuration disables high availability, meaning a single instance failure will cause downtime for the Keycloak service.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "keycloak:gcp:m:ha:us-central1": {
+    "key": "keycloak:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:03:13.210Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports Keycloak for 25 to 150 peak logins per second, utilizing two n2-standard-4 instances for the application and two n2-standard-4 instances for the database, plus one n2-standard-2 for other services. The primary cost driver at this tier is \"Other\" at $18.00, which is 99% of the total monthly cost. A key consideration is that compute and storage costs are negligible, indicating that the fixed costs categorized as \"Other\" dominate the expense for this medium-scale, high-availability setup.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "keycloak:gcp:xl:noha:us-central1": {
+    "key": "keycloak:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:03:13.493Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Keycloak sizing supports 150 to 500 peak logins per second or heavier federation and brokering workloads. The primary cost driver is the compute instances, specifically four n2-standard-8 nodes for Keycloak and one for the database. This configuration disables high availability, which significantly reduces cost but introduces a single point of failure for the database.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "keycloak:gcp:xl:ha:us-central1": {
+    "key": "keycloak:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:03:14.633Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 150 to 500 peak logins per second, or heavier federation and brokering workloads, using a total of 72 vCPUs and 256 GB RAM across nine instances. The primary cost driver is \"Other\" at $36.00, which is 99% of the total monthly cost. This architecture dedicates 4x n2-standard-8 instances for Keycloak, with additional n2-standard-8 and n2-standard-2 instances likely for database and load balancing, indicating a distributed setup for high availability.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "keycloak:azure:xl:ha:westus3": {
+    "key": "keycloak:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:03:29.455Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Keycloak deployment supports 150 to 500 peak logins per second, or heavier federation and brokering workloads, using a total of nine Azure Standard_D8s_v5 and Standard_D2s_v5 instances. Compute is the dominant cost driver, accounting for over 85% of the $2392.40 monthly on-demand expenditure. The architecture prioritizes high availability and performance with eight instances dedicated to the Keycloak cluster and two smaller instances for supporting services.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "kong-gateway:gcp:xs:noha:us-central1": {
+    "key": "kong-gateway:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:03:41.448Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports Kong Gateway deployments with fewer than 1,000 configured entities and under 2,500 requests per second. The primary cost driver is compute, specifically the two n2-standard-2 instances, totaling $0.03 per month. This configuration prioritizes minimal cost for low-scale usage by disabling high availability, which means a single point of failure exists.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:aws:xs:ha:us-east-1": {
+    "key": "kong-gateway:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T06:03:46.435Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports Kong Gateway deployments handling fewer than 1,000 entities and 2,500 requests per second with high availability. Compute instances, specifically the five m6i.large instances, are the dominant cost driver, accounting for over 90% of the total monthly cost. The architecture balances high availability with cost by using five instances, where three have 4GB RAM and two have 8GB RAM, indicating a slight overprovisioning of memory on two instances for potential peak loads or specific service requirements.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:gcp:xl:noha:us-central1": {
+    "key": "kong-gateway:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:03:47.759Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 10,000 to 50,000+ configured entities in a central production gateway cluster. The primary cost driver is compute, accounting for $0.26 of the total monthly cost. A key consideration is the use of 4 n2-standard-8 instances for the gateway and a separate n2-standard-8 instance for the database, indicating a distributed architecture even without high availability.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:azure:xl:noha:westus3": {
+    "key": "kong-gateway:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:03:50.379Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports 10,000 to 50,000+ configured entities in a central production gateway cluster. Compute instances, specifically four Standard_D8s_v5 nodes, are the dominant cost driver, accounting for over 94% of the $1485.60 monthly total. The architecture provisions a single database instance without high availability, which reduces cost by $1400 per month compared to a highly available setup, but introduces a single point of failure.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:aws:m:ha:us-east-1": {
+    "key": "kong-gateway:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:03:51.321Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This medium-tier sizing supports Kong Gateway deployments handling up to 10,000 configured entities and 10,000 requests per second with high availability. Compute instances, specifically five m6i instances, are the dominant cost driver, accounting for 91% of the $843 monthly total. The architecture balances compute and memory across instances, with some instances having double the RAM and storage of others, indicating varied roles within the deployment. This configuration provides sufficient resources for the specified workload without over-provisioning for larger scales.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:azure:xs:ha:westus3": {
+    "key": "kong-gateway:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:03:57.658Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports an Extra Small Kong Gateway deployment, handling under 1,000 entities and 2,500 requests per second, with high availability enabled across five Standard_D2s_v5 instances. Compute is the dominant cost driver, accounting for 86% of the $405.40 monthly total. The architecture prioritizes high availability and moderate compute capacity over larger individual instance sizes, as evidenced by the distribution across multiple 2 vCPU instances rather than fewer, larger machines.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "minio:gcp:xs:noha:us-central1": {
+    "key": "minio:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:09.634Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small, single-node MinIO deployment provides up to 20 TB of usable capacity on a single `n2-standard-8` instance. The dominant cost driver is the compute instance itself, priced at $0.05/month, which includes the NVMe storage. This configuration offers high performance due to local NVMe, but lacks high availability as it's a single node.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:gcp:m:noha:us-central1": {
+    "key": "minio:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:09.746Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides 20 to 100 TB of usable MinIO capacity across four nodes, leveraging erasure coding for data protection. The primary cost driver is compute, specifically the n2-standard-16 instances, which account for the entire $0.41 monthly cost. This configuration assumes local NVMe storage is included in the compute instance price, resulting in zero explicit storage cost.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:gcp:xs:ha:us-central1": {
+    "key": "minio:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:09.821Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small MinIO deployment provides up to 20 TB of usable capacity on a single multi-drive node, suitable for initial development or small-scale data storage. The dominant cost driver at this tier is \"Other\" at $18.00, which covers the three additional n2-standard-8 instances and the n2-standard-2 instance, despite their compute cost being negligible. This configuration prioritizes high availability with multiple nodes, even for a small capacity, leading to a higher cost relative to the storage provided.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:gcp:m:ha:us-central1": {
+    "key": "minio:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:10.508Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides 20-100 TB of usable capacity on a four-node erasure-coded MinIO cluster, suitable for medium-scale object storage. The dominant cost driver is compute, specifically the n2-standard-16 instances, which account for the entire $0.41 monthly cost. The architecture leverages local NVMe storage, resulting in no direct storage cost but requiring careful consideration of data durability and backup strategies.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:aws:xs:noha:us-east-1": {
+    "key": "minio:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T06:04:10.749Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small, single-node MinIO deployment provides up to 20 TB of usable capacity on a single m6i.2xlarge instance. The primary cost driver is storage, accounting for over 90% of the total monthly cost at $3000. This configuration offers high performance with local NVMe storage but lacks high availability, making it unsuitable for production workloads requiring fault tolerance.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:gcp:xl:ha:us-central1": {
+    "key": "minio:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:11.015Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides 100 TB to 1 PiB of usable capacity for an eight-node erasure-coded MinIO cluster, ensuring high availability. The primary cost driver is compute, with eight n2-standard-32 instances costing $1.64 per month. A key consideration at this scale is the use of 30 TB NVMe disks per node, which are not directly billed as persistent storage but are included in the instance cost.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:aws:m:ha:us-east-1": {
+    "key": "minio:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:04:12.345Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This MinIO configuration provides 20-100 TB of usable, erasure-coded object storage across four nodes, suitable for medium-scale deployments requiring high availability. Storage is the dominant cost driver, accounting for over 85% of the total monthly expenditure. The use of m6i.4xlarge instances with 30 TB NVMe per node balances compute resources with substantial local storage for performance.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:aws:xs:ha:us-east-1": {
+    "key": "minio:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T06:04:14.837Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small MinIO deployment supports up to 20 TB of usable capacity on a single multi-drive node, with an additional three nodes for high availability and one for management. The primary cost driver is storage, accounting for over 90% of the total monthly cost at $12,000. A key consideration is that while the single-node-multi-drive architecture is efficient for capacity, the high availability setup triples the compute and storage footprint for redundancy.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:azure:m:noha:westus3": {
+    "key": "minio:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:04:15.417Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration provides 20-100 TB of usable MinIO capacity across four erasure-coded nodes, suitable for medium-scale object storage needs. The primary cost driver is storage, accounting for 81% of the total monthly cost. This tier prioritizes high-performance local NVMe storage, which significantly contributes to the overall expense compared to compute resources.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:azure:xl:noha:westus3": {
+    "key": "minio:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:04:19.130Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration provides 100 TB to 1 PiB of usable capacity on an eight-node erasure-coded MinIO cluster. The primary cost driver is storage, accounting for 68% of the total monthly cost at $19,272. The use of eight Standard_D32s_v5 instances, each with 30 TB of NVMe storage, balances high performance with significant storage capacity.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:azure:m:ha:westus3": {
+    "key": "minio:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:04:19.160Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This four-node erasure-coded MinIO cluster on Azure provides 20-100 TB of usable capacity, suitable for medium-scale object storage needs. Storage is the dominant cost driver, accounting for 81% of the total monthly expenditure at $9636.00. The Standard_D16s_v5 instances are provisioned with 30,000 GB NVMe storage each, emphasizing high-performance local storage over compute resources for this object storage workload.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:aws:xl:ha:us-east-1": {
+    "key": "minio:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:04:21.165Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large MinIO tier supports 100 TB to 1 PiB of usable capacity on an eight-node erasure-coded cluster, leveraging 8x m6i.8xlarge instances for high availability. The primary cost driver is storage, accounting for $30,000 of the $38,970 monthly total. This configuration provides significant NVMe storage directly attached to compute, offering high performance at a higher cost compared to object storage services.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "minio:azure:xs:ha:westus3": {
+    "key": "minio:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:04:22.588Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small MinIO deployment supports up to 20 TB of usable capacity on a single multi-drive node, with high availability enabled through additional compute. The primary cost driver is storage, accounting for over 85% of the total monthly cost at $7708.80. This configuration balances high availability with a single-node storage architecture, meaning compute resources are replicated for resilience while storage remains centralized.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:xs:noha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:31.532Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides an extra small, non-highly available MongoDB replica set suitable for up to 250 GB working sets, deployed on three n2-standard-4 instances. The primary cost driver for this on-demand configuration is compute, at $0.08 monthly. The absence of high availability significantly reduces cost but introduces a single point of failure risk for the entire cluster.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:m:noha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:32.467Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a 3-node replica set, with each node offering 8 vCPUs and 32 GB RAM, suitable for a MongoDB working set between 250 GB and 1 TB. The primary cost driver for this on-demand configuration is compute, accounting for the entire $0.15 monthly cost. This setup prioritizes a balanced compute-to-memory ratio for MongoDB's operational needs, but it lacks high availability due to the disabled HA option.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:m:ha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:33.057Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a highly available MongoDB replica set suitable for a medium working set of 250 GB to 1 TB. The primary cost driver for this configuration is compute, with three n2-standard-8 instances costing $0.15 monthly. This setup prioritizes high availability and performance for the specified working set size, utilizing 8 vCPUs and 32 GB RAM per instance.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:xl:ha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:33.585Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large sharded cluster configuration supports a 1 to 10 TB working set, leveraging 9 data-bearing nodes with 16 vCPUs and 64 GB RAM each, alongside 6 smaller nodes for config servers and mongos routers. The primary cost driver is compute, accounting for 100% of the $1.08 monthly on-demand cost. This setup prioritizes high availability and performance for large datasets, with the substantial compute resources reflecting the demands of a sharded architecture at this scale.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:xl:noha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:33.593Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports a MongoDB sharded cluster with a 1 to 10 TB working set, utilizing nine data-bearing nodes and six smaller nodes for config servers and mongos routers. The primary cost driver is compute, accounting for the entire $1.08 monthly cost. This on-demand setup, with disabled high availability, prioritizes minimal cost for a large working set over redundancy or long-term commitment savings.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:aws:m:noha:us-east-1": {
+    "key": "mongodb-enterprise-advanced:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:04:34.610Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a 3-node replica set, each with 8 vCPUs and 32 GB RAM, suitable for a MongoDB working set between 250 GB and 1 TB. Compute instances are the dominant cost driver, accounting for $841 of the $1081 monthly total. This configuration prioritizes high availability through a replica set, but disabling high availability at the cloud level means no automatic failover between availability zones.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:aws:xl:ha:us-east-1": {
+    "key": "mongodb-enterprise-advanced:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:04:35.830Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large sharded cluster supports a 1-10 TB working set, aligning with MongoDB's production guidance for substantial data volumes. Compute instances are the primary cost driver, accounting for over 65% of the total monthly expenditure. The architecture provisions 9 data-bearing nodes with 4000 GB SSDs each, balancing high storage capacity with the performance demands of a large working set. The remaining instances provide high availability and configuration services.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:azure:m:noha:westus3": {
+    "key": "mongodb-enterprise-advanced:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:04:37.021Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a 3-node replica set, each with 8 vCPUs, 32 GB RAM, and 1 TB SSD, suitable for a MongoDB working set between 250 GB and 1 TB. Compute is the dominant cost driver, accounting for 70% of the $1200.96 monthly total. The 1 TB SSD per node offers sufficient capacity for the specified working set range, but the disabled high availability means no redundancy against regional outages.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:azure:m:ha:westus3": {
+    "key": "mongodb-enterprise-advanced:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:04:38.252Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a highly available MongoDB replica set suitable for a 250 GB to 1 TB working set. The primary cost driver is compute, accounting for 70% of the total monthly cost at $841. The architecture provisions three D8s_v5 instances, each with 8 vCPUs and 32 GB RAM, ensuring sufficient processing power and memory for the specified working set size. This configuration prioritizes high availability and performance over minimizing compute costs for a medium-scale production workload.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:aws:m:ha:us-east-1": {
+    "key": "mongodb-enterprise-advanced:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:04:38.347Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a highly available MongoDB replica set suitable for a 250 GB to 1 TB working set, utilizing three m6i.2xlarge instances. Compute is the dominant cost driver at $841 monthly, representing 78% of the total. The 1000 GB SSD per instance provides ample storage headroom, allowing for future data growth or increased I/O demands without immediate storage scaling.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:azure:xl:noha:westus3": {
+    "key": "mongodb-enterprise-advanced:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:04:42.361Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large MongoDB deployment is designed for a sharded cluster with a 1 to 10 TB working set, utilizing nine data-bearing nodes and six smaller nodes for config servers and mongos routers. The primary cost driver is compute, accounting for over half of the total monthly expenditure. This configuration prioritizes high-performance compute and substantial local SSD storage on data nodes, reflecting the demands of large working sets.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:azure:xs:ha:westus3": {
+    "key": "mongodb-enterprise-advanced:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:04:44.423Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports a replicated operational cluster with a working set up to 250 GB. The primary cost driver is compute, accounting for 70% of the total monthly cost at $420.48. The architecture provisions three Standard_D4s_v5 instances, each with 4 vCPUs and 16 GB RAM, providing high availability but with a relatively high compute-to-storage cost ratio.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "mongodb-enterprise-advanced:azure:xl:ha:westus3": {
+    "key": "mongodb-enterprise-advanced:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:04:47.963Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large sharded cluster supports a 1 to 10 TB working set, utilizing nine data-bearing nodes and six smaller nodes for routing and configuration. Compute accounts for 57% of the monthly cost at $5887, while storage contributes 43% at $4374. The significant storage cost reflects the provision of 4 TB SSD per data node, totaling 36 TB, which is a key consideration for this scale.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "neo4j-enterprise:gcp:m:noha:us-central1": {
+    "key": "neo4j-enterprise:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:59.075Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Neo4j graph store, between 100 GB and 500 GB, with read scale-out capabilities provided by two replica instances. The primary cost driver is compute, specifically the five N2 series instances, which account for the entire $0.21 monthly cost. The architecture prioritizes read performance and data redundancy across three primary and two replica nodes, but disables high availability for the overall system.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:gcp:m:ha:us-central1": {
+    "key": "neo4j-enterprise:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:04:59.257Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Neo4j Enterprise graph store between 100 GB and 500 GB, configured for high availability with three primary nodes and two replica nodes. The primary cost driver at this tier is compute, accounting for 100% of the monthly cost. This configuration prioritizes read scale-out and data redundancy over minimizing compute resources, utilizing 8 vCPU primary nodes and 4 vCPU replica nodes. The on-demand commitment term offers flexibility but foregoes potential cost savings from committed use discounts.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:gcp:xl:noha:us-central1": {
+    "key": "neo4j-enterprise:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:04:59.591Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports Neo4j Enterprise for graph stores between 500 GB and 2 TB, or read-heavy workloads within that range, using a three-primary, four-replica cluster. The primary cost driver is compute, specifically the seven n2-standard instances. This configuration prioritizes read scalability and data redundancy over high availability, as HA is disabled, meaning no automatic failover for the primary instances.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:aws:xs:ha:us-east-1": {
+    "key": "neo4j-enterprise:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T06:05:00.335Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Neo4j cluster supports up to 100 GB of graph data across three primary nodes, ensuring high availability. Compute instances are the dominant cost driver, accounting for 78% of the monthly spend at $420.48. The architecture prioritizes data redundancy and availability over minimizing compute costs for this small data footprint.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:aws:m:ha:us-east-1": {
+    "key": "neo4j-enterprise:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:05:01.748Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Neo4j Enterprise graph store between 100 GB and 500 GB, utilizing a three-primary, two-replica cluster for read scale-out and high availability. Compute instances are the dominant cost driver, accounting for over 75% of the monthly expenditure. The architecture prioritizes read performance and resilience with dedicated replica instances, trading off higher compute costs for improved operational stability and query throughput.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:aws:xl:noha:us-east-1": {
+    "key": "neo4j-enterprise:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T06:05:01.918Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a 3-primary, 4-replica Neo4j cluster, suitable for Extra Large graph stores (500 GB to 2 TB) or read-heavy workloads, with high availability disabled. The primary cost driver is compute, accounting for over 75% of the total monthly cost at $2803.20. A key consideration is the 2:1 ratio of primary to replica compute resources, with primaries having double the vCPU and RAM of replicas, reflecting their write-intensive role.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:gcp:xl:ha:us-central1": {
+    "key": "neo4j-enterprise:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:05:03.650Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Neo4j deployment, with three primary and four replica instances, supports graph stores between 500 GB and 2 TB or heavy read-dominant workloads. The primary cost driver is compute, specifically the 3x n2-standard-16 instances for primaries and 4x n2-standard-8 instances for replicas. This architecture prioritizes read scalability and high availability through its seven-node cluster, but incurs higher compute costs compared to smaller tiers due to the increased instance count and size.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "mongodb-enterprise-advanced:gcp:xs:ha:us-central1": {
+    "key": "mongodb-enterprise-advanced:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:05:04.586Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports a replicated operational cluster with up to a 250 GB working set, utilizing three n2-standard-4 instances for high availability. The primary cost driver is compute, accounting for the entire $0.08 monthly cost. At this scale, the architecture prioritizes high availability and operational workload capacity over storage cost, as storage is effectively free.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "neo4j-enterprise:azure:m:ha:westus3": {
+    "key": "neo4j-enterprise:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:05:05.539Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Neo4j graph store between 100 GB and 500 GB, configured for read scale-out with three primary and two replica instances. Compute, totaling $1121.28 monthly, is the dominant cost driver, accounting for 70% of the total. The architecture prioritizes high availability and read distribution by deploying five instances, with the two smaller D4s_v5 instances dedicated to read replicas.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:azure:xs:ha:westus3": {
+    "key": "neo4j-enterprise:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:05:06.200Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-primary Neo4j cluster suitable for graph stores up to 100 GB, ensuring high availability. The primary cost driver is compute, accounting for 70% of the total monthly cost at $420.48. A key consideration is the 3:1 ratio of compute to storage cost, indicating that scaling compute resources will significantly impact overall expenses.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:azure:xl:noha:westus3": {
+    "key": "neo4j-enterprise:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:05:06.639Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Neo4j deployment supports graph stores from 500 GB to 2 TB or read-dominant workloads, utilizing three primary nodes (D16s_v5) and four replica nodes (D8s_v5) for data distribution. Compute is the primary cost driver, accounting for 70% of the $4003.20 monthly total. The architecture prioritizes read scalability and data redundancy across seven nodes, but high availability is disabled, meaning no automatic failover is configured.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:aws:xs:noha:us-east-1": {
+    "key": "neo4j-enterprise:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T06:05:09.123Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Neo4j deployment supports up to 100 GB of graph data across a three-primary cluster. Compute instances are the primary cost driver, accounting for 78% of the total monthly expenditure. This configuration prioritizes a minimal footprint for smaller datasets, but disabling high availability means the cluster is not resilient to instance failures.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:aws:m:noha:us-east-1": {
+    "key": "neo4j-enterprise:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:05:09.404Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Neo4j graph store between 100 GB and 500 GB, configured with three primary nodes for write operations and two replica nodes for read scale-out. Compute instances are the dominant cost driver, accounting for over 75% of the monthly spend. The architecture prioritizes read scalability and data durability across three primary nodes, but forgoes high availability by not configuring automatic failover.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "neo4j-enterprise:azure:xl:ha:westus3": {
+    "key": "neo4j-enterprise:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:05:10.380Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Neo4j deployment supports graph stores between 500 GB and 2 TB, or heavier read-dominant workloads, using a 3-primary, 4-replica cluster for high availability. The primary cost driver is compute, accounting for 70% of the $4003.20 monthly total. This configuration prioritizes read scalability and fault tolerance with seven D-series VMs, trading off higher compute costs for enhanced operational resilience and performance.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "nexus-repository:gcp:s:noha:us-central1": {
+    "key": "nexus-repository:gcp:s:noha:us-central1",
+    "generated_at": "2026-04-28T06:05:21.113Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports up to 300 requests per second for Sonatype Nexus Repository on Google Cloud, using an n2-standard-8 instance for the application and an n2-standard-2 for a supporting component. The primary cost driver at this tier is compute, though the total monthly cost is negligible at $0.06 due to the small instance sizes and on-demand commitment. A key consideration is the disabled high availability, which means this setup is not resilient to instance failures.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:gcp:l:noha:us-central1": {
+    "key": "nexus-repository:gcp:l:noha:us-central1",
+    "generated_at": "2026-04-28T06:05:22.599Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Sonatype Nexus Repository instance, handling up to 2,500 requests per second. The primary cost driver is compute, specifically the four n2-standard-32 instances, which account for the entire $0.82 monthly cost. The architecture provisions three instances with 32 vCPU and 128 GB RAM each, plus one instance with 16 vCPU and 128 GB RAM, indicating a distributed setup without high availability.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:xs:ha:westus3": {
+    "key": "nexus-repository:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:05:32.596Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 50 requests per second, utilizing a 4 vCPU/16GB RAM instance for the application and a 2 vCPU/8GB RAM instance for high availability. Compute is the dominant cost driver, accounting for 76% of the monthly total at $210.24. The inclusion of a second, smaller instance for HA significantly increases compute costs for a relatively low request volume.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:s:noha:westus3": {
+    "key": "nexus-repository:azure:s:noha:westus3",
+    "generated_at": "2026-04-28T06:05:32.706Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure \"Small\" tier supports Sonatype Nexus Repository deployments handling up to 300 requests per second. The primary cost driver is compute, accounting for over 90% of the total monthly cost at $350.40. This configuration uses a single D8s_v5 instance for Nexus and a smaller D2s_v5 for the database, reflecting a tradeoff where high availability is disabled to reduce infrastructure complexity and cost.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:m:ha:westus3": {
+    "key": "nexus-repository:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:05:34.072Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Medium tier sizing supports Sonatype Nexus Repository for up to 900 requests per second, leveraging high availability on Azure in westus3. The primary cost driver is compute, accounting for over 90% of the total monthly expenditure at $2032.32. This configuration utilizes three Standard_D8s_v5 instances for the application, alongside two larger Standard_D16s_v5 instances, indicating a design choice to distribute processing across multiple, moderately sized nodes rather than consolidating onto fewer, larger ones.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:l:ha:westus3": {
+    "key": "nexus-repository:azure:l:ha:westus3",
+    "generated_at": "2026-04-28T06:05:35.148Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Sonatype Nexus Repository deployment, handling up to 2,500 requests per second with high availability enabled. The primary cost driver is compute, accounting for over 96% of the monthly expenditure at $5676.48. A key consideration for this scale is the distribution of compute resources across multiple Standard_D32s_v5 instances, with three instances providing 32 vCPU and 128 GB RAM each, and two additional instances providing 16 vCPU and 128 GB RAM each, alongside a smaller 2 vCPU instance.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:s:ha:westus3": {
+    "key": "nexus-repository:azure:s:ha:westus3",
+    "generated_at": "2026-04-28T06:05:36.073Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure \"Small\" tier supports up to 300 requests per second for Sonatype Nexus Repository, leveraging a primary D8s_v5 instance and two D2s_v5 instances for high availability. Compute is the dominant cost driver, accounting for over 88% of the $475.48 monthly total. The architecture prioritizes resilience with multiple instances, incurring higher compute costs compared to a single-instance deployment, but ensuring continuous operation.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:azure:m:noha:westus3": {
+    "key": "nexus-repository:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:05:37.175Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure \"Medium\" tier supports up to 900 requests per second for Sonatype Nexus Repository, utilizing three Standard_D8s_v5 instances for application nodes and one Standard_D16s_v5 for the database. Compute instances are the dominant cost driver, accounting for over 88% of the $1581.60 monthly on-demand cost. This configuration prioritizes compute capacity for throughput, accepting the lack of high availability for a 10% cost reduction compared to HA-enabled setups.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nomad:gcp:xs:noha:us-central1": {
+    "key": "nomad:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:05:46.285Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Nomad cluster supports up to 50 small jobs on a starter production cluster. The primary cost driver is compute, specifically the 3x n2-standard-2 and 3x n2-standard-4 instances. This configuration prioritizes a low monthly cost of $0.12 by disabling high availability, which means the cluster is not resilient to zone or instance failures.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:gcp:m:ha:us-central1": {
+    "key": "nomad:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:05:47.786Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Nomad production cluster, handling 50 to 300 jobs, with high availability enabled across 13 total instances. The primary cost driver is compute, specifically the 3 n2-standard-4 instances for servers and 10 n2-standard-4 instances for clients. A key consideration is that this configuration provides 52 vCPUs and 208 GB RAM, which is suitable for the specified job count but may require scaling up compute instances for higher job loads or more resource-intensive tasks.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:gcp:xl:ha:us-central1": {
+    "key": "nomad:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:05:48.657Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Nomad cluster supports 300 to 1,000 jobs or serves as a bootstrap platform for larger fleets, leveraging 5 servers for Nomad's control plane and 25 servers for job execution. The primary cost driver is compute, accounting for the entire $1.41 monthly cost. This configuration prioritizes high availability and performance for a significant workload, with the 25 n2-standard-8 instances providing the bulk of the processing capacity.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:gcp:xs:ha:us-central1": {
+    "key": "nomad:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:05:50.568Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Nomad cluster supports up to 50 small jobs on a starter production cluster, utilizing 3 n2-standard-2 instances for servers and 3 n2-standard-4 instances for clients. The total monthly cost is $0.12, with compute being the sole cost driver. This configuration prioritizes high availability with 3 server nodes, but the small instance sizes and on-demand pricing reflect a focus on minimal initial expenditure for a low-workload environment.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:azure:xs:ha:westus3": {
+    "key": "nomad:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:05:54.751Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Nomad cluster supports up to 50 small jobs, providing high availability with three D2s_v5 servers for Nomad and three D4s_v5 servers for workloads. Compute instances are the dominant cost driver, accounting for over 90% of the $685 monthly total. This configuration prioritizes high availability and dedicated Nomad server resources over minimizing compute costs for a starter production environment.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:azure:xl:noha:westus3": {
+    "key": "nomad:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:05:58.493Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Nomad cluster, designed for 300 to 1,000 jobs, provisions 5 servers for Nomad's control plane and 25 servers for job execution. Compute instances are the dominant cost driver, accounting for over 90% of the $8,218.80 monthly on-demand expenditure. The architecture prioritizes horizontal scaling of worker nodes (25x D8s_v5) over a smaller control plane (5x D4s_v5) to handle the specified job volume, but lacks high availability.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:aws:m:noha:us-east-1": {
+    "key": "nomad:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:05:59.000Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Nomad production cluster, managing 50 to 300 jobs on 10 client nodes with 3 server nodes. Compute instances are the dominant cost driver, accounting for over 90% of the monthly expense at $1822.08. This configuration prioritizes a smaller scheduler footprint, accepting the lack of high availability for the Nomad servers.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "nomad:azure:xl:ha:westus3": {
+    "key": "nomad:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:05:59.384Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Nomad cluster, designed for 300 to 1,000 jobs or as a bootstrap for larger fleets, provisions 5 server nodes and 25 client nodes. The primary cost driver is compute, accounting for over 90% of the $8,218.80 monthly total. The architecture prioritizes high availability and job capacity with a 5-node server cluster and a substantial 25-node client fleet.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
+  },
+  "opensearch:gcp:xl:noha:us-central1": {
+    "key": "opensearch:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:06:10.164Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large OpenSearch configuration supports 1 to 5 TB of hot data on a scale-out cluster, utilizing 6 data nodes, 3 master nodes, and 2 ingest nodes. The primary cost driver is compute, accounting for the entire $0.71 monthly cost. This architecture prioritizes data node compute and NVMe storage for performance, while disabling high availability reduces complexity and cost.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:gcp:m:ha:us-central1": {
+    "key": "opensearch:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:10.490Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This OpenSearch configuration supports 100 GB to 1 TB of hot data using dedicated manager nodes for stability. The primary cost driver is compute, specifically the 3x n2-standard-8 data nodes and 3x n2-standard-2 manager nodes. A key tradeoff is the use of on-demand pricing, which provides flexibility but foregoes the significant cost savings of committed use discounts. The architecture includes 2x n2-standard-4 ingest nodes, contributing to the compute cost.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:gcp:xl:ha:us-central1": {
+    "key": "opensearch:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:11.411Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large OpenSearch configuration supports 1 to 5 TB of hot data across a scale-out cluster, leveraging 6 data nodes with 16 vCPU and 64 GB RAM each. The primary cost driver is compute, specifically the on-demand n2-standard-16 instances for data nodes, which account for nearly all of the $0.71 monthly total. This setup prioritizes high availability and performance for large datasets, trading off higher individual node cost for distributed processing power and redundancy.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:aws:m:noha:us-east-1": {
+    "key": "opensearch:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:06:12.382Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This OpenSearch configuration supports 100 GB to 1 TB of hot data on a cluster with dedicated managers, using a mix of m6i instances for data, ingest, and cluster management roles. Compute is the dominant cost driver, accounting for over 75% of the total monthly expenditure at $1331.52. The architecture prioritizes dedicated cluster managers and separate ingest nodes, which increases compute costs but enhances cluster stability and performance for the specified data volume.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:aws:xl:noha:us-east-1": {
+    "key": "opensearch:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T06:06:13.874Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large OpenSearch configuration supports 1 to 5 TB of hot data on a scale-out cluster, utilizing 6 data nodes, 3 master nodes, and 2 client nodes. Compute is the dominant cost driver, accounting for 71% of the total monthly expenditure at $3854.40. The absence of high availability significantly reduces infrastructure complexity and cost, but introduces a single point of failure risk.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:azure:xs:noha:westus3": {
+    "key": "opensearch:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:06:15.314Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small OpenSearch deployment supports up to 100 GB of hot index data on a single node, suitable for development or minimal production workloads. Compute, specifically the D4s_v5 instance, is the dominant cost driver, accounting for 78% of the total monthly cost. The single-node architecture with disabled high availability means there is no redundancy, making it vulnerable to downtime from a single point of failure. The 500 GB NVMe storage provides high I/O performance for the hot data.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:azure:m:noha:westus3": {
+    "key": "opensearch:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:06:16.554Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a medium OpenSearch cluster, supporting 100 GB to 1 TB of hot data without high availability. Compute is the dominant cost driver, accounting for over 80% of the monthly total at $1331.52. The architecture dedicates 3 instances with 8 vCPU and 32 GB RAM each for data nodes, prioritizing processing power and memory for data operations over storage capacity.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:azure:xs:ha:westus3": {
+    "key": "opensearch:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:06:18.836Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small OpenSearch deployment supports up to 100 GB of hot index data on a single data node. The primary cost driver is compute, accounting for 78% of the total monthly cost at $490.56. To achieve high availability, the architecture provisions three D-series VMs, with two D4s_v5 instances for data and master roles and one D2s_v5 for a dedicated master, increasing compute costs but ensuring resilience.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:azure:m:ha:westus3": {
+    "key": "opensearch:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:06:20.150Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This architecture supports a medium OpenSearch cluster with 100 GB to 1 TB of hot data, utilizing dedicated manager nodes for stability. The primary cost driver is compute, accounting for over 80% of the total monthly cost at $1331.52. A key tradeoff at this scale is balancing the high compute cost of the 3x D8s_v5 data nodes against their 1 TB NVMe storage, which is provisioned to handle the specified hot data range.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "opensearch:azure:xl:ha:westus3": {
+    "key": "opensearch:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:06:21.151Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large OpenSearch cluster supports 1 to 5 TB of hot data, distributed across six data nodes, with dedicated master and ingest nodes ensuring high availability. Compute instances, primarily the six Standard_D16s_v5 data nodes, drive 79% of the $4878 monthly cost. The architecture prioritizes performance and data capacity over minimizing instance count, utilizing 2000 GB NVMe storage per data node for high I/O throughput.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "redis-enterprise:gcp:s:noha:us-central1": {
+    "key": "redis-enterprise:gcp:s:noha:us-central1",
+    "generated_at": "2026-04-28T06:06:34.931Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Redis Enterprise working set of 50 to 200 GB on Google Cloud, utilizing three n2-standard-4 instances for data and one n2-standard-2 for management. The primary cost driver is compute, accounting for the entire $0.09 monthly cost. This configuration disables high availability, trading off redundancy for a significantly lower operational cost.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:m:ha:us-central1": {
+    "key": "redis-enterprise:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:38.091Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Redis Enterprise deployment with a 200-500 GB working set, leveraging a total of 7 instances across two instance types for high availability. The primary cost driver is compute, specifically the 3x n2-standard-8 instances, which account for the entire $0.28 monthly cost. A key consideration is the use of NVMe storage on the larger instances for performance, while smaller SSDs are used on the n2-standard-2 instances, indicating a tiered storage strategy.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:l:noha:us-central1": {
+    "key": "redis-enterprise:gcp:l:noha:us-central1",
+    "generated_at": "2026-04-28T06:06:38.334Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports a large production Redis Enterprise deployment with a 500 GB to 1 TB working set, utilizing 5 data nodes and 2 coordinator nodes. The primary cost driver is compute, accounting for the entire $0.31 monthly cost. The absence of high availability significantly reduces infrastructure complexity and cost, but introduces a single point of failure.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:l:ha:us-central1": {
+    "key": "redis-enterprise:gcp:l:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:39.531Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large production Redis Enterprise deployment with a 500 GB to 1 TB working set, leveraging a mix of 9 n2-standard-8 instances and 2 n2-standard-4 instances across three zones for high availability. The primary cost driver is compute, accounting for $0.41 monthly, while storage costs are negligible. This configuration prioritizes high availability and performance for large datasets, with the tradeoff of increased instance count and associated operational complexity compared to smaller tiers.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:xs:noha:us-central1": {
+    "key": "redis-enterprise:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:06:41.933Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"dev-small\" tier supports a Redis Enterprise working set up to 50 GB, suitable for development or minimal load scenarios. The primary cost driver is the single n2-standard-4 instance, which provides 4 vCPU and 16 GB RAM. This configuration prioritizes low cost over high availability, as it lacks redundancy and relies on on-demand pricing. The small n2-standard-2 instance is likely for management or auxiliary services, contributing negligibly to the total cost.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:xs:ha:us-central1": {
+    "key": "redis-enterprise:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:42.220Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"dev-small\" Redis Enterprise sizing supports a working set up to 50 GB, utilizing a mix of n2-standard-4 and n2-standard-2 instances across three nodes for high availability. The primary cost driver at this tier is compute, accounting for the entire $0.09 monthly cost. This configuration prioritizes high availability and sufficient memory for development workloads over minimizing compute resources, as evidenced by the three provisioned instances.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:s:ha:us-east-1": {
+    "key": "redis-enterprise:aws:s:ha:us-east-1",
+    "generated_at": "2026-04-28T06:06:43.310Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"prod-small\" Redis Enterprise configuration supports a 50-200 GB working set, utilizing 3 data nodes and 3 proxy/coordinator nodes for high availability. Compute instances, specifically the m6i.xlarge data nodes, are the dominant cost driver, accounting for 89% of the total monthly spend. The architecture prioritizes data redundancy and operational resilience over minimizing compute costs for this working set size.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:m:noha:us-east-1": {
+    "key": "redis-enterprise:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:06:44.257Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Redis Enterprise sizing is for a medium production workload with a 200-500 GB working set, deployed without high availability. The primary cost driver is compute, accounting for 86% of the total monthly cost, driven by the three m6i.2xlarge instances. Disabling high availability reduces infrastructure complexity and cost, but eliminates redundancy for the data tier.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:s:ha:us-central1": {
+    "key": "redis-enterprise:gcp:s:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:44.574Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a production Redis Enterprise deployment with a 50-200 GB working set, leveraging high availability across three n2-standard-4 instances for data and two n2-standard-4 instances for replica data. The primary cost driver is compute, accounting for the entire $0.14 monthly cost. This configuration prioritizes data redundancy and performance for a small production workload, with storage costs being negligible due to the use of local NVMe.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:l:ha:us-east-1": {
+    "key": "redis-enterprise:aws:l:ha:us-east-1",
+    "generated_at": "2026-04-28T06:06:47.134Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Redis Enterprise deployment with a 500 GB to 1 TB working set, leveraging a mix of 9 m6i instances for high availability across data and proxy nodes. Compute, at $2242.56 monthly, is the dominant cost driver, accounting for over 75% of the total. The architecture prioritizes performance and redundancy with 750 GB NVMe storage on data nodes, balancing cost with high I/O requirements for large datasets.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:xl:noha:us-east-1": {
+    "key": "redis-enterprise:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T06:06:47.935Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Redis Enterprise deployment supports a 1-2 TB working set on AWS us-east-1 with high availability disabled. The primary cost driver is compute, accounting for over 75% of the total monthly cost. This configuration prioritizes a large working set and high performance via five m6i.4xlarge instances with NVMe storage, accepting the higher cost and reduced resilience of disabled HA.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:m:ha:us-east-1": {
+    "key": "redis-enterprise:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:06:48.534Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Redis Enterprise working set between 200 GB and 500 GB, utilizing 7 instances across three distinct roles for high availability. The primary cost driver is compute, accounting for over 85% of the total monthly expenditure at $1541.76. A key consideration is the distribution of resources, with 6 instances dedicated to data and proxy roles, each having 8 vCPU and 32 GB RAM, while two smaller instances handle quorum.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:gcp:xl:ha:us-central1": {
+    "key": "redis-enterprise:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:06:48.657Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Redis Enterprise deployment supports a 1-2 TB working set, leveraging 9 n2-standard-16 instances for data and 2 n2-standard-4 instances for control plane functions. The architecture prioritizes high availability and performance with NVMe storage. The listed monthly cost of $0.77 is a placeholder, as actual on-demand compute costs for these instances are significantly higher and represent the dominant cost driver.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:aws:xl:ha:us-east-1": {
+    "key": "redis-enterprise:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:06:49.500Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Redis Enterprise prod-xl sizing supports a 1 to 2 TB working set, leveraging 9 m6i instances for compute and storage. The primary cost driver is compute, accounting for over 75% of the total monthly cost. The architecture includes 5 data instances with 1500 GB NVMe each, indicating a preference for high-performance local storage over network-attached options for the working set. This configuration balances high availability with significant compute resources to manage the large dataset.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:s:noha:westus3": {
+    "key": "redis-enterprise:azure:s:noha:westus3",
+    "generated_at": "2026-04-28T06:06:49.621Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"prod-small\" Redis Enterprise configuration supports a 50-200 GB working set on Azure westus3 with high availability disabled. The primary cost driver is compute, accounting for over 90% of the $533 monthly total. The use of three D4s_v5 instances for data shards and one smaller D2s_v5 for the coordinator balances resource allocation for the working set size. Disabling high availability significantly reduces infrastructure costs but removes redundancy for production workloads.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:xs:ha:westus3": {
+    "key": "redis-enterprise:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:06:50.000Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"dev-small\" Redis Enterprise deployment supports a working set up to 50 GB with high availability enabled. The primary cost driver is compute, accounting for over 94% of the $520.65 monthly total. The architecture utilizes a mix of 1x D4s_v5 and 1x D2s_v5 instances for data nodes, plus 2x D4s_v5 instances for replica nodes, providing redundancy at a higher compute cost.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:s:ha:westus3": {
+    "key": "redis-enterprise:azure:s:ha:westus3",
+    "generated_at": "2026-04-28T06:06:50.739Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Redis Enterprise working set of 50 to 200 GB, utilizing three data nodes and three proxy/coordinator nodes for high availability. Compute, at $770.88 monthly, is the dominant cost driver, accounting for over 90% of the total. The architecture uses a mix of D4s_v5 and D2s_v5 instances, providing 150 GB NVMe storage per data node for performance, which is a key consideration for Redis.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:m:ha:westus3": {
+    "key": "redis-enterprise:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:06:50.894Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Redis Enterprise deployment for a medium working set of 200-500 GB, leveraging a total of 7 D8s_v5 and 2 D2s_v5 instances across three availability zones for high availability. Compute accounts for 90% of the monthly cost at $1541.76, making it the primary cost driver. The architecture balances performance with cost by using smaller D2s_v5 instances for non-data nodes, reducing the overall compute footprint compared to an all-D8s_v5 deployment.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "opensearch:aws:xl:ha:us-east-1": {
+    "key": "opensearch:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:06:51.370Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large OpenSearch cluster supports 1 to 5 TB of hot data, distributed across six data nodes, each with 2TB NVMe storage. Compute, primarily from the m6i.4xlarge data nodes, accounts for 71% of the total monthly cost. The architecture prioritizes high availability and performance for large datasets, balancing significant compute and storage resources.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "redis-enterprise:azure:xl:ha:westus3": {
+    "key": "redis-enterprise:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:06:51.957Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Redis Enterprise deployment on Azure supports a 1-2 TB working set with high availability. The primary cost driver is compute, accounting for over 80% of the $5071.95 monthly total. The architecture utilizes 5 data nodes (D16s_v5) for data storage and processing, alongside 4 additional D16s_v5 nodes and 2 D4s_v5 nodes for other Redis Enterprise components, indicating a significant investment in dedicated compute resources for performance and redundancy.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:xs:noha:westus3": {
+    "key": "redis-enterprise:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:06:52.560Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"dev-small\" Redis Enterprise deployment supports a working set up to 50 GB, utilizing a single D4s_v5 instance for data and a D2s_v5 for management functions. Compute is the dominant cost driver, accounting for over 90% of the $224.27 monthly total. The disabled high availability and on-demand commitment reflect a cost-optimized configuration suitable for non-production environments.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:m:noha:westus3": {
+    "key": "redis-enterprise:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:06:53.926Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Redis Enterprise working set between 200 GB and 500 GB on Azure, utilizing three D8s_v5 nodes for data and two D2s_v5 nodes for auxiliary services. Compute, at $981.12 monthly, is the primary cost driver, accounting for 90% of the total. The architecture prioritizes a larger working set over high availability, as HA is disabled, which reduces node count and associated costs.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:l:noha:westus3": {
+    "key": "redis-enterprise:azure:l:noha:westus3",
+    "generated_at": "2026-04-28T06:06:54.246Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large production Redis Enterprise deployment with a 500 GB to 1 TB working set, provisioned without high availability in Azure westus3. Compute instances are the dominant cost driver, accounting for over 80% of the $2007 monthly total. The architecture utilizes 5 large compute instances (D8s_v5) for data sharding and 2 smaller instances (D4s_v5) for auxiliary services, prioritizing compute power and local NVMe storage for performance over redundancy.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:l:ha:westus3": {
+    "key": "redis-enterprise:azure:l:ha:westus3",
+    "generated_at": "2026-04-28T06:06:54.420Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure deployment supports a Redis Enterprise working set between 500 GB and 1 TB, utilizing a mix of 9 D8s_v5 and 2 D4s_v5 instances for high availability. Compute accounts for 83% of the total monthly cost, at $2242.56. The architecture prioritizes high-performance NVMe storage on the D8s_v5 instances, which contributes to the overall cost but ensures rapid data access for the large working set.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:azure:xl:noha:westus3": {
+    "key": "redis-enterprise:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:06:54.783Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Redis Enterprise configuration supports a 1 to 2 TB working set on Azure westus3. The primary cost driver is compute, accounting for over 80% of the monthly total at $3083.52. A key tradeoff at this scale is the absence of high availability, which reduces compute costs by eliminating redundant nodes but introduces a single point of failure.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redpanda:gcp:xs:ha:us-central1": {
+    "key": "redpanda:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:07:14.016Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provides a three-broker Redpanda cluster suitable for durable event streaming in a production environment. The primary cost driver is compute, specifically the 3x n2-standard-4 instances. At this scale, the architecture prioritizes high availability with three instances, but the 1000 GB NVMe storage per instance is provisioned at no additional cost, indicating it's bundled or negligible for this instance type.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:gcp:m:ha:us-central1": {
+    "key": "redpanda:gcp:m:ha:us-central1",
+    "generated_at": "2026-04-28T06:07:15.500Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster suitable for production environments with higher partition density and data retention. The primary cost driver is the compute instances, specifically three n2-standard-8 machines, which account for the entire $0.15 monthly cost. A key consideration is that this configuration utilizes NVMe storage, which is included with the instance and results in no separate storage cost.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:aws:xs:noha:us-east-1": {
+    "key": "redpanda:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T06:07:15.976Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Redpanda cluster, consisting of three m6i.xlarge instances, is designed for a starter production environment requiring durable event streaming. The primary cost driver at this tier is compute, accounting for 53% of the total monthly cost. This configuration utilizes NVMe storage for performance, but disabling high availability means the cluster is not resilient to single-node failures.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:aws:xs:ha:us-east-1": {
+    "key": "redpanda:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T06:07:16.468Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Redpanda cluster provides a three-broker production environment suitable for durable event streaming. The primary cost driver is compute, accounting for 53% of the total monthly cost. The 1000 GB NVMe storage per broker offers high performance, but at this scale, it contributes significantly to the overall expense, nearly matching compute costs.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:aws:m:ha:us-east-1": {
+    "key": "redpanda:aws:m:ha:us-east-1",
+    "generated_at": "2026-04-28T06:07:16.774Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster, suitable for production workloads requiring higher partition density and data retention. The primary cost drivers are compute and storage, each contributing roughly half of the total monthly cost. The use of NVMe storage on m6i.2xlarge instances provides high I/O performance, but at a higher cost compared to EBS-backed solutions.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:aws:m:noha:us-east-1": {
+    "key": "redpanda:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:07:17.366Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster, suitable for production workloads requiring higher partition density and data retention. The primary cost driver is compute, at $841 per month, closely followed by storage at $750 per month. The significant storage allocation of 2 TB per instance, totaling 6 TB across the cluster, supports the increased retention requirements but contributes substantially to the overall cost. This configuration prioritizes data retention and partition density over high availability, as HA is disabled.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:xs:noha:westus3": {
+    "key": "redpanda:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:07:20.977Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Redpanda cluster, with three D4s_v5 instances, provides a starter production environment for durable event streaming. The primary cost driver is compute, accounting for 64% of the $661 monthly total. The 1000 GB NVMe storage per instance offers high performance but contributes significantly to the cost, representing 36% of the total. This configuration prioritizes performance and durability over high availability, as HA is disabled.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:xs:ha:westus3": {
+    "key": "redpanda:azure:xs:ha:westus3",
+    "generated_at": "2026-04-28T06:07:21.448Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Redpanda cluster, consisting of three Standard_D4s_v5 instances, is designed as a starter production environment for durable event streaming. The primary cost driver for this tier is compute, accounting for 64% of the total monthly cost. The 1TB NVMe storage per instance provides high-performance local storage, but its fixed size means scaling storage independently of compute is not possible at this tier.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:m:noha:westus3": {
+    "key": "redpanda:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:07:22.230Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster, suitable for production workloads with higher partition density and data retention. The primary cost driver for this configuration is compute, accounting for $841 of the $1323 monthly total. The use of NVMe storage, at 2 TB per node, balances performance with a significant storage cost of $482. This setup prioritizes individual node performance and capacity over high availability, as HA is disabled.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:gcp:m:noha:us-central1": {
+    "key": "redpanda:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:07:22.768Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster suitable for production workloads with higher partition density and data retention. The primary cost driver is compute, specifically the three n2-standard-8 instances. A key consideration at this scale is the disabled high availability, meaning the cluster is not resilient to single-node failures.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:xl:ha:westus3": {
+    "key": "redpanda:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:07:23.129Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier provisions a six-broker Redpanda cluster, suitable for high-ingest and longer-retention production workloads. Compute is the primary cost driver, accounting for 64% of the total monthly cost. The architecture prioritizes high performance with 4TB of NVMe storage per broker, contributing significantly to the overall expenditure.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:gcp:xl:noha:us-central1": {
+    "key": "redpanda:gcp:xl:noha:us-central1",
+    "generated_at": "2026-04-28T06:07:23.808Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier provisions a six-broker Redpanda cluster, each with 16 vCPUs, 64 GB RAM, and 4000 GB NVMe storage, suitable for high-ingest and longer-retention workloads. The primary cost driver is compute, accounting for the entire $0.62 monthly cost. This configuration prioritizes high performance and local storage capacity over high availability, as indicated by the disabled HA and the absence of separate storage costs.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:m:ha:westus3": {
+    "key": "redpanda:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:07:25.708Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-broker Redpanda cluster, each with 8 vCPUs, 32 GB RAM, and 2 TB NVMe storage, suitable for production workloads with higher partition density and data retention. Compute is the dominant cost driver at $841 monthly, representing 64% of the total. The 2 TB NVMe storage per broker allows for substantial data retention, but also contributes significantly to the cost at $482 monthly.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "redpanda:azure:xl:noha:westus3": {
+    "key": "redpanda:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:07:41.905Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier provisions a six-broker Redpanda cluster, suitable for high-ingest and longer-retention workloads. The primary cost driver is compute, accounting for 64% of the total monthly cost. Each broker is allocated 16 vCPU, 64 GB RAM, and 4000 GB NVMe storage, reflecting a significant investment in local storage capacity per node. This configuration prioritizes high-performance local storage over network-attached options, which is a key consideration for Redpanda's architecture.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "teleport:gcp:xl:ha:us-central1": {
+    "key": "teleport:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:07:44.029Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports Teleport deployments managing 10,000 to 50,000 SSH nodes, or similar large access estates, with high availability enabled. The primary cost driver is the \"Other\" category at $36.00 monthly, which significantly outweighs compute and storage costs. This architecture prioritizes high availability and resilience across 9 instances, with a tradeoff of higher operational complexity compared to smaller, less distributed deployments.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:aws:xl:noha:us-east-1": {
+    "key": "teleport:aws:xl:noha:us-east-1",
+    "generated_at": "2026-04-28T06:07:46.128Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Teleport deployment for 10,000 to 50,000 SSH nodes in a non-HA configuration on AWS us-east-1. Compute instances are the dominant cost driver, accounting for over 95% of the $1100 monthly total. The architecture prioritizes scale over high availability, as indicated by the disabled HA setting, which reduces complexity and cost but introduces a single point of failure.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:azure:xs:noha:westus3": {
+    "key": "teleport:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:07:47.228Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provides a starter self-hosted control plane for smaller Teleport estates, utilizing a single `Standard_D8s_v5` instance for the primary control plane and a `Standard_D4s_v5` for auxiliary services. Compute is the dominant cost driver, accounting for over 95% of the $438.48 monthly total. This configuration prioritizes cost efficiency for initial deployments by disabling high availability, which means a single point of failure exists for the control plane.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:aws:xl:ha:us-east-1": {
+    "key": "teleport:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:07:49.928Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Teleport deployment managing 10,000 to 50,000 SSH nodes or larger access estates, with high availability enabled. Compute instances are the dominant cost driver, accounting for over 90% of the monthly expenditure at $1191.36. A key consideration at this scale is balancing the 8 vCPU/16GB RAM instances for core services with smaller 2 vCPU/8GB RAM instances for less demanding components, optimizing resource allocation across the cluster.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:azure:xl:ha:westus3": {
+    "key": "teleport:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:07:54.946Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Teleport deployment supports 10,000 to 50,000 SSH nodes, utilizing a mix of 9 Azure D-series VMs for high availability. Compute instances are the dominant cost driver, accounting for over 90% of the $1300 monthly total. The architecture balances performance and cost by dedicating larger D8s_v5 instances for primary services and smaller D2s_v5 instances for less demanding roles, such as the two D2s_v5 instances provisioned without attached storage.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "victoria-metrics:gcp:m:noha:us-central1": {
+    "key": "victoria-metrics:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:08:04.235Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This minimal VictoriaMetrics cluster is designed for higher-ingest workloads or scenarios requiring independent scaling of insert, query, and storage paths. The primary cost driver is compute, specifically the n2-standard-8 instance, which accounts for the majority of the $0.09 monthly total. A key consideration is the disabled high availability, meaning this configuration is not resilient to single-node failures.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "victoria-metrics:gcp:xs:ha:us-central1": {
+    "key": "victoria-metrics:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:08:07.693Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small single-node VictoriaMetrics deployment supports ingestion rates below 1 million samples per second, providing high availability through redundant n2-standard-8 instances. The primary cost driver is \"Other\" at $18.00 monthly, which likely covers networking or managed service fees, as compute and storage costs are negligible. The architecture includes two identical n2-standard-8 instances for the main VictoriaMetrics component, plus a smaller n2-standard-2 instance, indicating a design choice for redundancy over raw processing power at this scale.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "victoria-metrics:azure:xs:noha:westus3": {
+    "key": "victoria-metrics:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:08:12.900Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small single-node VictoriaMetrics deployment is suitable for ingestion rates under 1 million samples per second. Compute and storage are the primary cost drivers, each contributing around $240-280 to the $520 monthly total. This configuration prioritizes cost efficiency for low ingestion volumes by disabling high availability, making it a single point of failure.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "victoria-metrics:azure:m:noha:westus3": {
+    "key": "victoria-metrics:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:08:19.842Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure \"minimal-cluster\" configuration for VictoriaMetrics is designed for higher-ingest workloads, allowing independent scaling of insert, query, and storage paths. The primary cost driver is compute, accounting for $491 of the $749 monthly total. This tier provisions a single instance for each component, meaning there is no high availability configured for any part of the cluster.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "yugabytedb-self-hosted:gcp:xs:noha:us-central1": {
+    "key": "yugabytedb-self-hosted:gcp:xs:noha:us-central1",
+    "generated_at": "2026-04-28T06:08:28.363Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small, three-node YugabyteDB cluster is designed for light production YSQL or YCQL workloads, providing a compact RF3 deployment. The primary cost driver is compute, accounting for the entire $0.15 monthly cost. This tier disables high availability, meaning the cluster is not resilient to zone or region outages.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:gcp:xs:ha:us-central1": {
+    "key": "yugabytedb-self-hosted:gcp:xs:ha:us-central1",
+    "generated_at": "2026-04-28T06:08:28.396Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small, three-node YugabyteDB cluster is designed for light production YSQL or YCQL workloads, leveraging a compact RF3 configuration for high availability. The primary cost driver is compute, accounting for $0.15 of the total monthly cost. This tier provisions 3 n2-standard-8 instances, each with 8 vCPU and 32 GB RAM, and includes 1 TB of SSD storage per node, which is not a cost factor in this on-demand pricing model.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:gcp:m:noha:us-central1": {
+    "key": "yugabytedb-self-hosted:gcp:m:noha:us-central1",
+    "generated_at": "2026-04-28T06:08:29.181Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This six-node YugabyteDB cluster, with three n2-standard-16 instances for each of the two components, is designed for mainstream distributed OLTP workloads. The primary cost driver is compute, accounting for $0.62 monthly, while storage costs are negligible. This configuration provides high availability through replication across six nodes, but disabling high availability at the cloud level means potential downtime during regional outages.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:aws:xs:noha:us-east-1": {
+    "key": "yugabytedb-self-hosted:aws:xs:noha:us-east-1",
+    "generated_at": "2026-04-28T06:08:33.193Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small YugabyteDB deployment, consisting of three m6i.2xlarge instances, is designed for light production YSQL or YCQL workloads. Compute accounts for 78% of the monthly cost at $841, making it the dominant cost driver. This configuration provides 24 vCPUs and 96 GB RAM across the cluster, but disabling high availability means there is no redundancy for fault tolerance.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:aws:xs:ha:us-east-1": {
+    "key": "yugabytedb-self-hosted:aws:xs:ha:us-east-1",
+    "generated_at": "2026-04-28T06:08:33.563Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provides a compact, highly available YugabyteDB cluster suitable for light production YSQL or YCQL workloads. The primary cost driver is compute, accounting for $841 of the $1081 monthly total. This configuration balances high availability with cost by using three m6i.2xlarge instances, each with 8 vCPU and 32 GB RAM, for a total of 24 vCPU and 96 GB RAM across the cluster.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:aws:xl:ha:us-east-1": {
+    "key": "yugabytedb-self-hosted:aws:xl:ha:us-east-1",
+    "generated_at": "2026-04-28T06:08:34.554Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This nine-node YugabyteDB cluster, with a replication factor of 3, is designed for larger distributed SQL estates requiring high availability. Compute is the dominant cost driver at $5046 monthly, significantly exceeding storage costs of $2880. The architecture distributes 144 vCPUs and 576 GB RAM across the cluster, providing substantial resources for demanding workloads while ensuring data redundancy.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:azure:xs:noha:westus3": {
+    "key": "yugabytedb-self-hosted:azure:xs:noha:westus3",
+    "generated_at": "2026-04-28T06:08:35.015Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small YugabyteDB deployment is designed for light production YSQL or YCQL workloads, utilizing three `Standard_D8s_v5` instances, each with 8 vCPUs, 32 GB RAM, and 1 TB SSD. Compute is the dominant cost driver, accounting for 70% of the total monthly cost at $841. The architecture prioritizes a compact, replicated setup over high availability, as indicated by the disabled HA setting, which reduces complexity but sacrifices fault tolerance. The 1 TB SSD per node provides ample local storage for data and operational overhead.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:azure:m:ha:westus3": {
+    "key": "yugabytedb-self-hosted:azure:m:ha:westus3",
+    "generated_at": "2026-04-28T06:08:36.265Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This six-node YugabyteDB cluster, with three nodes per availability zone, provides high availability for mainstream distributed OLTP workloads. Compute is the dominant cost driver at $3364 monthly, representing 70% of the total. The 2TB SSDs on each node offer substantial local storage, contributing $1440 monthly, which is a significant cost factor for this on-demand, RF3 configuration. This setup balances performance and redundancy for applications requiring strong data consistency and fault tolerance.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:azure:m:noha:westus3": {
+    "key": "yugabytedb-self-hosted:azure:m:noha:westus3",
+    "generated_at": "2026-04-28T06:08:36.535Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This six-node YugabyteDB cluster, with three nodes in each of two availability zones, is designed for mainstream distributed OLTP workloads requiring high data redundancy (RF3). Compute instances are the primary cost driver, accounting for 70% of the total monthly cost. The use of Standard_D16s_v5 instances provides a balanced 1:4 vCPU to RAM ratio, suitable for typical OLTP database operations. Disabling high availability reduces operational complexity and cost, but means the cluster is not designed to withstand a full region outage.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:azure:xl:noha:westus3": {
+    "key": "yugabytedb-self-hosted:azure:xl:noha:westus3",
+    "generated_at": "2026-04-28T06:08:37.221Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large, nine-node YugabyteDB cluster is designed for substantial distributed SQL estates, leveraging a 3x replication factor across all nodes. The primary cost driver is compute, accounting for over 50% of the total monthly expenditure. This configuration prioritizes data durability and read scalability with its nine-node architecture, but forgoes high availability features, which are disabled in this specific deployment.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:gcp:xl:ha:us-central1": {
+    "key": "yugabytedb-self-hosted:gcp:xl:ha:us-central1",
+    "generated_at": "2026-04-28T06:08:38.246Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier provisions a nine-node YugabyteDB cluster with 144 vCPUs and 576 GB RAM, suitable for substantial distributed SQL workloads requiring high availability. The primary cost driver is compute, accounting for the entire $0.92 monthly cost. This configuration balances high resource allocation across nine nodes with the cost implications of on-demand pricing for n2-standard-16 instances.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:aws:m:noha:us-east-1": {
+    "key": "yugabytedb-self-hosted:aws:m:noha:us-east-1",
+    "generated_at": "2026-04-28T06:08:42.959Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This six-node YugabyteDB cluster, with three nodes for each of the two data centers, is sized for mainstream distributed OLTP workloads requiring a replication factor of 3. Compute instances are the dominant cost driver, accounting for over 75% of the $4323.84 monthly on-demand total. The architecture provisions 2000 GB of SSD storage per node, which is a significant capacity that contributes $960 monthly, but this configuration disables high availability, meaning a regional outage would impact the entire cluster.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
+  },
+  "yugabytedb-self-hosted:azure:xl:ha:westus3": {
+    "key": "yugabytedb-self-hosted:azure:xl:ha:westus3",
+    "generated_at": "2026-04-28T06:08:46.570Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large, nine-node YugabyteDB cluster provides high availability with a replication factor of 3 across its 9 `Standard_D16s_v5` instances, each with 16 vCPUs and 64 GB RAM. The primary cost driver is compute, accounting for 54% of the $9365.76 monthly total. At this scale, the architecture dedicates 3 nodes to a specific role, while the remaining 6 nodes are for general purpose, indicating a potential tradeoff between specialized resource allocation and overall instance count.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
   }
 }
