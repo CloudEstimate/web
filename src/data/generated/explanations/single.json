@@ -3148,5 +3148,86 @@
     "source_refs": [
       "https://docs.yugabyte.com/stable/deploy/checklist/"
     ]
+  },
+  "apache-kafka-confluent-platform:aws:xs:noha:us-east-1": {
+    "key": "apache-kafka-confluent-platform:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-01T06:15:09.415Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Confluent Platform deployment supports up to 50 MB/s ingress with short retention, utilizing a total of 60 vCPU and 192 GB RAM across 11 instances. Compute is the dominant cost driver, accounting for over 80% of the $2856.64 monthly total. The architecture provisions 3 large m6i instances for Kafka brokers, but also includes 8 smaller instances for other Confluent components, reflecting a distributed system design even at this entry-level scale.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "confluence-data-center:aws:l:ha:us-east-1": {
+    "key": "confluence-data-center:aws:l:ha:us-east-1",
+    "generated_at": "2026-05-01T06:15:32.367Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Confluence Data Center deployment, handling up to 10 million content items or 700,000 HTTP calls per hour, with high availability enabled. Compute instances are the dominant cost driver, accounting for over 98% of the monthly expenditure at $1191.36. The architecture prioritizes dedicated resources for different Confluence components, using a mix of instance sizes from 2 vCPU to 8 vCPU to meet performance requirements for this scale.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "consul:azure:xl:ha:westus3": {
+    "key": "consul:azure:xl:ha:westus3",
+    "generated_at": "2026-05-01T06:15:41.934Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Consul deployment supports 5,000 to 25,000 registered services, including larger service mesh control plane requirements, by provisioning 5 Consul servers and 6 client agents across 3 different VM sizes. Compute is the dominant cost driver at $1261.44 monthly, representing 88% of the total cost. The architecture prioritizes high availability with 5 servers, but this comes at the cost of increased compute resources compared to smaller deployments.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "jfrog-artifactory:azure:s:ha:westus3": {
+    "key": "jfrog-artifactory:azure:s:ha:westus3",
+    "generated_at": "2026-05-01T06:16:28.893Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure deployment supports a medium JFrog Artifactory instance, handling up to 50,000 requests per minute with high availability enabled. Compute instances are the dominant cost driver, accounting for over 90% of the $2171 monthly total. The architecture utilizes multiple D-series VMs, including two D8s_v5 instances with 500 GB SSDs, indicating a balance between processing power and local storage for performance. The on-demand commitment term provides flexibility but incurs higher costs compared to reserved instances.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jira-data-center:aws:xl:noha:us-east-1": {
+    "key": "jira-data-center:aws:xl:noha:us-east-1",
+    "generated_at": "2026-05-01T06:16:36.258Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Jira Data Center deployment, with 5 application nodes and 1 dedicated search node, is designed for user bases exceeding the Large profile thresholds. The primary cost driver is compute, accounting for 100% of the $3363.84 monthly on-demand cost. A key consideration at this scale is the distribution of resources, with 5 nodes dedicated to application processing and a separate node for search, indicating a workload where search performance is critical enough to warrant dedicated resources.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "mongodb-enterprise-advanced:aws:xl:noha:us-east-1": {
+    "key": "mongodb-enterprise-advanced:aws:xl:noha:us-east-1",
+    "generated_at": "2026-05-01T06:17:11.739Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a MongoDB sharded cluster with a 1-10 TB working set, using nine data-bearing nodes and six smaller nodes for config servers and mongos routers. Compute accounts for 67% of the total cost, with storage making up the remaining 33%. The architecture provisions 4000 GB of SSD storage per data node, indicating a focus on high I/O performance for the large working set. This configuration prioritizes performance and capacity for large datasets over cost savings from high availability features or commitment discounts.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "teleport:gcp:xl:noha:us-central1": {
+    "key": "teleport:gcp:xl:noha:us-central1",
+    "generated_at": "2026-05-01T06:18:11.491Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Teleport deployment managing 10,000 to 50,000 SSH nodes, or similar large access estates, on Google Cloud in `us-central1`. The architecture provisions a total of 30 vCPUs and 96 GB RAM across seven instances, with compute being the sole cost driver at $0.19 per month. A key consideration is the disabled high availability, which reduces infrastructure complexity and cost but introduces a single point of failure for this large-scale deployment.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "victoria-metrics:gcp:xl:noha:us-central1": {
+    "key": "victoria-metrics:gcp:xl:noha:us-central1",
+    "generated_at": "2026-05-01T06:18:20.297Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large VictoriaMetrics cluster is designed for demanding workloads requiring longer data retention, extensive query fan-out, or multi-tenant metrics estates. The primary cost driver is compute, with two n2-standard-16 instances providing 32 vCPUs and 128 GB RAM for core processing. The architecture's reliance on these large compute instances, rather than storage, indicates a focus on processing power for high-volume metrics rather than raw data storage capacity.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "victoria-metrics:aws:xl:ha:us-east-1": {
+    "key": "victoria-metrics:aws:xl:ha:us-east-1",
+    "generated_at": "2026-05-01T06:18:25.341Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large VictoriaMetrics cluster is designed for demanding workloads requiring longer retention, heavy query fan-out, or multi-tenant metrics estates. Compute is the dominant cost driver, accounting for 70% of the total monthly cost at $3223.68. The architecture utilizes a diverse set of instance types, with eight instances providing 16TB of SSD storage, balancing high storage capacity with significant processing power for data retrieval and ingestion.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }
