@@ -1,6 +1,6 @@
 {
   "cloud": "gcp",
-  "retrieved_at": "2026-05-01T05:48:03.610Z",
+  "retrieved_at": "2026-05-02T05:17:04.746Z",
   "regions": {
     "us-central1": {
       "compute": {
@@ -31,10 +31,10 @@
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 1.2216422660851184e-16,
-        "hdd_gb_month_usd": 4.491331860607053e-17,
-        "nvme_gb_month_usd": 2.874452390788514e-17,
-        "object_gb_month_usd": 7.904744074668413e-18
+        "ssd_gb_month_usd": 1.1822344510501146e-16,
+        "hdd_gb_month_usd": 4.346450187684245e-17,
+        "nvme_gb_month_usd": 2.7817281201179165e-17,
+        "object_gb_month_usd": 7.64975233032427e-18
       },
       "other": {
         "load_balancer_monthly_usd": 18
@@ -69,10 +69,10 @@
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 1.2216422660851184e-16,
-        "hdd_gb_month_usd": 4.491331860607053e-17,
-        "nvme_gb_month_usd": 3.233758939637078e-17,
-        "object_gb_month_usd": 7.904744074668413e-18
+        "ssd_gb_month_usd": 1.1822344510501146e-16,
+        "hdd_gb_month_usd": 4.346450187684245e-17,
+        "nvme_gb_month_usd": 3.1294441351326565e-17,
+        "object_gb_month_usd": 7.64975233032427e-18
       },
       "other": {
         "load_balancer_monthly_usd": 18
