@@ -3355,5 +3355,77 @@
     "source_refs": [
       "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
     ]
+  },
+  "gitlab:aws:s:noha:us-east-1": {
+    "key": "gitlab:aws:s:noha:us-east-1",
+    "generated_at": "2026-05-03T05:58:10.289Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 500 to 2,000 users, utilizing a total of 26 vCPUs and 104 GB RAM across five EC2 instances. Compute instances are the primary cost driver, accounting for 86% of the total monthly expenditure at $1051.20. The architecture prioritizes compute resources, with the largest instance providing 8 vCPUs and 32 GB RAM, while storage is distributed across multiple smaller volumes and an object store.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:aws:xs:ha:us-east-1": {
+    "key": "gitlab:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-03T05:58:10.299Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small sizing supports up to 500 users for a highly available GitLab Self-Managed instance on AWS. Compute instances are the dominant cost driver, accounting for 89% of the total monthly cost at $771. The architecture provisions 7 instances, with 4 instances having 4 vCPUs and 16 GB RAM, indicating a preference for distributed processing over consolidating workloads onto fewer, larger machines. This setup prioritizes high availability and redundancy for a smaller user base.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:gcp:s:ha:us-central1": {
+    "key": "gitlab:gcp:s:ha:us-central1",
+    "generated_at": "2026-05-03T05:58:10.445Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a highly available GitLab Self-Managed instance for 500 to 2,000 users, utilizing a mix of n2-standard machines for various services. The primary cost driver is \"Other\" at $36.00, which likely encompasses networking, managed services, or licensing not detailed in compute or storage. A key consideration for this tier is the distribution across 10 instances, with 6 instances having local SSDs ranging from 200GB to 1000GB, indicating a need for high-performance local storage for specific components.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "influxdb-enterprise:azure:xl:noha:westus3": {
+    "key": "influxdb-enterprise:azure:xl:noha:westus3",
+    "generated_at": "2026-05-03T05:58:22.693Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large InfluxDB Enterprise deployment supports 400,000 to 750,000+ writes per second and 5 to 10 million+ series. The dominant cost driver is compute, accounting for over 56% of the total monthly cost. This configuration utilizes 6 large data nodes (D16s_v5) for data storage and processing, alongside 5 smaller meta nodes (D2s_v5) for cluster management. The substantial storage allocation of 4TB per data node reflects the high series count and write throughput requirements.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "minio:azure:xl:ha:westus3": {
+    "key": "minio:azure:xl:ha:westus3",
+    "generated_at": "2026-05-03T05:58:55.295Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier provides 100 TB to 1 PiB of usable capacity on an eight-node erasure-coded MinIO cluster. The primary cost driver is storage, accounting for 68% of the total monthly cost at $19,272. The architecture utilizes 8 Standard_D32s_v5 instances, each with 30 TB of NVMe storage, totaling 240 TB raw capacity. This configuration prioritizes high-performance local storage over compute resources, with compute making up 32% of the cost.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "neo4j-enterprise:azure:xs:noha:westus3": {
+    "key": "neo4j-enterprise:azure:xs:noha:westus3",
+    "generated_at": "2026-05-03T05:59:05.047Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports a Neo4j three-primary cluster for graph stores up to 100 GB, as per the Neo4j Operations Manual. Compute is the dominant cost driver, accounting for over two-thirds of the total monthly cost at $420.48. The architecture provisions three Standard_D4s_v5 instances, each with 4 vCPUs and 16 GB RAM, which is a suitable configuration for smaller graph workloads but lacks high availability.",
+    "source_refs": [
+      "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/"
+    ]
+  },
+  "nexus-repository:aws:xs:ha:us-east-1": {
+    "key": "nexus-repository:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-03T05:59:21.705Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 50 requests per second, providing high availability with two EC2 instances. The primary cost driver is compute, accounting for over 80% of the total monthly cost at $210.24. This configuration dedicates 4 vCPU and 16 GB RAM to the primary instance, with a smaller 2 vCPU and 8 GB RAM instance for redundancy, reflecting a tradeoff between resource allocation and cost efficiency for lower request volumes.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "teleport:aws:m:noha:us-east-1": {
+    "key": "teleport:aws:m:noha:us-east-1",
+    "generated_at": "2026-05-03T05:59:50.273Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-scale Teleport deployment managing up to 10,000 SSH nodes, utilizing a mix of m6i instances for compute and storage. The primary cost driver is compute, accounting for over 95% of the total monthly expenditure at $1051.20. This configuration prioritizes a balance of performance and cost for a substantial estate, but it does not include high availability, which would increase instance count and cost.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
   }
 }
