@@ -3427,5 +3427,41 @@
     "source_refs": [
       "https://goteleport.com/docs/reference/deployment/scaling/"
     ]
+  },
+  "elasticsearch-oss:aws:xs:noha:us-east-1": {
+    "key": "elasticsearch-oss:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-04T06:12:09.766Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch node. The primary cost driver is compute, accounting for 69% of the total monthly cost at $140.16. This configuration provides a cost-effective entry point but lacks high availability, making it unsuitable for production workloads requiring uptime guarantees.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "nexus-repository:gcp:xs:ha:us-central1": {
+    "key": "nexus-repository:gcp:xs:ha:us-central1",
+    "generated_at": "2026-05-04T06:13:23.150Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 50 requests per second for Sonatype Nexus Repository, utilizing an n2-standard-4 instance for the application and an n2-standard-2 for high availability. The primary cost driver at this scale is \"Other\" at $18.00, which significantly outweighs compute and storage costs. The architecture provisions 400 GB of SSD storage, which is a fixed cost regardless of actual usage at this tier.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "opensearch:aws:xs:noha:us-east-1": {
+    "key": "opensearch:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-04T06:13:34.956Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small OpenSearch configuration supports up to 100 GB of hot index data on a single node, suitable for development or minimal production workloads without high availability. Compute is the primary cost driver, accounting for 69% of the total monthly cost at $140.16. The single-node architecture eliminates high availability, making it susceptible to downtime during node failures.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "victoria-metrics:azure:xl:ha:westus3": {
+    "key": "victoria-metrics:azure:xl:ha:westus3",
+    "generated_at": "2026-05-04T06:14:20.144Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large VictoriaMetrics cluster is sized for longer retention, heavier query fan-out, or multi-tenant metrics estates, leveraging 8 VMs with 80 vCPUs and 304 GB RAM. Compute is the dominant cost driver at $3223.68 monthly, representing 61% of the total. The architecture provisions 16 TB of SSD storage across four VMs, indicating a significant investment in high-performance storage for data retention and query performance.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }
