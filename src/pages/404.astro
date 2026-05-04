@@ -12,4 +12,18 @@ const description = "The page you asked for is not here. Browse the ISV director
       Try the <a href="/isvs">ISVs directory</a> or go back to the <a href="/">home page</a>.
     </p>
   </section>
+
+  <script is:inline>
+    if (location.pathname.startsWith("/sizing/")) {
+      const gtag = window.gtag;
+
+      if (typeof gtag === "function") {
+        gtag("event", "sizing_no_answer", {
+          route_family: "sizing",
+          response_status: "no_answer",
+          reason: "static_route_not_found"
+        });
+      }
+    }
+  </script>
 </BaseLayout>

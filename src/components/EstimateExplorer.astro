@@ -1,6 +1,6 @@
 ---
 import { buildStateKey, getDefaultRegion, getRegionsForCloud } from "@/lib/estimates";
-import { getSizingExplanation } from "@/lib/explanations";
+import { getSizingExplanationWithMetadata } from "@/lib/explanations";
 import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatStorage, formatUserRange } from "@/lib/format";
 import { cloudMeta, cloudOrder, termOrder, type CloudSlug, type CommitmentTerm, type SizeSlug } from "@/lib/site";
 import { buildTerraformSnippet } from "@/lib/terraform";
@@ -48,23 +48,30 @@ const clientData = {
   states: Object.fromEntries(
     Object.entries(estimateMatrix).map(([key, estimate]) => {
       const [, size, haKey, term, region] = key.split(":");
+      const ha = haKey === "ha";
+      const explanation = getSizingExplanationWithMetadata({
+        isv,
+        cloud,
+        size,
+        region,
+        term,
+        ha,
+        estimate
+      });
+
       return [
         key,
         {
           estimate,
           size,
-          ha: haKey === "ha",
+          ha,
           term,
           region,
-          explanation: getSizingExplanation({
-            isv,
-            cloud,
-            size,
-            region,
-            term,
-            ha: haKey === "ha",
-            estimate
-          }),
+          explanation: explanation.explanation,
+          explanationSource: explanation.source,
+          explanationGeneratedAt: explanation.generatedAt,
+          explanationGeneratedDate: explanation.generatedDate,
+          explanationModel: explanation.model,
           terraform: buildTerraformSnippet({
             slug,
             cloud,
@@ -255,15 +262,7 @@ const clientData = {
       <section class="space-y-3">
         <h2 class="section-heading">Why this sizing</h2>
         <p class="max-w-none text-base" id={`${widgetId}-explanation`}>
-          {getSizingExplanation({
-            isv,
-            cloud,
-            size: initialState.size,
-            region: initialState.region,
-            term: initialState.term,
-            ha: initialState.ha,
-            estimate: initialEstimate
-          })}
+          {clientData.states[initialKey]?.explanation}
         </p>
       </section>
 
@@ -426,6 +425,33 @@ const clientData = {
       });
     }
 
+    function daysSince(value) {
+      if (!value) {
+        return null;
+      }
+
+      const normalized = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00Z` : value;
+      const timestamp = Date.parse(normalized);
+
+      if (Number.isNaN(timestamp)) {
+        return null;
+      }
+
+      return Math.max(0, Math.floor((Date.now() - timestamp) / 86400000));
+    }
+
+    function trackSizingEvent(eventName, params) {
+      if (typeof window.gtag !== "function") {
+        return;
+      }
+
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(([, value]) => value !== null && value !== undefined && value !== "")
+      );
+
+      window.gtag("event", eventName, cleanParams);
+    }
+
     function buildKey() {
       return [currentCloud, state.size, state.ha ? "ha" : "noha", state.term, state.region].join(":");
     }
@@ -505,6 +531,25 @@ const clientData = {
         link.href = `/sizing/${data.slug}/${targetCloud}?${searchString(targetCloud)}`;
       });
       compareLink.href = `/sizing/${data.slug}/compare?size=${state.size}&ha=${state.ha}&term=${state.term}`;
+      trackSizingEvent("sizing_recommendation_served", {
+        view_type: "single",
+        isv_slug: data.slug,
+        cloud: currentCloud,
+        size: state.size,
+        ha: String(state.ha),
+        term: state.term,
+        region: state.region,
+        ref_arch_tier: view.estimate.refArchTier,
+        recommendation_source: "reference_architecture",
+        recommendation_count: 1,
+        explanation_source: view.explanationSource,
+        explanation_generated_date: view.explanationGeneratedDate,
+        explanation_age_days: daysSince(view.explanationGeneratedAt || view.explanationGeneratedDate),
+        explanation_model: view.explanationModel,
+        pricing_snapshot_date: view.estimate.pricingSnapshotDate,
+        pricing_snapshot_age_days: daysSince(view.estimate.pricingSnapshotDate),
+        response_status: "served"
+      });
       history.replaceState({}, "", `${location.pathname}?${searchString()}`);
     }
 

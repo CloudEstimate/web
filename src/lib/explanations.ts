@@ -7,6 +7,36 @@ import type { EstimateResult, ExplanationCacheEntry, IsvEntry } from "@/lib/type
 const singleCache = singleExplanationCache as Record<string, ExplanationCacheEntry>;
 const compareCache = compareExplanationCache as Record<string, ExplanationCacheEntry>;
 
+export type ExplanationSource = "precomputed_cache" | "deterministic_fallback";
+
+export type ExplanationWithMetadata = {
+  explanation: string;
+  source: ExplanationSource;
+  generatedAt: string | null;
+  generatedDate: string | null;
+  model: string | null;
+};
+
+type SizingExplanationArgs = {
+  isv: IsvEntry;
+  cloud: CloudSlug;
+  size: string;
+  region: string;
+  term: string;
+  ha: boolean;
+  estimate: EstimateResult;
+};
+
+type CompareExplanationArgs = {
+  isv: IsvEntry;
+  size: string;
+  sizeLabel: string;
+  rangeDescription: string;
+  term: string;
+  ha: boolean;
+  estimates: Record<CloudSlug, EstimateResult>;
+};
+
 function dominantLineItem(estimate: EstimateResult) {
   const items = [
     { label: "Compute", value: estimate.computeTotal },
@@ -17,34 +47,38 @@ function dominantLineItem(estimate: EstimateResult) {
   return items[0];
 }
 
-export function getSizingExplanation(args: {
-  isv: IsvEntry;
-  cloud: CloudSlug;
-  size: string;
-  region: string;
-  term: string;
-  ha: boolean;
-  estimate: EstimateResult;
-}) {
+export function getSizingExplanation(args: SizingExplanationArgs) {
+  return getSizingExplanationWithMetadata(args).explanation;
+}
+
+export function getSizingExplanationWithMetadata(args: SizingExplanationArgs): ExplanationWithMetadata {
   if (args.term !== "on-demand") {
-    return buildSizingExplanationFallback(args);
+    return buildFallbackMetadata(buildSizingExplanationFallback(args));
   }
 
   const key = buildSingleKey(args);
-  return singleCache[key]?.explanation ?? buildSizingExplanationFallback(args);
+  const cached = singleCache[key];
+
+  if (cached?.explanation) {
+    return buildCacheMetadata(cached);
+  }
+
+  return buildFallbackMetadata(buildSizingExplanationFallback(args));
 }
 
-export function getCompareExplanation(args: {
-  isv: IsvEntry;
-  size: string;
-  sizeLabel: string;
-  rangeDescription: string;
-  term: string;
-  ha: boolean;
-  estimates: Record<CloudSlug, EstimateResult>;
-}) {
+export function getCompareExplanation(args: CompareExplanationArgs) {
+  return getCompareExplanationWithMetadata(args).explanation;
+}
+
+export function getCompareExplanationWithMetadata(args: CompareExplanationArgs): ExplanationWithMetadata {
   const key = buildCompareKey(args);
-  return compareCache[key]?.explanation ?? buildCompareExplanationFallback(args);
+  const cached = compareCache[key];
+
+  if (cached?.explanation) {
+    return buildCacheMetadata(cached);
+  }
+
+  return buildFallbackMetadata(buildCompareExplanationFallback(args));
 }
 
 export function buildSingleKey(args: {
@@ -98,9 +132,8 @@ export function buildSizingExplanationFallback(args: {
       ? `High availability is enabled here, so the footprint carries duplicate capacity for failover across the application, data, or cache tiers.`
       : `High availability is not included here, so this baseline stays lean and leaves failover headroom out of the monthly total.`,
     biggestStorageFootprint?.storageGb
-      ? `${formatRoleLabel(biggestStorageFootprint.role)} carries the heaviest storage footprint at ${formatStorage(biggestStorageFootprint.storageGb)}${
-          biggestStorageFootprint.count > 1 ? ` on each of its ${biggestStorageFootprint.count} nodes` : ""
-        }.${commitmentSavings ? ` ${commitmentSavings}` : ""}`
+      ? `${formatRoleLabel(biggestStorageFootprint.role)} carries the heaviest storage footprint at ${formatStorage(biggestStorageFootprint.storageGb)}${biggestStorageFootprint.count > 1 ? ` on each of its ${biggestStorageFootprint.count} nodes` : ""
+      }.${commitmentSavings ? ` ${commitmentSavings}` : ""}`
       : `This tier is primarily a compute sizing exercise rather than a storage-heavy one.${commitmentSavings ? ` ${commitmentSavings}` : ""}`
   ];
 
@@ -149,4 +182,24 @@ function buildCommitmentSentence(term: string, estimate: EstimateResult) {
   const savings = onDemandEquivalent > 0 ? ((onDemandEquivalent - estimate.computeTotal) / onDemandEquivalent) * 100 : 0;
 
   return `${term} pricing cuts the compute portion by about ${formatPercent(savings)} against on-demand in this snapshot.`;
+}
+
+function buildCacheMetadata(entry: ExplanationCacheEntry): ExplanationWithMetadata {
+  return {
+    explanation: entry.explanation,
+    source: "precomputed_cache",
+    generatedAt: entry.generated_at,
+    generatedDate: entry.generated_at.slice(0, 10),
+    model: entry.model
+  };
+}
+
+function buildFallbackMetadata(explanation: string): ExplanationWithMetadata {
+  return {
+    explanation,
+    source: "deterministic_fallback",
+    generatedAt: null,
+    generatedDate: null,
+    model: null
+  };
 }

@@ -1,5 +1,5 @@
 ---
-import { getCompareExplanation } from "@/lib/explanations";
+import { getCompareExplanationWithMetadata } from "@/lib/explanations";
 import { buildCompareKey } from "@/lib/estimates";
 import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatUserRange } from "@/lib/format";
 import { cloudMeta, cloudOrder, termOrder, type CommitmentTerm, type SizeSlug } from "@/lib/site";
@@ -50,25 +50,32 @@ const clientData = {
     ])
   ),
   states: Object.fromEntries(
-    Object.entries(compareMatrix).map(([key, view]) => [
-      key,
-      {
-        ...view,
-        explanation: getCompareExplanation({
-          isv,
-          size: view.size,
-          sizeLabel: isv.data.sizes[view.size]?.label ?? view.size.toUpperCase(),
-          rangeDescription: isv.data.sizes[view.size]?.range_description ?? "",
-          term: view.term,
-          ha: view.ha,
-          estimates: view.estimates
-        })
-      }
-    ])
+    Object.entries(compareMatrix).map(([key, view]) => {
+      const explanation = getCompareExplanationWithMetadata({
+        isv,
+        size: view.size,
+        sizeLabel: isv.data.sizes[view.size]?.label ?? view.size.toUpperCase(),
+        rangeDescription: isv.data.sizes[view.size]?.range_description ?? "",
+        term: view.term,
+        ha: view.ha,
+        estimates: view.estimates
+      });
+
+      return [
+        key,
+        {
+          ...view,
+          explanation: explanation.explanation,
+          explanationSource: explanation.source,
+          explanationGeneratedAt: explanation.generatedAt,
+          explanationGeneratedDate: explanation.generatedDate,
+          explanationModel: explanation.model
+        }
+      ];
+    })
   ),
   clouds: cloudMeta
 };
-
 ---
 
 <section class="page-shell py-8 lg:py-10">
@@ -180,15 +187,7 @@ const clientData = {
       <section class="space-y-3">
         <h2 class="section-heading">Why the totals differ</h2>
         <p id={`${widgetId}-explanation`}>
-          {getCompareExplanation({
-            isv,
-            size: initialState.size,
-            sizeLabel: isv.data.sizes[initialState.size]?.label ?? initialState.size.toUpperCase(),
-            rangeDescription: isv.data.sizes[initialState.size]?.range_description ?? "",
-            term: initialState.term,
-            ha: initialState.ha,
-            estimates: initialView.estimates
-          })}
+          {clientData.states[initialKey]?.explanation}
         </p>
       </section>
 
@@ -268,6 +267,35 @@ const clientData = {
         .join(" ");
     }
 
+    function daysSince(value) {
+      if (!value) {
+        return null;
+      }
+
+      const normalized = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00Z` : value;
+      const timestamp = Date.parse(normalized);
+
+      if (Number.isNaN(timestamp)) {
+        return null;
+      }
+
+      return Math.max(0, Math.floor((Date.now() - timestamp) / 86400000));
+    }
+
+    function trackSizingEvent(eventName, params) {
+      const gtag = window.gtag;
+
+      if (typeof gtag !== "function") {
+        return;
+      }
+
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(([, value]) => value !== null && value !== undefined && value !== "")
+      );
+
+      gtag("event", eventName, cleanParams);
+    }
+
     function buildKey() {
       return [state.size, state.ha ? "ha" : "noha", state.term].join(":");
     }
@@ -330,6 +358,29 @@ const clientData = {
         link.href = `/sizing/${data.slug}/${targetCloud}?size=${state.size}&ha=${state.ha}&term=${state.term}&region=${data.defaultRegions[targetCloud]}`;
       });
 
+      trackSizingEvent("sizing_comparison_served", {
+        view_type: "compare",
+        isv_slug: data.slug,
+        size: state.size,
+        ha: String(state.ha),
+        term: state.term,
+        recommendation_source: "reference_architecture",
+        recommendation_count: 3,
+        response_status: "served",
+        cheapest_cloud: winner,
+        gcp_region: view.regions.gcp,
+        aws_region: view.regions.aws,
+        azure_region: view.regions.azure,
+        explanation_source: view.explanationSource,
+        explanation_generated_date: view.explanationGeneratedDate,
+        explanation_age_days: daysSince(view.explanationGeneratedAt || view.explanationGeneratedDate),
+        explanation_model: view.explanationModel,
+        pricing_snapshot_date: view.estimates.gcp.pricingSnapshotDate,
+        pricing_snapshot_age_days: daysSince(view.estimates.gcp.pricingSnapshotDate),
+        gcp_pricing_snapshot_date: view.estimates.gcp.pricingSnapshotDate,
+        aws_pricing_snapshot_date: view.estimates.aws.pricingSnapshotDate,
+        azure_pricing_snapshot_date: view.estimates.azure.pricingSnapshotDate
+      });
       history.replaceState({}, "", `${location.pathname}?size=${state.size}&ha=${state.ha}&term=${state.term}`);
     }
 
