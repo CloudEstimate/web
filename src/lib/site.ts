@@ -32,6 +32,9 @@ export const siteConfig = {
     { href: "/about", label: "About" }
   ],
   footerMiddle: [
+    { href: "/gcp", label: "Google Cloud Estimates" },
+    { href: "/aws", label: "AWS Estimates" },
+    { href: "/azure", label: "Azure Estimates" },
     { href: "/methodology", label: "Methodology" },
     { href: "/changelog", label: "Changelog" },
     { href: "/acknowledgements", label: "Acknowledgements" }

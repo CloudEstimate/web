@@ -7,11 +7,11 @@ export function buildCanonical(pathname: string) {
 }
 
 export function buildEstimateTitle(isv: IsvEntry, cloud: CloudSlug) {
-  return `${isv.data.name} on ${cloudMeta[cloud].name} sizing and monthly cost | CloudEstimate`;
+  return `Self-Managed ${isv.data.name} Pricing & Sizing on ${cloudMeta[cloud].name} | CloudEstimate`;
 }
 
 export function buildEstimateDescription(isv: IsvEntry, cloud: CloudSlug, estimate: EstimateResult) {
-  return `${isv.data.name} on ${cloudMeta[cloud].name}: ${estimate.sizeLabel} sizing for ${formatUserRange(
+  return `Self-managed ${isv.data.name} on ${cloudMeta[cloud].name}: ${estimate.sizeLabel} sizing for ${formatUserRange(
     estimate.sizeDescription
   )}. Monthly cost ${formatCurrency(estimate.monthlyTotal)} based on reference architecture ${estimate.refArchTier}. Pricing snapshot ${formatDate(
     estimate.pricingSnapshotDate
@@ -19,11 +19,11 @@ export function buildEstimateDescription(isv: IsvEntry, cloud: CloudSlug, estima
 }
 
 export function buildCompareTitle(isv: IsvEntry) {
-  return `Compare ${isv.data.name} on Google Cloud, AWS, and Azure | CloudEstimate`;
+  return `Compare Self-Managed ${isv.data.name} Pricing on Google Cloud, AWS, and Azure | CloudEstimate`;
 }
 
 export function buildCompareDescription(isv: IsvEntry, estimate: EstimateResult) {
-  return `Compare ${isv.data.name} on Google Cloud, AWS, and Azure. Default ${estimate.sizeLabel.toLowerCase()} view starts at ${formatCurrency(
+  return `Compare self-managed ${isv.data.name} on Google Cloud, AWS, and Azure. Default ${estimate.sizeLabel.toLowerCase()} view starts at ${formatCurrency(
     estimate.monthlyTotal
   )}/month with dated source citations.`;
 }
@@ -137,4 +137,29 @@ export function buildJsonLd(args: {
     canonical: args.canonical,
     image: args.image
   });
+}
+
+export function buildEstimateProductJsonLd(args: {
+  title: string;
+  description: string;
+  canonical: string;
+  image: string;
+  price: number;
+  lastModifiedDate: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: args.title,
+    description: args.description,
+    url: args.canonical,
+    image: args.image,
+    offers: {
+      "@type": "Offer",
+      price: args.price.toFixed(2),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock"
+    },
+    dateModified: args.lastModifiedDate
+  };
 }

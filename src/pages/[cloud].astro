@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buildCanonical, buildItemListJsonLd, buildPageJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
+import { cloudOrder, cloudMeta, type CloudSlug } from "@/lib/site";
+
+export function getStaticPaths() {
+  return cloudOrder.map((cloud) => ({
+    params: { cloud },
+    props: { cloud }
+  }));
+}
+
+const { cloud } = Astro.props as { cloud: CloudSlug };
+const isvs = await getCollection("isvs");
+const title = `Self-Managed Workload Pricing on ${cloudMeta[cloud].name} | CloudEstimate`;
+const description = `Directory of supported self-managed workloads and cost estimates for ${cloudMeta[cloud].name}.`;
+
+const canonical = buildCanonical(`/${cloud}`);
+const jsonLd = [
+  buildPageJsonLd({
+    type: "CollectionPage",
+    title,
+    description,
+    canonical
+  }),
+  buildItemListJsonLd({
+    name: `${cloudMeta[cloud].name} Supported ISVs`,
+    description: `Supported workloads and cost estimates for ${cloudMeta[cloud].name}.`,
+    items: isvs.map((isv) => ({
+      name: isv.data.name,
+      item: buildCanonical(`/sizing/${isv.data.slug}/${cloud}`)
+    }))
+  }),
+  buildBreadcrumbJsonLd([
+    { name: "Home", item: buildCanonical("/") },
+    { name: "ISVs", item: buildCanonical("/isvs") },
+    { name: cloudMeta[cloud].name, item: canonical }
+  ])
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <section class="page-shell py-10 lg:py-14">
+    <div class="max-w-3xl space-y-4">
+      <nav aria-label="Breadcrumb" class="text-sm text-muted">
+        <a href="/">Home</a>
+        <span aria-hidden="true"> / </span>
+        <a href="/isvs">ISVs</a>
+        <span aria-hidden="true"> / </span>
+        <span>{cloudMeta[cloud].name}</span>
+      </nav>
+      <h1 class="text-[2rem] font-semibold tracking-tight">{cloudMeta[cloud].name} Estimates</h1>
+      <p class="text-lg text-muted">
+        Directory of self-managed workloads supported for {cloudMeta[cloud].name}.
+      </p>
+    </div>
+
+    <div class="mt-8 overflow-x-auto panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ISV</th>
+            <th>Vendor</th>
+            <th>Category</th>
+            <th data-align="right">{cloudMeta[cloud].name} Sizing</th>
+          </tr>
+        </thead>
+        <tbody>
+          {isvs.map((isv) => (
+            <tr>
+              <td>
+                <a class="font-medium" href={`/sizing/${isv.data.slug}/${cloud}`}>{isv.data.name}</a>
+              </td>
+              <td>{isv.data.vendor}</td>
+              <td>{isv.data.category}</td>
+              <td data-align="right">
+                <a href={`/sizing/${isv.data.slug}/${cloud}`}>View Estimate</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>

@@ -28,7 +28,8 @@ export async function GET() {
     { path: "/changelog", source: "src/pages/changelog.astro" },
     { path: "/acknowledgements", source: "src/pages/acknowledgements.astro" },
     { path: "/terms", source: "src/pages/terms.astro" },
-    { path: "/privacy", source: "src/pages/privacy.astro" }
+    { path: "/privacy", source: "src/pages/privacy.astro" },
+    ...cloudOrder.map((cloud) => ({ path: `/${cloud}`, source: "src/pages/[cloud].astro" }))
   ];
 
   const estimateRoutes = isvs.flatMap((isv) => {
