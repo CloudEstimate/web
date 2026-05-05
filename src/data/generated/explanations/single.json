@@ -3463,5 +3463,50 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "elasticsearch-oss:aws:xs:ha:us-east-1": {
+    "key": "elasticsearch-oss:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-05T05:41:50.870Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier supports up to 100 GB of hot index data on a single Elasticsearch OSS node, suitable for development or small-scale production workloads. The primary cost driver is compute, accounting for over 70% of the monthly spend at $490.56. While high availability is enabled, the single data node architecture means that data redundancy and resilience are limited to the underlying infrastructure, not within Elasticsearch itself.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "gitlab:aws:m:noha:us-east-1": {
+    "key": "gitlab:aws:m:noha:us-east-1",
+    "generated_at": "2026-05-05T05:41:53.380Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 2,000 to 5,000 users without high availability. Compute instances, totaling $2383 monthly, are the dominant cost driver, representing over 80% of the total. The architecture provisions 7 EC2 instances with SSDs for various services, alongside one instance utilizing object storage for 1500 GB, indicating a balance between performance-critical local storage and cost-effective object storage for less demanding data. The absence of high availability significantly reduces complexity and cost but introduces a single point of failure risk.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "influxdb-enterprise:gcp:m:noha:us-central1": {
+    "key": "influxdb-enterprise:gcp:m:noha:us-central1",
+    "generated_at": "2026-05-05T05:42:04.324Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports InfluxDB Enterprise for 100,000 to 400,000 writes per second and 1 to 5 million series, utilizing 3 n2-standard-2 nodes for meta services and 4 n2-standard-8 nodes for data. The primary cost driver at this tier is compute, accounting for 100% of the $0.24 monthly total. A key consideration is the distribution of resources, with data nodes receiving 4x the vCPU and RAM of meta nodes, reflecting the higher demands of data processing.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "jira-data-center:aws:xl:ha:us-east-1": {
+    "key": "jira-data-center:aws:xl:ha:us-east-1",
+    "generated_at": "2026-05-05T05:42:25.683Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This AWS sizing for Jira Data Center's xlarge tier supports deployments exceeding the Large profile thresholds, utilizing 5 application nodes, 1 search node, and 1 dedicated database node for high availability. Compute instances are the dominant cost driver, accounting for over 99% of the $3449.92 monthly total. The architecture prioritizes dedicated resources for search and database functions, with the search node having 2x the memory of application nodes (64GB vs 32GB) to handle larger indexes.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "nexus-repository:gcp:s:ha:us-central1": {
+    "key": "nexus-repository:gcp:s:ha:us-central1",
+    "generated_at": "2026-05-05T05:43:05.770Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a small Sonatype Nexus Repository deployment, handling up to 300 requests per second. The primary cost driver for this configuration is the \"Other\" category at $18.00 per month, which likely includes managed services or networking. The architecture uses three instances for high availability, with the largest instance providing 8 vCPU and 32 GB RAM for the main application, while two smaller instances contribute to the overall resilience.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
   }
 }

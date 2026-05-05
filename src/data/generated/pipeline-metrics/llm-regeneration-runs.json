@@ -1,0 +1,48 @@
+[
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 3 * * *",
+    "event_name": "schedule",
+    "run_id": "25359884320",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "422a954da80e4649efba8eb55be3db9e1104867f",
+    "started_at": "2026-05-05T05:41:07.318Z",
+    "completed_at": "2026-05-05T05:44:09.320Z",
+    "duration_ms": 182002,
+    "conclusion": "success",
+    "model": "gemini-2.5-flash",
+    "options": {
+      "maxNewExplanations": 0,
+      "timeBudgetMs": 3900000,
+      "concurrency": 12
+    },
+    "work_items_queued": 220,
+    "attempted": 220,
+    "generated": 23,
+    "skipped_existing": 692,
+    "validation_failures": 197,
+    "llm_api_responses": 635,
+    "llm_api_responses_with_usage_metadata": 635,
+    "llm_api_responses_without_usage_metadata": 0,
+    "llm_api_errors_or_timeouts": 0,
+    "token_usage": {
+      "prompt_token_count": 277218,
+      "candidates_token_count": 70398,
+      "total_token_count": 347616,
+      "cached_content_token_count": 0,
+      "thoughts_token_count": 0,
+      "tool_use_prompt_token_count": 0
+    },
+    "usage_metadata_fields_seen": [
+      "candidatesTokenCount",
+      "candidatesTokensDetails",
+      "promptTokenCount",
+      "promptTokensDetails",
+      "totalTokenCount",
+      "trafficType"
+    ],
+    "error_message": null
+  }
+]
