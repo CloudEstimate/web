@@ -1,0 +1,47 @@
+[
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "25359293998",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "d2d52c28258188257112016e866c5cfd29556bcc",
+    "started_at": "2026-05-05T05:20:34.164Z",
+    "completed_at": "2026-05-05T05:20:57.445Z",
+    "duration_ms": 23281,
+    "conclusion": "success",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": "2026-05-05T05:20:34.168Z",
+    "pricing": {
+      "gcp": "2026-05-05T05:20:45.785Z",
+      "aws": "2026-05-05T05:20:55.977Z",
+      "azure": "2026-05-05T05:20:56.854Z"
+    },
+    "providers": {
+      "gcp": {
+        "retrieved_at": "2026-05-05T05:20:45.785Z",
+        "regions_count": 2,
+        "duration_ms": 11859
+      },
+      "aws": {
+        "retrieved_at": "2026-05-05T05:20:55.977Z",
+        "regions_count": 2,
+        "duration_ms": 10827
+      },
+      "azure": {
+        "retrieved_at": "2026-05-05T05:20:56.854Z",
+        "regions_count": 2,
+        "duration_ms": 590
+      }
+    },
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": null
+  }
+]
