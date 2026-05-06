@@ -3508,5 +3508,131 @@
     "source_refs": [
       "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
     ]
+  },
+  "cockroachdb-self-hosted:aws:xs:noha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-06T05:55:45.688Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a three-node cluster suitable for up to 1 TB of replicated OLTP data. The primary cost driver is compute, accounting for over 75% of the total monthly cost. This configuration does not include high availability, meaning a single node failure will impact service.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "apache-kafka-confluent-platform:gcp:xs:noha:us-central1": {
+    "key": "apache-kafka-confluent-platform:gcp:xs:noha:us-central1",
+    "generated_at": "2026-05-06T05:55:48.835Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Confluent Platform deployment supports up to 50 MB/s ingress with short retention windows, suitable for departmental use cases. The primary cost driver is compute, specifically the three n2-standard-16 instances, which account for the majority of the $0.42 monthly cost. A key tradeoff at this scale is the disabled high availability, meaning the architecture is not resilient to single-node failures.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "cockroachdb-self-hosted:azure:m:noha:westus3": {
+    "key": "cockroachdb-self-hosted:azure:m:noha:westus3",
+    "generated_at": "2026-05-06T05:55:49.004Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This five-node CockroachDB cluster is sized for 1 to 5 TB of replicated OLTP data, with each node providing 8 vCPU and 32 GB RAM. Compute instances are the dominant cost driver, accounting for over 70% of the $2000 monthly total. The use of 1 TB SSDs per node provides ample storage capacity, but disabling high availability means this configuration is not resilient to zone or region failures.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "confluence-data-center:aws:l:noha:us-east-1": {
+    "key": "confluence-data-center:aws:l:noha:us-east-1",
+    "generated_at": "2026-05-06T05:55:59.349Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Confluence Data Center deployment, handling up to 10 million content items or 700,000 HTTP calls per hour. The primary cost driver for this on-demand, non-HA configuration is compute, accounting for the entire $1121.28 monthly cost. A key consideration for this tier is the absence of high availability, meaning a single instance failure will result in downtime for the entire Confluence application.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "gitlab:aws:l:ha:us-east-1": {
+    "key": "gitlab:aws:l:ha:us-east-1",
+    "generated_at": "2026-05-06T05:56:30.450Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 5,000 to 10,000 users with high availability enabled on AWS. Compute instances are the dominant cost driver, accounting for over 80% of the monthly expenditure at $5045.76. A key consideration for this scale is the distribution of resources across 15 instances, including 7 instances with 16 vCPU and 64 GB RAM, which balances performance with the operational overhead of managing multiple components.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "influxdb-enterprise:aws:m:ha:us-east-1": {
+    "key": "influxdb-enterprise:aws:m:ha:us-east-1",
+    "generated_at": "2026-05-06T05:56:34.980Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports InfluxDB Enterprise for medium-scale workloads, handling up to 400,000 writes per second and 5 million series with high availability enabled. Compute instances are the primary cost driver, accounting for 67% of the monthly expenditure. The architecture dedicates 75% of instances to data nodes, each with 2 TB of storage, reflecting the data-intensive nature of this tier.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "influxdb-enterprise:aws:xs:ha:us-east-1": {
+    "key": "influxdb-enterprise:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-06T05:56:35.269Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports InfluxDB Enterprise for workloads up to 100,000 writes per second and under 1 million series, with high availability enabled. Compute instances are the primary cost driver, accounting for 74% of the total monthly cost. The architecture uses three smaller instances for meta nodes and two larger instances for data nodes, balancing metadata management with data storage and query processing. The 1TB of SSD storage on data nodes is provisioned to handle the expected data volume for this workload size.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "influxdb-enterprise:azure:m:noha:westus3": {
+    "key": "influxdb-enterprise:azure:m:noha:westus3",
+    "generated_at": "2026-05-06T05:56:44.707Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Azure deployment supports InfluxDB Enterprise at a medium scale, handling up to 400,000 writes per second and 5 million series with high availability disabled. The primary cost driver is compute, accounting for 58% of the total monthly cost at $1331.52. The architecture balances compute and storage, with 3 smaller D2s_v5 instances for meta nodes and 4 larger D8s_v5 instances providing substantial storage (8 TB total) for data nodes.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "kong-gateway:azure:xl:ha:westus3": {
+    "key": "kong-gateway:azure:xl:ha:westus3",
+    "generated_at": "2026-05-06T05:57:03.432Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large tier supports Kong Gateway deployments with 10,000 to 50,000+ configured entities in a central production gateway cluster. Compute instances are the dominant cost driver, accounting for over 90% of the total monthly cost at $2382.72. The architecture provisions 10 VMs in total, with 8 of these being D8s_v5 instances, indicating a focus on high availability and processing capacity for large-scale deployments.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "opensearch:aws:m:ha:us-east-1": {
+    "key": "opensearch:aws:m:ha:us-east-1",
+    "generated_at": "2026-05-06T05:57:31.743Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This OpenSearch sizing supports a medium-scale deployment with 100 GB to 1 TB of hot data, utilizing dedicated cluster managers for stability. The primary cost driver is compute, accounting for over 75% of the total monthly expenditure. A key consideration is balancing the cost of dedicated cluster managers (m6i.large instances) against their role in maintaining cluster health and preventing resource contention with data nodes.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
+  },
+  "redis-enterprise:aws:s:noha:us-east-1": {
+    "key": "redis-enterprise:aws:s:noha:us-east-1",
+    "generated_at": "2026-05-06T05:57:33.062Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This configuration supports a Redis Enterprise working set of 50 to 200 GB on AWS us-east-1 without high availability. Compute instances are the primary cost driver, accounting for 89% of the $551 monthly total. The absence of high availability significantly reduces infrastructure complexity and cost, but introduces a single point of failure for the Redis deployment.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "teleport:aws:xs:ha:us-east-1": {
+    "key": "teleport:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-06T05:58:11.732Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small tier provides a highly available Teleport control plane suitable for smaller estates, utilizing a total of 30 vCPUs and 72 GB RAM across eight instances. Compute instances represent the dominant cost driver, accounting for over 90% of the monthly expenditure at $1121.28. The architecture prioritizes high availability with multiple instances, which increases compute costs compared to a single-instance deployment.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "victoria-metrics:aws:xs:ha:us-east-1": {
+    "key": "victoria-metrics:aws:xs:ha:us-east-1",
+    "generated_at": "2026-05-06T05:58:13.771Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small VictoriaMetrics deployment supports ingestion rates below 1 million samples per second using a single-node architecture. The primary cost driver is compute, accounting for 65% of the total monthly cost. This configuration provides high availability through redundant compute instances, but storage is not replicated, presenting a single point of failure for data durability.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "victoria-metrics:aws:xl:noha:us-east-1": {
+    "key": "victoria-metrics:aws:xl:noha:us-east-1",
+    "generated_at": "2026-05-06T05:58:19.333Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large VictoriaMetrics cluster is designed for demanding workloads requiring longer data retention, extensive query fan-out, or multi-tenant metric estates. Compute is the primary cost driver, accounting for 70% of the total monthly expenditure. The architecture prioritizes high-performance storage with 4 TB of SSD across the cluster, which contributes significantly to the remaining cost. This configuration provides substantial resources for large-scale metrics ingestion and querying, but lacks high availability.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }
