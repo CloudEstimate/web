@@ -30,6 +30,22 @@ async function writePng(filename, size, logoDataUri) {
   await fs.writeFile(path.join(publicDir, filename), png);
 }
 
+const ogWidth = 1200;
+const ogHeight = 630;
+const ogSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${ogWidth}" height="${ogHeight}" viewBox="0 0 ${ogWidth} ${ogHeight}">
+  <rect width="${ogWidth}" height="${ogHeight}" fill="#f9f9fb" />
+  <rect x="40" y="40" width="${ogWidth - 80}" height="${ogHeight - 80}" rx="24" fill="#f2f1f5" stroke="#cec9da" stroke-width="2" />
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif" fill="#1f2030">
+    <text x="92" y="128" font-size="42" font-weight="600">CloudEstimate</text>
+    <text x="92" y="258" font-size="64" font-weight="600">Size self-managed workloads across</text>
+    <text x="92" y="338" font-size="64" font-weight="600">Google Cloud, AWS, and Azure.</text>
+    <text x="92" y="410" font-size="34" fill="#52566a">Reference-architecture-based sizing and</text>
+    <text x="92" y="458" font-size="34" fill="#52566a">monthly cost estimates.</text>
+    <text x="${ogWidth - 92}" y="${ogHeight - 92}" text-anchor="end" font-size="24" fill="#676b80">CloudEstimate</text>
+  </g>
+</svg>`;
+
 await ensureDir();
 const logo = await fs.readFile(logoPath);
 const logoDataUri = `data:image/png;base64,${logo.toString("base64")}`;
@@ -37,4 +53,10 @@ await writePng("favicon-16x16.png", 16, logoDataUri);
 await writePng("favicon-32x32.png", 32, logoDataUri);
 await fs.writeFile(path.join(publicDir, "favicon.svg"), renderSvg(32, logoDataUri));
 
-console.log("Generated favicon assets.");
+await fs.writeFile(path.join(publicDir, "og.svg"), ogSvg);
+const ogPng = new Resvg(ogSvg, {
+  fitTo: { mode: "width", value: ogWidth }
+}).render().asPng();
+await fs.writeFile(path.join(publicDir, "og.png"), ogPng);
+
+console.log("Generated favicon and OG assets.");
