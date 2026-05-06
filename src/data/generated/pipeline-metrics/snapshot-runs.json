@@ -130,5 +130,30 @@
     "validation_failures": 164,
     "llm_total_token_count": 299566,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-05-06T23:30:42.720Z",
+    "completed_at": "2026-05-06T23:30:44.608Z",
+    "duration_ms": 1888,
+    "conclusion": "failure",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": null,
+    "pricing": {},
+    "providers": {},
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": "Google Cloud Billing request failed: 403 Forbidden. {\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Cloud Billing API has not been used in project shared-ai-services before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\n    \"status\": \"PERMISSION_DENIED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"SERVICE_DISABLED\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"containerInfo\": \"shared-ai-services\",\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services\",\n          \"serviceTitle\": \"Cloud Billing API\",\n          \"service\": \"cloudbilling.googleapis.com\",\n          \"consumer\": \"projects/shared-ai-services\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        \"message\": \"Cloud Billing API has not been used in project shared-ai-services before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Google developers console API activation\",\n            \"url\": \"https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services\"\n          }\n        ]\n      }\n    ]\n  }\n}\n"
   }
 ]

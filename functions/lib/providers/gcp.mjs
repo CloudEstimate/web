@@ -180,5 +180,5 @@ function getSkuUnitPrice(sku) {
   }
 
   const raw = Number(tier.unitPrice.units ?? 0) + Number(tier.unitPrice.nanos ?? 0) / 1e9;
-  return expression?.baseUnitConversionFactor ? raw / expression.baseUnitConversionFactor : raw;
+  return raw;
 }
