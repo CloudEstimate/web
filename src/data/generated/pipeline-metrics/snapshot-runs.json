@@ -64,5 +64,50 @@
     "validation_failures": 197,
     "llm_total_token_count": 347616,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "25418376381",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "75cca86ff1dad2424a073705f026c2399c98512f",
+    "started_at": "2026-05-06T05:35:27.427Z",
+    "completed_at": "2026-05-06T05:35:49.246Z",
+    "duration_ms": 21819,
+    "conclusion": "success",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": "2026-05-06T05:35:27.428Z",
+    "pricing": {
+      "gcp": "2026-05-06T05:35:38.243Z",
+      "aws": "2026-05-06T05:35:47.725Z",
+      "azure": "2026-05-06T05:35:48.491Z"
+    },
+    "providers": {
+      "gcp": {
+        "retrieved_at": "2026-05-06T05:35:38.243Z",
+        "regions_count": 2,
+        "duration_ms": 11049
+      },
+      "aws": {
+        "retrieved_at": "2026-05-06T05:35:47.725Z",
+        "regions_count": 2,
+        "duration_ms": 10014
+      },
+      "azure": {
+        "retrieved_at": "2026-05-06T05:35:48.491Z",
+        "regions_count": 2,
+        "duration_ms": 754
+      }
+    },
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": null
   }
 ]
