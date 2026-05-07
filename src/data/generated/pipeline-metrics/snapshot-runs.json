@@ -155,5 +155,26 @@
     ],
     "llm_total_token_count": 0,
     "error_message": "Google Cloud Billing request failed: 403 Forbidden. {\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"Cloud Billing API has not been used in project shared-ai-services before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\",\n    \"status\": \"PERMISSION_DENIED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.ErrorInfo\",\n        \"reason\": \"SERVICE_DISABLED\",\n        \"domain\": \"googleapis.com\",\n        \"metadata\": {\n          \"containerInfo\": \"shared-ai-services\",\n          \"activationUrl\": \"https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services\",\n          \"serviceTitle\": \"Cloud Billing API\",\n          \"service\": \"cloudbilling.googleapis.com\",\n          \"consumer\": \"projects/shared-ai-services\"\n        }\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.LocalizedMessage\",\n        \"locale\": \"en-US\",\n        \"message\": \"Cloud Billing API has not been used in project shared-ai-services before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.\"\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Google developers console API activation\",\n            \"url\": \"https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=shared-ai-services\"\n          }\n        ]\n      }\n    ]\n  }\n}\n"
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 3 * * *",
+    "event_name": "schedule",
+    "run_id": "25478926449",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "ce7dfa1244ab83d3c5b6c1f3943139ca1d38a0ba",
+    "started_at": "2026-05-07T06:08:16.251Z",
+    "completed_at": "2026-05-07T06:10:10.607Z",
+    "duration_ms": 114356,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 48,
+    "attempted": 164,
+    "skipped_existing": 748,
+    "validation_failures": 116,
+    "llm_total_token_count": 237547,
+    "error_message": null
   }
 ]

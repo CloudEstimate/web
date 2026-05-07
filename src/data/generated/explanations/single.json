@@ -3634,5 +3634,104 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "gitlab:gcp:xs:ha:us-central1": {
+    "key": "gitlab:gcp:xs:ha:us-central1",
+    "generated_at": "2026-05-07T06:08:46.296Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small GitLab deployment supports up to 500 users with high availability enabled. Compute instances, totaling 22 vCPUs and 80 GB RAM across seven machines, are the primary cost driver at $508 monthly. The architecture prioritizes resilience with multiple instances, which contributes to the higher compute and storage costs compared to a single-node setup. The storage costs of $159 per month are driven by 900 GB of SSD and 300 GB of object storage.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:gcp:m:ha:us-central1": {
+    "key": "gitlab:gcp:m:ha:us-central1",
+    "generated_at": "2026-05-07T06:08:46.679Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 2,000 to 5,000 users with high availability enabled. Compute and storage are the dominant cost drivers, accounting for 66% and 33% of the total monthly cost, respectively. The architecture utilizes a mix of N2-series machines, with the largest instances providing 16 vCPUs and 64 GB RAM, balancing performance for core services with the cost of persistent storage across multiple components. The high number of individual components, including 11 virtual machines, contributes to both the high availability and the overall cost.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "jfrog-artifactory:gcp:xs:ha:us-central1": {
+    "key": "jfrog-artifactory:gcp:xs:ha:us-central1",
+    "generated_at": "2026-05-07T06:08:58.690Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"Extra Small\" Artifactory deployment on Google Cloud supports up to 6,000 requests per minute with high availability enabled. Compute instances, totaling 38 vCPUs and 144 GB RAM across six machines, are the dominant cost driver at $877 monthly. The architecture provisions multiple n2-standard-8 instances for redundancy and performance, while also including smaller n2-standard-2 and n2-standard-4 instances for specific roles, balancing resource allocation with cost. The 500 GB SSD storage for two instances contributes $170 to the monthly total.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "jfrog-artifactory:gcp:s:ha:us-central1": {
+    "key": "jfrog-artifactory:gcp:s:ha:us-central1",
+    "generated_at": "2026-05-07T06:09:08.012Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This \"Small\" tier configuration supports up to 50,000 requests per minute for JFrog Artifactory, leveraging a total of 54 vCPUs and 174 GB RAM across seven instances for high availability. Compute instances are the dominant cost driver at $1338.41 monthly, representing 88% of the total. The architecture prioritizes dedicated resources for different Artifactory functions, with two n2-standard-16 instances providing 32 vCPUs and 128 GB RAM for core services, balancing performance with cost for this request volume.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "keycloak:aws:xs:noha:us-east-1": {
+    "key": "keycloak:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-07T06:09:13.523Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Keycloak deployment supports up to 25 peak logins per second using two m6i.large instances, one for Keycloak and one for the database. Compute instances are the primary cost driver, accounting for 90% of the total monthly cost. This configuration lacks high availability, meaning a single instance failure will result in downtime for the Keycloak service or its database.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "kong-gateway:azure:xs:noha:westus3": {
+    "key": "kong-gateway:azure:xs:noha:westus3",
+    "generated_at": "2026-05-07T06:09:17.011Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small sizing supports Kong Gateway deployments with fewer than 1,000 configured entities and under 2,500 requests per second. Compute instances, specifically the two Standard_D2s_v5 VMs, are the dominant cost driver at $140.16 monthly. The architecture provisions two VMs with differing RAM and storage (4GB/50GB and 8GB/100GB) despite disabled high availability, suggesting a potential for future HA enablement or distinct workload separation.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:gcp:m:ha:us-central1": {
+    "key": "kong-gateway:gcp:m:ha:us-central1",
+    "generated_at": "2026-05-07T06:09:17.872Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Kong Gateway deployment, handling up to 10,000 configured entities and 10,000 requests per second with high availability. Compute instances are the dominant cost driver, accounting for over 78% of the monthly expenditure at $507.66. The architecture provisions a mix of N2-standard instances, with 4 vCPU instances being common, and two instances allocated 16 GB RAM and 200 GB SSD for specific roles, indicating a need for increased memory or storage for those components.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "nexus-repository:gcp:m:ha:us-central1": {
+    "key": "nexus-repository:gcp:m:ha:us-central1",
+    "generated_at": "2026-05-07T06:09:24.967Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium-tier Sonatype Nexus Repository deployment, handling up to 900 requests per second with high availability enabled. Compute instances, specifically the three n2-standard-8 nodes and two n2-standard-16 nodes, are the dominant cost driver, accounting for over 80% of the monthly expenditure. The architecture dedicates significant compute resources to ensure performance and redundancy, with storage costs being a smaller, but still notable, factor at $255 per month.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "teleport:azure:xl:noha:westus3": {
+    "key": "teleport:azure:xl:noha:westus3",
+    "generated_at": "2026-05-07T06:09:47.122Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Large Teleport deployment on Azure supports 10,000 to 50,000 SSH nodes, utilizing a mix of D8s_v5, D4s_v5, and D2s_v5 instances for its various components. Compute is the dominant cost driver, accounting for over 93% of the $1123.20 monthly total. The architecture prioritizes scale for large access estates over high availability, as indicated by the disabled HA configuration, which reduces complexity and cost.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "victoria-metrics:gcp:m:ha:us-central1": {
+    "key": "victoria-metrics:gcp:m:ha:us-central1",
+    "generated_at": "2026-05-07T06:09:48.908Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This VictoriaMetrics \"minimal-cluster\" Medium tier is designed for higher-ingest workloads or scenarios requiring independent scaling of insert, query, and storage paths. Storage is the dominant cost driver, accounting for 51% of the total monthly cost at $731. The architecture provisions 4TB of SSD storage across two n2-standard-8 instances, indicating a design choice to prioritize high I/O performance and capacity for metric storage. This setup allows for scaling compute resources independently from storage, offering flexibility for evolving performance needs.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "yugabytedb-self-hosted:aws:m:ha:us-east-1": {
+    "key": "yugabytedb-self-hosted:aws:m:ha:us-east-1",
+    "generated_at": "2026-05-07T06:10:04.516Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This six-node YugabyteDB cluster, with three nodes in each of two availability zones, provides high availability and is suitable for mainstream distributed OLTP workloads. The primary cost driver is compute, accounting for over 75% of the total monthly cost at $3363.84. Each node is provisioned with 16 vCPU, 64 GB RAM, and 2000 GB SSD, balancing compute and storage for performance and data redundancy with a replication factor of 3.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
   }
 }
