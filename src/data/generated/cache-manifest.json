@@ -1,6 +1,6 @@
 {
-  "source": "github-actions-pricing-cron",
-  "generated_at": "2026-05-08T04:58:18.629Z",
+  "source": "github-actions-explanations-cron",
+  "generated_at": "2026-05-08T05:30:10.368Z",
   "pricing": {
     "gcp": "2026-05-08T04:58:27.480Z",
     "aws": "2026-05-08T04:58:36.962Z",

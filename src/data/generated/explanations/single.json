@@ -3733,5 +3733,68 @@
     "source_refs": [
       "https://docs.yugabyte.com/stable/deploy/checklist/"
     ]
+  },
+  "edb-postgres-advanced-server:azure:m:noha:westus3": {
+    "key": "edb-postgres-advanced-server:azure:m:noha:westus3",
+    "generated_at": "2026-05-08T05:29:00.839Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a single EDB Postgres Advanced Server instance on a D8s_v5 VM, suitable for a 250 GB to 1 TB OLTP database with mixed read/write patterns, plus two smaller D2s_v5 VMs for management or utility functions. Compute is the dominant cost driver, accounting for 76% of the monthly on-demand expenditure. A key consideration is the absence of high availability, meaning this configuration is not resilient to single-instance failures.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "gitlab:aws:xs:noha:us-east-1": {
+    "key": "gitlab:aws:xs:noha:us-east-1",
+    "generated_at": "2026-05-08T05:29:02.530Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small GitLab Self-Managed deployment supports up to 500 users on AWS, utilizing a total of 12 vCPUs and 48 GB RAM across four instances. Compute instances represent the dominant cost driver, accounting for over 90% of the monthly expenditure at $420.48. This configuration prioritizes cost efficiency for smaller user bases by disabling high availability, which introduces a single point of failure.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "gitlab:azure:l:ha:westus3": {
+    "key": "gitlab:azure:l:ha:westus3",
+    "generated_at": "2026-05-08T05:29:13.218Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a GitLab Self-Managed instance for 5,000 to 10,000 users with high availability enabled on Azure. Compute instances are the primary cost driver, accounting for over 75% of the total monthly expenditure. The architecture provisions a mix of 15 compute instances, with the largest being 16 vCPU and 64 GB RAM, alongside significant SSD and object storage to handle the demands of a large user base. The on-demand commitment term provides flexibility but results in higher monthly costs compared to reserved instances.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "kong-gateway:gcp:xs:ha:us-central1": {
+    "key": "kong-gateway:gcp:xs:ha:us-central1",
+    "generated_at": "2026-05-08T05:29:25.563Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This Extra Small Kong Gateway configuration supports under 1,000 configured entities and up to 2,500 requests per second. Compute instances are the primary cost driver, accounting for over 70% of the total monthly expenditure. The architecture provisions five n2-standard-2 instances, with two instances having double the RAM and storage of the others, indicating a split role or specialized requirement for those nodes. This setup prioritizes high availability and moderate throughput for a small-scale deployment.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "kong-gateway:azure:m:ha:westus3": {
+    "key": "kong-gateway:azure:m:ha:westus3",
+    "generated_at": "2026-05-08T05:29:28.949Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a medium Kong Gateway deployment, handling up to 10,000 configured entities and 10,000 requests per second with high availability enabled. The primary cost driver is compute, accounting for over 88% of the total monthly cost. The architecture utilizes a mix of D4s_v5 and D2s_v5 instances, with the D4s_v5 instances providing 4 vCPU and either 8GB or 16GB RAM, indicating a balance between processing power and memory for varying component needs.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "victoria-metrics:aws:m:noha:us-east-1": {
+    "key": "victoria-metrics:aws:m:noha:us-east-1",
+    "generated_at": "2026-05-08T05:29:53.523Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing provides a starter VictoriaMetrics cluster for higher-ingest workloads, allowing independent scaling of insert, query, and storage paths. Compute is the dominant cost driver, accounting for 74% of the total monthly cost. The architecture prioritizes dedicated resources for each path, with the largest instance allocated to storage, which also incurs a significant storage cost of $172 for 2TB of SSD. This configuration is suitable for environments where high availability is not a primary concern.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "teleport:gcp:m:ha:us-central1": {
+    "key": "teleport:gcp:m:ha:us-central1",
+    "generated_at": "2026-05-08T05:29:54.609Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a Teleport deployment managing up to 10,000 SSH nodes with high availability enabled. Compute instances are the dominant cost driver, accounting for over 80% of the monthly on-demand expenditure. The architecture distributes workloads across 8 instances, with the largest being two n2-standard-8 machines, to ensure resilience and performance at this scale. This configuration prioritizes high availability and capacity for a substantial resource estate.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
   }
 }

@@ -221,5 +221,26 @@
     ],
     "llm_total_token_count": 0,
     "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 3 * * *",
+    "event_name": "schedule",
+    "run_id": "25538644294",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "8bc6ae4abb1ca459bcbc3deb4dfbac87365c982d",
+    "started_at": "2026-05-08T05:28:39.533Z",
+    "completed_at": "2026-05-08T05:30:10.369Z",
+    "duration_ms": 90836,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 30,
+    "attempted": 116,
+    "skipped_existing": 796,
+    "validation_failures": 86,
+    "llm_total_token_count": 172144,
+    "error_message": null
   }
 ]
