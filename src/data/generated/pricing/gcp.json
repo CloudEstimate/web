@@ -1,40 +1,40 @@
 {
   "cloud": "gcp",
-  "retrieved_at": "2026-05-06T05:35:38.243Z",
+  "retrieved_at": "2026-05-08T04:58:27.480Z",
   "regions": {
     "us-central1": {
       "compute": {
         "n2-standard-2": {
-          "on_demand_hourly_usd": 0.06322,
-          "reserved_1yr_hourly_usd": 0.03983,
-          "reserved_3yr_hourly_usd": 0.02845
+          "on_demand_hourly_usd": 0.09711800000000001,
+          "reserved_1yr_hourly_usd": 0.061182,
+          "reserved_3yr_hourly_usd": 0.043706
         },
         "n2-standard-4": {
-          "on_demand_hourly_usd": 0.12644,
-          "reserved_1yr_hourly_usd": 0.07966,
-          "reserved_3yr_hourly_usd": 0.0569
+          "on_demand_hourly_usd": 0.19423600000000002,
+          "reserved_1yr_hourly_usd": 0.122364,
+          "reserved_3yr_hourly_usd": 0.087412
         },
         "n2-standard-8": {
-          "on_demand_hourly_usd": 0.25289,
-          "reserved_1yr_hourly_usd": 0.15932,
-          "reserved_3yr_hourly_usd": 0.1138
+          "on_demand_hourly_usd": 0.38847200000000004,
+          "reserved_1yr_hourly_usd": 0.244728,
+          "reserved_3yr_hourly_usd": 0.174824
         },
         "n2-standard-16": {
-          "on_demand_hourly_usd": 0.50578,
-          "reserved_1yr_hourly_usd": 0.31864,
-          "reserved_3yr_hourly_usd": 0.2276
+          "on_demand_hourly_usd": 0.7769440000000001,
+          "reserved_1yr_hourly_usd": 0.489456,
+          "reserved_3yr_hourly_usd": 0.349648
         },
         "n2-standard-32": {
-          "on_demand_hourly_usd": 1.01155,
-          "reserved_1yr_hourly_usd": 0.63728,
-          "reserved_3yr_hourly_usd": 0.4552
+          "on_demand_hourly_usd": 1.5538880000000002,
+          "reserved_1yr_hourly_usd": 0.978912,
+          "reserved_3yr_hourly_usd": 0.699296
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 0.17,
-        "hdd_gb_month_usd": 0.04,
-        "nvme_gb_month_usd": 0.04,
-        "object_gb_month_usd": 0.02
+        "ssd_gb_month_usd": 0.34,
+        "hdd_gb_month_usd": 0.125,
+        "nvme_gb_month_usd": 0.08,
+        "object_gb_month_usd": 0.022
       },
       "other": {
         "load_balancer_monthly_usd": 18
@@ -43,36 +43,36 @@
     "us-east1": {
       "compute": {
         "n2-standard-2": {
-          "on_demand_hourly_usd": 0.06322,
-          "reserved_1yr_hourly_usd": 0.03983,
-          "reserved_3yr_hourly_usd": 0.02845
+          "on_demand_hourly_usd": 0.09711800000000001,
+          "reserved_1yr_hourly_usd": 0.061182,
+          "reserved_3yr_hourly_usd": 0.043706
         },
         "n2-standard-4": {
-          "on_demand_hourly_usd": 0.12644,
-          "reserved_1yr_hourly_usd": 0.07966,
-          "reserved_3yr_hourly_usd": 0.0569
+          "on_demand_hourly_usd": 0.19423600000000002,
+          "reserved_1yr_hourly_usd": 0.122364,
+          "reserved_3yr_hourly_usd": 0.087412
         },
         "n2-standard-8": {
-          "on_demand_hourly_usd": 0.25289,
-          "reserved_1yr_hourly_usd": 0.15932,
-          "reserved_3yr_hourly_usd": 0.1138
+          "on_demand_hourly_usd": 0.38847200000000004,
+          "reserved_1yr_hourly_usd": 0.244728,
+          "reserved_3yr_hourly_usd": 0.174824
         },
         "n2-standard-16": {
-          "on_demand_hourly_usd": 0.50578,
-          "reserved_1yr_hourly_usd": 0.31864,
-          "reserved_3yr_hourly_usd": 0.2276
+          "on_demand_hourly_usd": 0.7769440000000001,
+          "reserved_1yr_hourly_usd": 0.489456,
+          "reserved_3yr_hourly_usd": 0.349648
         },
         "n2-standard-32": {
-          "on_demand_hourly_usd": 1.01155,
-          "reserved_1yr_hourly_usd": 0.63728,
-          "reserved_3yr_hourly_usd": 0.4552
+          "on_demand_hourly_usd": 1.5538880000000002,
+          "reserved_1yr_hourly_usd": 0.978912,
+          "reserved_3yr_hourly_usd": 0.699296
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 0.17,
-        "hdd_gb_month_usd": 0.04,
-        "nvme_gb_month_usd": 0.045,
-        "object_gb_month_usd": 0.02
+        "ssd_gb_month_usd": 0.34,
+        "hdd_gb_month_usd": 0.125,
+        "nvme_gb_month_usd": 0.09,
+        "object_gb_month_usd": 0.022
       },
       "other": {
         "load_balancer_monthly_usd": 18
