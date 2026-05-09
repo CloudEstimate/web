@@ -3697,5 +3697,104 @@
     "source_refs": [
       "https://docs.yugabyte.com/stable/deploy/checklist/"
     ]
+  },
+  "cockroachdb-self-hosted:m:noha:1yr": {
+    "key": "cockroachdb-self-hosted:m:noha:1yr",
+    "generated_at": "2026-05-09T05:47:16.436Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option for this CockroachDB configuration at $1327 per month, nearly half the cost of Google Cloud's $2593. This difference is primarily driven by Google Cloud's higher sustained use and committed use pricing for the instance types required. Without considering specific instance families or regional variations, the current pricing models show AWS and Azure as significantly more competitive for a 1-year commitment.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "apache-kafka-confluent-platform:m:ha:3yr": {
+    "key": "apache-kafka-confluent-platform:m:ha:3yr",
+    "generated_at": "2026-05-09T05:47:16.678Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS offers the lowest monthly cost at $2907.52, making it 7% cheaper than Azure and 54% cheaper than Google Cloud. This significant difference is primarily driven by Google Cloud's higher sustained use and committed use pricing for the underlying machine families. While AWS and Azure utilize 3-year reservation pricing, Google Cloud's pricing structure for this workload makes it a more expensive option.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "couchbase-server-enterprise:m:noha:1yr": {
+    "key": "couchbase-server-enterprise:m:noha:1yr",
+    "generated_at": "2026-05-09T05:47:29.261Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option for this Couchbase configuration at $1528.61/month, costing about $90 less than Azure and $1300 less than Google Cloud. The primary cost driver is each cloud's reserved instance or committed use discount structure. While AWS's no-upfront reserved rates offer significant savings, Google Cloud's pricing can vary substantially based on machine family and regional sustained use discounts, which are not fully leveraged here.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "consul:xs:noha:3yr": {
+    "key": "consul:xs:noha:3yr",
+    "generated_at": "2026-05-09T05:47:33.221Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "Azure is the most cost-effective option at $98/month, offering a 33% savings compared to Google Cloud's $147/month. This difference is primarily driven by Azure's reservation pricing, which is more aggressive than AWS's no-upfront reserved rates or Google Cloud's sustained use discounts for this workload. However, enabling high availability, which is disabled in this configuration, would significantly alter the cost landscape due to increased resource requirements across all clouds.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "couchbase-server-enterprise:xl:ha:3yr": {
+    "key": "couchbase-server-enterprise:xl:ha:3yr",
+    "generated_at": "2026-05-09T05:47:35.002Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option for this Extra Large Couchbase deployment, at $2499.09/month, making it roughly 20% cheaper than Azure and 60% cheaper than Google Cloud. This significant difference is primarily driven by AWS's no-upfront reserved instance pricing for Linux shared tenancy. While Google Cloud offers sustained use and committed use discounts, their impact varies by machine family and region, and for this workload, they do not bring costs in line with AWS or Azure.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "couchbase-server-enterprise:m:ha:1yr": {
+    "key": "couchbase-server-enterprise:m:ha:1yr",
+    "generated_at": "2026-05-09T05:47:35.324Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option at $1528.61/month, costing about 46% less than Google Cloud and 5% less than Azure. This difference is primarily driven by AWS's no-upfront reserved instance pricing model, which offers significant savings compared to Google Cloud's sustained use discounts. However, the specific machine family and region chosen on Google Cloud can significantly alter the impact of its sustained use and committed use discounts.",
+    "source_refs": [
+      "https://docs.couchbase.com/server/current/install/sizing-general.html"
+    ]
+  },
+  "gitlab:xl:noha:on-demand": {
+    "key": "gitlab:xl:noha:on-demand",
+    "generated_at": "2026-05-09T05:47:36.130Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option at $8,089/month, offering a 12% savings over Azure and a 45% savings over Google Cloud. This significant difference is primarily driven by AWS's reserved instance pricing, which is applied here as a no-upfront reservation. While on-demand pricing is requested, the underlying model for this comparison uses reservation terms, which can significantly alter the cost landscape.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "influxdb-enterprise:xs:noha:1yr": {
+    "key": "influxdb-enterprise:xs:noha:1yr",
+    "generated_at": "2026-05-09T05:47:40.286Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS is the most cost-effective option at $496.50/month, offering a 9% savings over Azure and a 52% savings over Google Cloud. This difference is primarily driven by AWS's no-upfront reserved rates for Linux shared tenancy, which are more aggressive than Google Cloud's sustained use discounts or Azure's retail reservation terms. However, Google Cloud's pricing can vary significantly by machine family and region, potentially altering this cost comparison for different instance types or locations.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "keycloak:xl:ha:3yr": {
+    "key": "keycloak:xl:ha:3yr",
+    "generated_at": "2026-05-09T05:47:47.552Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "Azure is the most cost-effective option for this Keycloak Extra Large deployment, at $1089/month, making it 5% cheaper than AWS and 36% cheaper than Google Cloud. This cost difference is primarily driven by each cloud's distinct 3-year commitment pricing for compute resources. While Azure and AWS offer competitive reservation pricing, Google Cloud's sustained use discounts are less aggressive for this workload. A shift to a 1-year commitment or on-demand pricing would alter these relative costs.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "redpanda:xl:ha:3yr": {
+    "key": "redpanda:xl:ha:3yr",
+    "generated_at": "2026-05-09T05:48:07.551Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "Azure offers the lowest monthly cost at $3205.53 for this Redpanda Extra Large cluster, making it 7% cheaper than Google Cloud and 29% cheaper than AWS. This cost difference is primarily driven by Azure's reservation pricing, which is more aggressive than AWS's no-upfront reserved rates and Google Cloud's sustained/committed use discounts for this specific configuration. However, the exact commitment terms and regional pricing variations for compute and storage can shift this calculus.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
+  },
+  "victoria-metrics:m:ha:on-demand": {
+    "key": "victoria-metrics:m:ha:on-demand",
+    "generated_at": "2026-05-09T05:48:14.134Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "AWS offers the lowest monthly cost at $1411, saving over $170 compared to Azure and more than $1100 compared to Google Cloud. This cost difference is primarily driven by Google Cloud's on-demand pricing for this configuration, which does not include sustained use discounts for the selected machine family. While AWS's reserved instance pricing is modeled, a shift to on-demand pricing across all clouds would likely increase costs, especially on AWS and Azure, narrowing the gap with Google Cloud's sustained use discounts.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }

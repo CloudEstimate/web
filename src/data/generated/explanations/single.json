@@ -3796,5 +3796,14 @@
     "source_refs": [
       "https://goteleport.com/docs/reference/deployment/scaling/"
     ]
+  },
+  "nexus-repository:gcp:l:ha:us-central1": {
+    "key": "nexus-repository:gcp:l:ha:us-central1",
+    "generated_at": "2026-05-09T05:47:54.903Z",
+    "model": "gemini-2.5-flash",
+    "explanation": "This sizing supports a large Sonatype Nexus Repository deployment, handling up to 2,500 requests per second with high availability. The primary cost driver is compute, accounting for over 90% of the monthly expenditure at $5742.59. The architecture utilizes a mix of 32 vCPU and 16 vCPU instances, with 3 instances dedicated to 500 GB SSD storage, indicating a balance between processing power and I/O performance for this high-throughput tier.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
   }
 }
