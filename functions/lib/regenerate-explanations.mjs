@@ -13,7 +13,7 @@ export async function regenerateExplanationCaches() {
     project: requireProjectId(),
     location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
   });
-  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-pro";
+  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-pro";
   const bucket = getCacheBucket();
   const pricingByCloud = await loadLatestPricing(bucket);
   const singleAggregate = {};

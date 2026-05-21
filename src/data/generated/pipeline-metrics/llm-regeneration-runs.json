@@ -12,7 +12,7 @@
     "completed_at": "2026-05-05T05:44:09.320Z",
     "duration_ms": 182002,
     "conclusion": "success",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "options": {
       "maxNewExplanations": 0,
       "timeBudgetMs": 3900000,
@@ -58,7 +58,7 @@
     "completed_at": "2026-05-06T05:58:44.083Z",
     "duration_ms": 179903,
     "conclusion": "success",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "options": {
       "maxNewExplanations": 0,
       "timeBudgetMs": 3900000,
@@ -104,7 +104,7 @@
     "completed_at": "2026-05-07T06:10:10.607Z",
     "duration_ms": 114356,
     "conclusion": "success",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "options": {
       "maxNewExplanations": 0,
       "timeBudgetMs": 3900000,
@@ -150,7 +150,7 @@
     "completed_at": "2026-05-08T05:30:10.369Z",
     "duration_ms": 90836,
     "conclusion": "success",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "options": {
       "maxNewExplanations": 0,
       "timeBudgetMs": 3900000,
@@ -196,7 +196,7 @@
     "completed_at": "2026-05-09T05:48:27.152Z",
     "duration_ms": 72465,
     "conclusion": "success",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-3.5-flash",
     "options": {
       "maxNewExplanations": 0,
       "timeBudgetMs": 3900000,

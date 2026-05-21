@@ -83,7 +83,7 @@ Pricing and explanation caches are refreshed in GitHub Actions and committed int
 
 The pricing workflow calls the Google Cloud Billing Catalog API first, then public AWS and Azure pricing APIs. The Google Cloud project used by `GCP_SA_KEY` / `CLOUDESTIMATE_GCP_PROJECT_ID` must have `cloudbilling.googleapis.com` enabled or the snapshot fails before AWS/Azure are refreshed.
 
-The explanation workflow uses Vertex AI through `@google/genai`. The workflow default model is `gemini-2.5-flash`; override it with `CLOUDESTIMATE_VERTEX_MODEL` when needed.
+The explanation workflow uses Vertex AI through `@google/genai`. The workflow default model is `gemini-3.5-flash`; override it with `CLOUDESTIMATE_VERTEX_MODEL` when needed.
 
 Manual local equivalents:
 
@@ -102,7 +102,7 @@ Required repository variables:
 Optional repository variables:
 
 - `CLOUDESTIMATE_GCP_LOCATION` (defaults to `global`)
-- `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-2.5-flash` in the GitHub Actions workflow)
+- `CLOUDESTIMATE_VERTEX_MODEL` (defaults to `gemini-3.5-flash` in the GitHub Actions workflow)
 - `CLOUDESTIMATE_EXPLANATION_LIMIT` (optional cap on new explanations per run; unset means no count cap)
 - `CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS` (defaults to `3900000`, just under 65 minutes)
 - `CLOUDESTIMATE_EXPLANATION_CONCURRENCY` (defaults to `12`)

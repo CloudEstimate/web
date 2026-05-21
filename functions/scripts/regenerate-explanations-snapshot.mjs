@@ -43,7 +43,7 @@ async function main() {
       project: requireProjectId(),
       location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
     });
-    const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-2.5-flash";
+    const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-flash";
     runMetrics.model = model;
     const pricingByCloud = await loadPricing();
     const singleAggregate = await loadAggregate("single.json");
