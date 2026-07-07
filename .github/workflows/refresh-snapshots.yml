@@ -1,20 +1,24 @@
-name: Regenerate Explanation Snapshot
+name: Refresh Pricing and Explanation Snapshots
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 2 * * *"
   workflow_dispatch:
 
 concurrency:
-  group: regenerate-explanations-main
+  group: refresh-snapshots-main
   cancel-in-progress: false
 
 jobs:
-  regenerate-explanations:
+  refresh-snapshots:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 120
+    env:
+      CLOUDESTIMATE_GCP_PROJECT_ID: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
+      GOOGLE_CLOUD_QUOTA_PROJECT: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
     permissions:
       contents: write
+      issues: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,27 +38,27 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
+      - name: Refresh pricing snapshot
+        run: npm run refresh:pricing:snapshot
       - name: Regenerate explanation snapshot
         run: npm run regenerate:explanations:snapshot
         env:
-          CLOUDESTIMATE_GCP_PROJECT_ID: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
-          GOOGLE_CLOUD_QUOTA_PROJECT: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
           CLOUDESTIMATE_GCP_LOCATION: ${{ vars.CLOUDESTIMATE_GCP_LOCATION || 'global' }}
           CLOUDESTIMATE_VERTEX_MODEL: ${{ vars.CLOUDESTIMATE_VERTEX_MODEL || 'gemini-3.5-flash' }}
           CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS: ${{ vars.CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS || '3900000' }}
-      - name: Commit explanation updates
+      - name: Commit snapshot updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/generated/explanations src/data/generated/cache-manifest.json src/data/generated/pipeline-metrics
+          git add src/data/generated/pricing src/data/generated/explanations src/data/generated/cache-manifest.json src/data/generated/pipeline-metrics
           if git diff --staged --quiet; then
-            echo "No explanation updates to commit."
+            echo "No snapshot updates to commit."
             exit 0
           fi
-          git commit -m "chore: regenerate explanations snapshot $(date -u +%Y-%m-%d)"
+          git commit -m "chore: refresh pricing and explanation snapshots $(date -u +%Y-%m-%d)"
           git pull --rebase origin main
           git push origin main
-      - name: Commit explanation failure metrics
+      - name: Commit failure metrics
         if: failure()
         run: |
           if [ ! -d src/data/generated/pipeline-metrics ]; then
@@ -68,6 +72,19 @@ jobs:
             echo "No pipeline metrics updates to commit."
             exit 0
           fi
-          git commit -m "chore: record explanation regeneration failure $(date -u +%Y-%m-%d)"
+          git commit -m "chore: record snapshot refresh failure $(date -u +%Y-%m-%d)"
           git pull --rebase origin main
           git push origin main
+      - name: File failure issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Refresh Pricing and Explanation Snapshots is failing"
+          body="Workflow run failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          existing=$(gh issue list --repo "${{ github.repository }}" --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "${{ github.repository }}" --body "$body"
+          else
+            gh issue create --repo "${{ github.repository }}" --title "$title" --body "$body"
+          fi

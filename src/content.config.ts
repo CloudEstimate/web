@@ -1,4 +1,5 @@
 import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const componentSchema = z.object({
   role: z.string(),
@@ -18,7 +19,7 @@ const sizeSchema = z.object({
 });
 
 const isvs = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.yaml", base: "./src/content/isvs" }),
   schema: z.object({
     slug: z.string().regex(/^[a-z0-9-]+$/),
     name: z.string(),

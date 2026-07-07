@@ -42,18 +42,20 @@ async function main() {
       }
     };
 
-    for (const [cloud, fetchPricing] of providers) {
-      const providerStartedAt = Date.now();
-      const payload = await fetchPricing();
-      await fs.writeFile(path.join(pricingDir, `${cloud}.json`), `${JSON.stringify(payload, null, 2)}\n`);
-      manifest.pricing[cloud] = payload.retrieved_at;
-      runRecord.providers[cloud] = {
-        retrieved_at: payload.retrieved_at,
-        regions_count: Object.keys(payload.regions ?? {}).length,
-        duration_ms: Date.now() - providerStartedAt
-      };
-      console.log(`Wrote generated pricing snapshot for ${cloud}.`);
-    }
+    await Promise.all(
+      providers.map(async ([cloud, fetchPricing]) => {
+        const providerStartedAt = Date.now();
+        const payload = await fetchPricing();
+        await fs.writeFile(path.join(pricingDir, `${cloud}.json`), `${JSON.stringify(payload, null, 2)}\n`);
+        manifest.pricing[cloud] = payload.retrieved_at;
+        runRecord.providers[cloud] = {
+          retrieved_at: payload.retrieved_at,
+          regions_count: Object.keys(payload.regions ?? {}).length,
+          duration_ms: Date.now() - providerStartedAt
+        };
+        console.log(`Wrote generated pricing snapshot for ${cloud}.`);
+      })
+    );
 
     await upsertManifest(manifest);
     finalizeSnapshotRunRecord(runRecord, {

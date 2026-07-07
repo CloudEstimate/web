@@ -19,7 +19,7 @@ const CHECKPOINT_INTERVAL = 25;
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_METRICS_ENTRIES = 400;
 const WORKFLOW_NAME = "regenerate-explanations";
-const SCHEDULED_CRON = "0 3 * * *";
+const SCHEDULED_CRON = "0 2 * * *";
 const TOKEN_USAGE_FIELDS = [
   ["promptTokenCount", "prompt_token_count"],
   ["candidatesTokenCount", "candidates_token_count"],

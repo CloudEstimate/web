@@ -69,3 +69,23 @@ jobs:
           TF_VAR_project_id: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
       - name: Deploy Hosting
         run: firebase deploy --only hosting --project ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }} --non-interactive
+
+  notify-failure:
+    needs: [validate, build-and-deploy]
+    if: always() && github.event_name != 'pull_request' && (needs.validate.result == 'failure' || needs.build-and-deploy.result == 'failure')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: File failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Build and Deploy is failing"
+          body="Workflow run failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          existing=$(gh issue list --repo "${{ github.repository }}" --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "${{ github.repository }}" --body "$body"
+          else
+            gh issue create --repo "${{ github.repository }}" --title "$title" --body "$body"
+          fi

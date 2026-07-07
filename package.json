@@ -20,6 +20,7 @@
     "validate:terraform": "node scripts/validate-terraform.mjs",
     "check:functions": "npm --prefix functions run check",
     "fetch:caches": "node scripts/fetch-caches.mjs",
+    "check:snapshot-freshness": "node scripts/check-snapshot-freshness.mjs",
     "refresh:pricing:snapshot": "node functions/scripts/refresh-pricing-snapshot.mjs",
     "regenerate:explanations:snapshot": "node functions/scripts/regenerate-explanations-snapshot.mjs",
     "generate:assets": "node scripts/generate-assets.mjs",
@@ -28,12 +29,13 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.1.6",
-    "@astrojs/tailwind": "^5.1.0",
     "@google-cloud/storage": "^7.16.0",
     "@resvg/resvg-js": "^2.6.2",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "astro": "^6.3.1",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.14",
     "tailwindcss": "^3.4.17",
     "yaml": "^2.8.0"
   },

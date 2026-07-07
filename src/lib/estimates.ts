@@ -3,7 +3,7 @@ import gcpPricing from "@/data/generated/pricing/gcp.json";
 import awsPricing from "@/data/generated/pricing/aws.json";
 import azurePricing from "@/data/generated/pricing/azure.json";
 import shapeMappingsRaw from "@/data/shape-mappings.yaml?raw";
-import { cloudMeta, cloudOrder, sizeOrder, termOrder, type CloudSlug, type CommitmentTerm, type SizeSlug } from "@/lib/site";
+import { cloudMeta, sizeOrder, termOrder, type CloudSlug, type CommitmentTerm, type SizeSlug } from "@/lib/site";
 import type { EstimateInput, EstimateResult, IsvEntry, PricingCache } from "@/lib/types";
 import { buildEstimateCore, pickDefaultRegion } from "../../shared/estimate-core.mjs";
 
@@ -100,28 +100,26 @@ export function buildEstimate(input: EstimateInput): EstimateResult {
   };
 }
 
-export function buildEstimateMatrix(isv: IsvEntry) {
+export function buildEstimateMatrix(isv: IsvEntry, cloud: CloudSlug) {
   const matrix: Record<string, EstimateResult> = {};
 
-  for (const cloud of cloudOrder) {
-    for (const size of sizeOrder) {
-      if (!isv.data.sizes[size]) {
-        continue;
-      }
+  for (const size of sizeOrder) {
+    if (!isv.data.sizes[size]) {
+      continue;
+    }
 
-      for (const ha of [false, true]) {
-        for (const term of termOrder) {
-          for (const region of getRegionsForCloud(cloud)) {
-            const key = buildStateKey({ cloud, size, ha, term, region });
-            matrix[key] = buildEstimate({
-              isv,
-              cloud,
-              size,
-              ha,
-              term,
-              region
-            });
-          }
+    for (const ha of [false, true]) {
+      for (const term of termOrder) {
+        for (const region of getRegionsForCloud(cloud)) {
+          const key = buildStateKey({ cloud, size, ha, term, region });
+          matrix[key] = buildEstimate({
+            isv,
+            cloud,
+            size,
+            ha,
+            term,
+            region
+          });
         }
       }
     }

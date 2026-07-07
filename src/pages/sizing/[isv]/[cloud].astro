@@ -31,7 +31,7 @@ const initialState = {
   term: "on-demand" as const,
   region: getDefaultRegion(cloud)
 };
-const estimateMatrix = buildEstimateMatrix(isv);
+const estimateMatrix = buildEstimateMatrix(isv, cloud);
 const initialEstimate = buildEstimate({
   isv,
   cloud,

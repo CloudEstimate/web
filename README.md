@@ -78,12 +78,14 @@ The `functions/` directory retains a `triggerRebuild` HTTP function and shared l
 
 Pricing and explanation caches are refreshed in GitHub Actions and committed into `src/data/generated/**`. The build reads those committed JSON files and `npm run build` first runs `npm run ensure:caches` so local builds have seeded fallback cache files when generated files are missing.
 
-- Daily pricing snapshot: `.github/workflows/refresh-pricing.yml`
-- Daily explanation snapshot: `.github/workflows/regenerate-explanations.yml`
+- Daily pricing and explanation snapshot: `.github/workflows/refresh-snapshots.yml` (runs the pricing refresh, then the explanation regeneration, then a single commit)
+- Daily freshness check: `.github/workflows/check-snapshot-freshness.yml` (files a GitHub issue if the committed snapshot is older than 48 hours)
 
-The pricing workflow calls the Google Cloud Billing Catalog API first, then public AWS and Azure pricing APIs. The Google Cloud project used by `GCP_SA_KEY` / `CLOUDESTIMATE_GCP_PROJECT_ID` must have `cloudbilling.googleapis.com` enabled or the snapshot fails before AWS/Azure are refreshed.
+The pricing step calls the Google Cloud Billing Catalog API first, then public AWS and Azure pricing APIs. The Google Cloud project used by `GCP_SA_KEY` / `CLOUDESTIMATE_GCP_PROJECT_ID` must have `cloudbilling.googleapis.com` enabled or the snapshot fails before AWS/Azure are refreshed.
 
-The explanation workflow uses Vertex AI through `@google/genai`. The workflow default model is `gemini-3.5-flash`; override it with `CLOUDESTIMATE_VERTEX_MODEL` when needed.
+The explanation step uses Vertex AI through `@google/genai`. The workflow default model is `gemini-3.5-flash`; override it with `CLOUDESTIMATE_VERTEX_MODEL` when needed.
+
+All three scheduled workflows file (or comment on) a GitHub issue when they fail, since a failed `npm ci`/auth step upstream of the snapshot scripts would otherwise fail silently with no other signal.
 
 Manual local equivalents:
 
