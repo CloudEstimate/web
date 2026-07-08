@@ -3805,5 +3805,104 @@
     "source_refs": [
       "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
     ]
+  },
+  "confluence-data-center:aws:m:ha:us-east-1": {
+    "key": "confluence-data-center:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-08T04:55:55.880Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment is sized to support medium-scale workloads handling up to 2.5 million content items and 350,000 hourly HTTP requests. Compute instances represent the dominant cost driver for this tier, accounting for $491 of the $507 total monthly spend. To balance performance and budget at this scale, the architecture distributes the workload across specialized node sizes, utilizing larger four-vCPU instances for the core application cluster while restricting the supporting components to smaller two-vCPU instances.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "cockroachdb-self-hosted:aws:xl:noha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:xl:noha:us-east-1",
+    "generated_at": "2026-07-08T04:55:56.450Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This seven-node configuration supports high-concurrency regional SQL workloads and manages up to 20 TB of replicated data. On-demand compute instances represent the primary cost driver at this tier, accounting for nearly 80% of the $5,044.48 monthly expenditure. Because high availability is disabled, this deployment risks data unavailability if a node failure exceeds the cluster's survival tolerance, making it critical to monitor the 14 TB of aggregate SSD storage closely.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "edb-postgres-advanced-server:aws:xs:ha:us-east-1": {
+    "key": "edb-postgres-advanced-server:aws:xs:ha:us-east-1",
+    "generated_at": "2026-07-08T04:55:57.353Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment supports light OLTP workloads up to 250 GB in database size by provisioning two primary database nodes alongside three smaller helper and witness instances. Compute resources represent the dominant cost driver at this tier, accounting for $491 of the $595 total monthly spend. To balance cost and performance at this scale, the architecture allocates 500 GB of SSD storage only to the two larger database instances, while the three smaller coordination instances run on minimal storage footprints.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "jira-data-center:aws:l:noha:us-east-1": {
+    "key": "jira-data-center:aws:l:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:13.159Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This single-node deployment supports organizations managing up to two million issues or one hundred thousand users without high availability. The primary cost driver at this tier is compute, which accounts for the entire monthly spend of $700.80 to run the application and database instances. By disabling high availability, this configuration trades redundancy for cost efficiency, relying on a single application node that introduces a single point of failure for the entire user base.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "influxdb-enterprise:aws:m:noha:us-east-1": {
+    "key": "influxdb-enterprise:aws:m:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:13.159Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This sizing tier supports workloads handling up to 400,000 writes per second and 5 million series. Compute instances represent the dominant cost driver at $1,331.52 per month, which is more than double the storage expenditure. To sustain these write rates, the architecture deploys four larger instances with 32 GB of RAM and 2,000 GB of SSD storage each, ensuring sufficient memory and disk I/O to prevent ingestion bottlenecks.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "kong-gateway:aws:xs:noha:us-east-1": {
+    "key": "kong-gateway:aws:xs:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:24.357Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-small configuration supports workloads processing fewer than 2,500 requests per second with under 1,000 configured entities. The primary cost driver at this tier is the compute infrastructure, which accounts for over 92% of the $152.16 monthly spend. Because high availability is disabled, this single-node deployment lacks redundancy, making it suitable only for non-production environments where brief service interruptions are acceptable.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
+  },
+  "mongodb-enterprise-advanced:aws:xs:ha:us-east-1": {
+    "key": "mongodb-enterprise-advanced:aws:xs:ha:us-east-1",
+    "generated_at": "2026-07-08T04:56:24.467Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This three-node replica set configuration supports operational workloads with a working set up to 250 GB while maintaining high availability in us-east-1. Compute instances represent the dominant cost driver at this tier, accounting for nearly eighty percent of the monthly spend. At this scale, the 16 GB of RAM per node requires careful monitoring because the working set can exceed the available system memory, forcing MongoDB to rely heavily on disk I/O for read operations.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "nexus-repository:aws:xs:noha:us-east-1": {
+    "key": "nexus-repository:aws:xs:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:25.139Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-small configuration supports low-throughput workloads up to 50 requests per second using a single non-high-availability instance. Compute resources represent the primary cost driver at this tier, accounting for over 80% of the $172.16 monthly spend. By deploying a single instance with local SSD storage, this architecture trades high availability for cost efficiency, meaning any instance failure will result in service downtime until the node is rescheduled.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "nexus-repository:aws:l:noha:us-east-1": {
+    "key": "nexus-repository:aws:l:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:26.278Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This single-node deployment supports high-throughput workloads up to 2,500 requests per second by provisioning 112 total vCPUs and 512 GB of RAM across the compute instances. Compute instances represent the dominant cost driver at this tier, accounting for over 97% of the $4,605.12 monthly spend. Operating at this scale without high availability lowers immediate infrastructure costs but introduces a single point of failure, meaning any instance outage will interrupt repository access for downstream build pipelines.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
+  },
+  "teleport:aws:m:ha:us-east-1": {
+    "key": "teleport:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-08T04:56:39.026Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability configuration supports up to 10,000 SSH nodes or equivalent protected resources by distributing workloads across eight specialized virtual machines. Compute instances represent the dominant cost driver at this tier, accounting for over 94% of the $1,185.28 monthly on-demand spend. To maintain system availability at this scale, the architecture trades compute efficiency for redundancy, splitting the workload across separate proxy, auth, and utility nodes to prevent a single point of failure.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
+  },
+  "teleport:aws:xs:noha:us-east-1": {
+    "key": "teleport:aws:xs:noha:us-east-1",
+    "generated_at": "2026-07-08T04:56:42.669Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-small configuration fits starter self-hosted Teleport control planes managing smaller infrastructure estates where high availability is not required. Compute instances drive 97% of the total monthly cost, with the primary m6i.2xlarge instance acting as the dominant cost driver at $292 per month. Operating a single-node control plane on-demand minimizes initial commitment but introduces a single point of failure, as any instance disruption will interrupt access to the managed estate.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
   }
 }

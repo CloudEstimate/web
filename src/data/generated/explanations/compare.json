@@ -3796,5 +3796,86 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "edb-postgres-advanced-server:xl:noha:1yr": {
+    "key": "edb-postgres-advanced-server:xl:noha:1yr",
+    "generated_at": "2026-07-08T04:56:01.201Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective option for this database tier, saving you roughly $550 per month compared to Google Cloud and $28 per month compared to Azure. This price advantage is driven by the AWS one-year, no-upfront reserved instance pricing model for shared tenancy Linux, which yields a lower baseline compute cost than Azure's standard reservation rates and Google Cloud's committed use discounts. However, the financial calculus will shift if you apply the Azure Hybrid Benefit, as the current Azure pricing excludes this licensing discount and relies solely on retail reservation terms.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "elasticsearch-oss:xl:ha:3yr": {
+    "key": "elasticsearch-oss:xl:ha:3yr",
+    "generated_at": "2026-07-08T04:56:02.010Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this scale-out search cluster, saving roughly $400 monthly compared to Google Cloud and nearly $800 monthly compared to AWS. This cost advantage is driven by Azure's three-year retail reservation pricing applied directly to the virtual machines hosting the hot data nodes. However, because the Google Cloud pricing model relies on regional committed use discounts that vary by machine family, selecting a different VM series in us-central1 can shift the cost calculus in Google's favor.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "jira-data-center:l:noha:on-demand": {
+    "key": "jira-data-center:l:noha:on-demand",
+    "generated_at": "2026-07-08T04:56:19.418Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS and Azure share the lowest monthly cost of $700.80 for this large-scale Jira Data Center deployment, making them roughly one percent cheaper than Google Cloud. This minor price difference is driven by Google Cloud's distinct sustained use and committed use discount structures, which vary by machine family and region. Platform engineers can shift this cost calculus by committing to a multi-year term, as the current on-demand pricing excludes the significant savings available through AWS No-Upfront Reserved Instances, Azure Retail Reservations, or Google Cloud Committed Use Contracts.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html"
+    ]
+  },
+  "mongodb-enterprise-advanced:xs:ha:1yr": {
+    "key": "mongodb-enterprise-advanced:xs:ha:1yr",
+    "generated_at": "2026-07-08T04:56:31.195Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this configuration, undercutting Azure by roughly $30 and Google Cloud by nearly $380 per month. This significant price gap is driven by Google Cloud's reliance on region-specific committed use discount structures that yield higher baseline costs for smaller machine families compared to AWS's no-upfront reserved rates. However, the financial calculus shifts if organizations can apply Azure Hybrid Benefit to their deployments, which is excluded from these retail reservation figures but would lower Azure's ongoing commitment costs.",
+    "source_refs": [
+      "https://www.mongodb.com/docs/manual/administration/production-notes/"
+    ]
+  },
+  "redis-enterprise:s:ha:3yr": {
+    "key": "redis-enterprise:s:ha:3yr",
+    "generated_at": "2026-07-08T04:56:32.509Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this small Redis Enterprise deployment, saving organizations roughly $69 to $88 per month compared to Google Cloud and AWS. This cost advantage is driven by Azure's retail reservation pricing model, which delivers a lower baseline rate for the required memory footprint without relying on hybrid benefits. However, the financial calculus shifts when evaluating Google Cloud, where regional variations in committed use discounts and specific machine family pricing can alter the final monthly cost.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:l:ha:on-demand": {
+    "key": "redis-enterprise:l:ha:on-demand",
+    "generated_at": "2026-07-08T04:56:33.896Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective option for this deployment, saving you $69 monthly compared to Google Cloud and $227 monthly compared to AWS. These cost differences are driven by the underlying on-demand compute and memory rates of the respective cloud providers, as no reservation discounts are applied to these baseline figures. Transitioning from on-demand rates to AWS no-upfront reserved instances, Azure retail reservations, or Google Cloud committed use contracts will shift this financial calculus and alter which provider offers the lowest total cost.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:xl:ha:1yr": {
+    "key": "redis-enterprise:xl:ha:1yr",
+    "generated_at": "2026-07-08T04:56:34.975Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this extra-large configuration, saving users roughly $240 per month compared to Google Cloud and $762 per month compared to AWS. This cost advantage is driven by Azure's retail reservation pricing applied to the underlying infrastructure without requiring hybrid benefits. However, because Google Cloud's pricing structure relies on regional machine family variations for committed use discounts, deploying in a different region or changing the machine family will shift the financial calculus.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:xl:ha:3yr": {
+    "key": "redis-enterprise:xl:ha:3yr",
+    "generated_at": "2026-07-08T04:56:39.769Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective option for this extra-large Redis Enterprise deployment, saving you $357 per month compared to Google Cloud and $770 per month compared to AWS. These cost differences are driven by the underlying three-year reservation pricing mechanics, which apply retail reservation terms on Azure and no-upfront reserved rates for Linux shared tenancy on AWS. The financial calculus shifts based on regional variations and machine-family rules, as Google Cloud determines its discounts through a combination of sustained use and committed use metrics that vary by region.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "yugabytedb-self-hosted:xl:ha:on-demand": {
+    "key": "yugabytedb-self-hosted:xl:ha:on-demand",
+    "generated_at": "2026-07-08T04:56:52.441Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this extra-large YugabyteDB deployment, saving organizations over $9,400 monthly compared to Google Cloud and roughly $1,440 monthly compared to Azure. This significant cost disparity is driven by Google Cloud's reliance on on-demand pricing that lacks the baseline efficiencies of the active reservation models applied to the other two providers. Platform engineers can shift this financial calculus by committing to multi-year terms, as Google Cloud's committed use discounts and Azure's hybrid benefit options are excluded from these on-demand figures.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
   }
 }
