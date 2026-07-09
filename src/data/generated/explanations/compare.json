@@ -3877,5 +3877,59 @@
     "source_refs": [
       "https://docs.yugabyte.com/stable/deploy/checklist/"
     ]
+  },
+  "consul:m:noha:on-demand": {
+    "key": "consul:m:noha:on-demand",
+    "generated_at": "2026-07-09T05:52:48.144Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this medium-sized Consul deployment, saving you $189 monthly compared to Google Cloud and $28 monthly compared to Azure. This price gap is driven by Google Cloud's higher baseline compute costs for the required machine families in us-central1 before sustained use discounts are applied. SREs can shift this financial calculus by committing to one-year or three-year terms, as Azure's retail reservation rates and AWS's no-upfront reserved instances alter the baseline on-demand pricing dynamics.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "influxdb-enterprise:xs:ha:1yr": {
+    "key": "influxdb-enterprise:xs:ha:1yr",
+    "generated_at": "2026-07-09T05:52:54.102Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this high-availability configuration, undercutting Azure by roughly $50 and Google Cloud by over $540 per month. This cost advantage is driven by AWS's no-upfront reserved instance pricing for Linux shared tenancy, which yields deeper discounts at this scale than Google Cloud's committed use discounts for the selected machine family. However, the financial calculus shifts if organizations can leverage the Azure Hybrid Benefit, which is excluded from these figures but significantly lowers Azure's reservation rates.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "minio:xl:ha:3yr": {
+    "key": "minio:xl:ha:3yr",
+    "generated_at": "2026-07-09T05:53:11.998Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this extra-large MinIO deployment, saving organizations over $11,300 monthly compared to AWS and undercutting Google Cloud by roughly $600 per month. These cost differences are primarily driven by the three-year reservation pricing models, which utilize Azure's retail reservation terms and AWS's no-upfront reserved rates for Linux shared tenancy. For platform engineers evaluating Google Cloud, the financial calculus shifts based on the specific machine families and regional variations governing sustained use versus committed use discounts.",
+    "source_refs": [
+      "https://min.io/docs/minio/linux/operations/installation.html"
+    ]
+  },
+  "redis-enterprise:s:noha:3yr": {
+    "key": "redis-enterprise:s:noha:3yr",
+    "generated_at": "2026-07-09T05:53:13.989Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this single-node configuration, saving organizations roughly $48 to $54 monthly compared to Google Cloud and AWS. This price advantage is driven by Azure's three-year retail reservation pricing applied directly to the base compute without requiring hybrid benefit licensing. However, because Google Cloud calculates committed use discounts based on specific machine families and regional availability, deploying in a different region or changing the underlying instance family will shift these cost dynamics.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "redis-enterprise:m:ha:1yr": {
+    "key": "redis-enterprise:m:ha:1yr",
+    "generated_at": "2026-07-09T05:53:14.504Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective option for this configuration, saving you roughly $95 per month compared to Google Cloud and $195 per month compared to AWS. This cost advantage is driven by Azure's retail reservation pricing applied to the underlying infrastructure without requiring hybrid benefits. However, because Google Cloud's pricing structure relies on regional machine family variations for its committed use discounts, deploying in a different region or changing the machine family will shift the cost calculus in Google Cloud's favor.",
+    "source_refs": [
+      "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/"
+    ]
+  },
+  "yugabytedb-self-hosted:xs:noha:3yr": {
+    "key": "yugabytedb-self-hosted:xs:noha:3yr",
+    "generated_at": "2026-07-09T05:53:19.624Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective option for this extra-small configuration, saving engineers roughly $780 per month compared to Google Cloud and about $58 per month compared to Azure. This significant price gap is driven by AWS's three-year, no-upfront reserved instance pricing for Linux shared tenancy, which yields deeper discounts than Google Cloud's committed use discounts for this specific machine family and region. However, the financial calculus shifts if organizations leverage the Azure Hybrid Benefit, which is excluded from these figures but can drastically lower Azure's compute costs.",
+    "source_refs": [
+      "https://docs.yugabyte.com/stable/deploy/checklist/"
+    ]
   }
 }

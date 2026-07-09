@@ -3904,5 +3904,32 @@
     "source_refs": [
       "https://goteleport.com/docs/reference/deployment/scaling/"
     ]
+  },
+  "confluence-data-center:gcp:m:ha:us-central1": {
+    "key": "confluence-data-center:gcp:m:ha:us-central1",
+    "generated_at": "2026-07-09T05:52:40.764Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier deployment supports up to 2.5 million content items and 350,000 hourly HTTP requests by distributing the workload across a high-availability cluster. Compute resources serve as the primary cost driver, accounting for $496 of the $514 total monthly spend due to the provisioning of five distinct virtual machines. To balance performance and cost at this scale, the architecture allocates dedicated, smaller instances for auxiliary roles while reserving the larger four-core instances exclusively for the active application nodes.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "elasticsearch-oss:aws:xl:noha:us-east-1": {
+    "key": "elasticsearch-oss:aws:xl:noha:us-east-1",
+    "generated_at": "2026-07-09T05:52:52.840Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This scale-out configuration supports search workloads managing between 1 and 5 TB of hot data on the legacy open-source Elasticsearch distribution. Compute instances represent the primary cost driver at $3,854.40 per month, which is more than double the storage expenditure. To control costs and maintain performance at this scale, high availability is disabled, meaning the cluster operates without redundant nodes to survive an AWS availability zone outage.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "gitlab:azure:xl:ha:westus3": {
+    "key": "gitlab:azure:xl:ha:westus3",
+    "generated_at": "2026-07-09T05:52:53.773Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability architecture supports up to 25,000 users by distributing workloads across multiple dedicated Azure virtual machines. Compute resources represent the primary cost driver at $7,709 monthly, closely followed by $4,646 in storage costs to support the extensive SSD and object storage requirements. To maintain system performance and redundancy at this scale, the design trades architectural simplicity for resilience, requiring platform engineers to manage a complex footprint of eighteen distinct virtual machines.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
   }
 }
