@@ -3931,5 +3931,23 @@
     "source_refs": [
       "https://docs.yugabyte.com/stable/deploy/checklist/"
     ]
+  },
+  "keycloak:xl:ha:1yr": {
+    "key": "keycloak:xl:ha:1yr",
+    "generated_at": "2026-07-10T05:49:35.335Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this high-availability deployment, saving you $60 monthly over AWS and $559 monthly over Google Cloud. These cost differences are driven by the underlying 1-year reservation structures, which apply flat retail reservation rates on Azure and no-upfront reserved instance rates on AWS, whereas Google Cloud relies on region-specific committed use discounts. Engineers must consider that Google Cloud's pricing calculus shifts based on the selected machine family and regional sustained use behavior, which can narrow the cost gap if workloads fluctuate.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "victoria-metrics:m:ha:1yr": {
+    "key": "victoria-metrics:m:ha:1yr",
+    "generated_at": "2026-07-10T05:49:47.858Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this medium VictoriaMetrics cluster, saving engineers roughly $100 per month compared to Azure and over $1,000 per month compared to Google Cloud. This cost disparity is driven by Google Cloud's committed use discount structures, which vary strictly by machine family and region, whereas AWS and Azure leverage more uniform reservation pricing models. Platform engineers must note that Azure's pricing excludes the Azure Hybrid Benefit, meaning the cost gap between AWS and Azure would shift if existing on-premises licenses are applied to the deployment.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }

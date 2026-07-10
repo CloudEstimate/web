@@ -3931,5 +3931,23 @@
     "source_refs": [
       "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
     ]
+  },
+  "edb-postgres-advanced-server:aws:xs:noha:us-east-1": {
+    "key": "edb-postgres-advanced-server:aws:xs:noha:us-east-1",
+    "generated_at": "2026-07-10T05:49:19.155Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-small configuration supports light OLTP workloads with database sizes up to 250 GB by deploying a single primary database instance alongside a smaller utility node. Compute resources represent the dominant cost driver at this tier, accounting for over 80% of the $254.24 total monthly spend. Because high availability is disabled, this single-primary architecture trades off continuous uptime for cost efficiency, leaving the workload vulnerable to downtime during an instance failure.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
+  },
+  "nexus-repository:aws:m:noha:us-east-1": {
+    "key": "nexus-repository:aws:m:noha:us-east-1",
+    "generated_at": "2026-07-10T05:49:44.967Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier configuration supports workloads up to 900 requests per second by deploying a single non-high-availability instance alongside supporting node resources. Compute instances represent the dominant cost driver at this scale, accounting for over 92% of the $1,521.60 monthly budget. By opting for on-demand pricing and disabling high availability, this architecture prioritizes lower commitment risk over redundancy, meaning any single node failure will result in service downtime.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
   }
 }
