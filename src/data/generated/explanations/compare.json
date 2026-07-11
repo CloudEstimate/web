@@ -3949,5 +3949,23 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "cockroachdb-self-hosted:m:ha:1yr": {
+    "key": "cockroachdb-self-hosted:m:ha:1yr",
+    "generated_at": "2026-07-11T04:50:27.133Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this medium-sized cluster, saving deployment teams roughly $100 per month over Azure and more than $1,200 per month compared to Google Cloud. This significant price gap is driven by AWS's highly discounted one-year, no-upfront reserved instance pricing for Linux shared tenancy, whereas Google Cloud's committed use discounts vary strictly by machine family and region. Engineers must note that the Azure calculation excludes the Azure Hybrid Benefit, which, if applied, would alter these calculations and potentially close the cost gap with AWS.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "redpanda:xl:ha:on-demand": {
+    "key": "redpanda:xl:ha:on-demand",
+    "generated_at": "2026-07-11T04:50:51.038Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure provides the lowest-cost deployment for this extra-large Redpanda configuration, saving users roughly $1,070 per month compared to AWS and undercutting Google Cloud by a slim $32 margin. These cost variations are driven primarily by the underlying compute and storage pricing mechanics of each provider's on-demand virtual machine families in their respective regions. Platform engineers can shift this cost calculus by committing to one-year or three-year terms, which unlock Google Cloud's committed use discounts, Azure's retail reservation terms, or AWS's no-upfront reserved rates.",
+    "source_refs": [
+      "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
+    ]
   }
 }

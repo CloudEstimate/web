@@ -1,10 +1,10 @@
 {
   "source": "github-actions-explanations-cron",
-  "generated_at": "2026-07-10T05:50:25.960Z",
+  "generated_at": "2026-07-11T04:51:11.525Z",
   "pricing": {
-    "azure": "2026-07-10T05:48:57.675Z",
-    "aws": "2026-07-10T05:49:07.124Z",
-    "gcp": "2026-07-10T05:49:12.828Z"
+    "azure": "2026-07-11T04:50:11.817Z",
+    "aws": "2026-07-11T04:50:21.830Z",
+    "gcp": "2026-07-11T04:50:24.653Z"
   },
   "explanations": {
     "single": "src/data/generated/explanations/single.json",

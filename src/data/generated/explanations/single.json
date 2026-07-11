@@ -3949,5 +3949,23 @@
     "source_refs": [
       "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
     ]
+  },
+  "confluence-data-center:gcp:l:ha:us-central1": {
+    "key": "confluence-data-center:gcp:l:ha:us-central1",
+    "generated_at": "2026-07-11T04:50:27.291Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment supports large-scale Confluence portfolios containing up to 10 million content items or handling up to 700,000 hourly HTTP requests. The primary cost driver is the compute infrastructure, which accounts for over 98% of the $1,223 monthly spend due to the provisioning of multiple specialized N2 virtual machines. To maintain performance at this scale, the architecture trades compute density for high availability by distributing the workload across three dedicated 8-vCPU application nodes while utilizing smaller, specialized instances for supporting services.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
+  },
+  "nomad:aws:m:ha:us-east-1": {
+    "key": "nomad:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-11T04:50:54.365Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier production deployment supports workloads running between 50 and 300 jobs by utilizing a high-availability control plane of three server nodes alongside ten client nodes. Compute instances represent the dominant cost driver at this scale, accounting for over 94% of the $1,926.08 total monthly spend. By utilizing identical instance types for both servers and clients, this configuration simplifies resource pooling but requires administrators to carefully monitor the three-node control plane to ensure scheduler performance does not degrade under peak job orchestration loads.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
   }
 }
