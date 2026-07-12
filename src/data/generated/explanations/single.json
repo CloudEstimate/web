@@ -3967,5 +3967,32 @@
     "source_refs": [
       "https://developer.hashicorp.com/nomad/docs/install/production"
     ]
+  },
+  "gitlab:aws:m:ha:us-east-1": {
+    "key": "gitlab:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-12T05:12:38.770Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment is sized to support 2,000 to 5,000 users under the GitLab 17.11 reference architecture on AWS. Compute instances represent the dominant cost driver at this tier, accounting for $3,644 of the $4,271 total monthly spend due to the distributed multi-node requirements of the architecture. To balance performance and reliability at this scale, the design trades lower-cost shared resources for dedicated compute nodes, utilizing larger 16-vCPU instances for heavy workloads alongside smaller 2-vCPU instances to handle lighter auxiliary tasks.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
+  },
+  "jfrog-artifactory:azure:xs:ha:westus3": {
+    "key": "jfrog-artifactory:azure:xs:ha:westus3",
+    "generated_at": "2026-07-12T05:12:54.788Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability Extra Small configuration supports self-hosted JFrog Artifactory deployments handling up to 6,000 requests per minute on Azure. Compute instances represent the dominant cost driver at this tier, accounting for $1,332 of the $1,471 total monthly spend. To maintain high availability at this scale, the architecture distributes workloads across multiple virtual machines, including four 8-vCPU instances and two smaller helper nodes. Platform engineers must balance this compute redundancy against a relatively minimal storage allocation of 1,000 gigabytes of total SSD capacity.",
+    "source_refs": [
+      "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/"
+    ]
+  },
+  "nexus-repository:aws:s:ha:us-east-1": {
+    "key": "nexus-repository:aws:s:ha:us-east-1",
+    "generated_at": "2026-07-12T05:13:06.301Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment is sized to support up to 300 requests per second by distributing workloads across a primary application node and two smaller auxiliary instances. Compute resources represent the dominant cost driver for this tier, accounting for over 90% of the $460.48 monthly total. To maintain this budget-friendly footprint, the architecture allocates a modest 300 GB of SSD storage, meaning teams must actively monitor artifact retention policies to avoid disk saturation.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
   }
 }
