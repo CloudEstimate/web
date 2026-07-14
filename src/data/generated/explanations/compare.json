@@ -3967,5 +3967,41 @@
     "source_refs": [
       "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/"
     ]
+  },
+  "elasticsearch-oss:m:ha:1yr": {
+    "key": "elasticsearch-oss:m:ha:1yr",
+    "generated_at": "2026-07-14T04:37:16.696Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective provider for this medium-sized Elasticsearch deployment, saving engineers roughly $170 per month compared to Google Cloud and over $200 per month compared to AWS. These savings are driven by Azure's retail reservation pricing applied directly to the compute and storage resources without requiring hybrid benefit licensing. However, the financial calculus shifts if workloads on Google Cloud qualify for regional sustained use discounts or if AWS deployments leverage upfront payment structures instead of the no-upfront reserved rates modeled here.",
+    "source_refs": [
+      "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html"
+    ]
+  },
+  "keycloak:xs:ha:on-demand": {
+    "key": "keycloak:xs:ha:on-demand",
+    "generated_at": "2026-07-14T04:37:28.867Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective option for this high-availability deployment, saving organizations roughly $110 per month compared to Google Cloud and about $19 per month compared to Azure. The primary cost drivers at this extra-small tier are the baseline compute and database instances required to maintain high availability, which carry higher standard on-demand rates in Google Cloud's us-central1 region. Committing to a one-year or three-year term shifts this calculus, as Google Cloud's committed use discounts and AWS's no-upfront reserved rates alter the baseline pricing dynamics.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
+  },
+  "victoria-metrics:m:ha:3yr": {
+    "key": "victoria-metrics:m:ha:3yr",
+    "generated_at": "2026-07-14T04:37:38.257Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this VictoriaMetrics cluster, costing roughly $100 less per month than Azure and less than half the cost of Google Cloud. This significant price gap is driven by AWS's highly discounted three-year, no-upfront reserved instance rates for Linux shared tenancy compared to Google Cloud's committed use discount structure for this specific machine family and region. However, the financial calculus shifts if organizations can leverage the Azure Hybrid Benefit, which is excluded from these baseline figures but would further reduce Azure's monthly cost.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
+  },
+  "nomad:xs:ha:on-demand": {
+    "key": "nomad:xs:ha:on-demand",
+    "generated_at": "2026-07-14T04:37:45.660Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this high-availability Nomad deployment, saving organizations roughly $124 per month compared to Google Cloud and $18 per month compared to Azure. These cost differences are driven by the baseline on-demand compute rates and the varying regional pricing structures across the cloud providers. Transitioning from on-demand pricing to committed use terms—such as AWS no-upfront reserved instances or Google Cloud committed use discounts—shifts the financial calculus by introducing steep discounts that alter these baseline cost relationships.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
   }
 }
