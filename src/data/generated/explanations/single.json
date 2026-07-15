@@ -3994,5 +3994,23 @@
     "source_refs": [
       "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
     ]
+  },
+  "apache-kafka-confluent-platform:aws:m:ha:us-east-1": {
+    "key": "apache-kafka-confluent-platform:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-15T04:37:02.401Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This deployment is sized to support medium-scale regional streaming workloads processing between 50 and 150 megabytes per second of ingress data or managing larger retained topic footprints. The primary cost driver is the compute infrastructure, which accounts for eighty percent of the monthly spend at over four thousand dollars. To balance performance and cost at this scale, the architecture utilizes three high-capacity broker nodes equipped with twelve terabytes of aggregate solid-state storage, while offloading coordination and management tasks to smaller, specialized helper instances.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
+  },
+  "nomad:aws:xl:ha:us-east-1": {
+    "key": "nomad:aws:xl:ha:us-east-1",
+    "generated_at": "2026-07-15T04:37:24.830Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-large deployment supports workloads running between 300 and 1,000 jobs, serving as a bootstrap platform for larger fleets. Compute instances drive 96% of the $8,049 monthly commitment, with the 25 client nodes accounting for the vast majority of this cost compared to the 5 control plane nodes. SREs must balance the high memory capacity of the client fleet against the on-demand pricing model, which lacks the cost efficiency of reserved instances or savings plans for a continuous production footprint.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
   }
 }
