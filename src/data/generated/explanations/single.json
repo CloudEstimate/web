@@ -4012,5 +4012,23 @@
     "source_refs": [
       "https://developer.hashicorp.com/nomad/docs/install/production"
     ]
+  },
+  "consul:aws:xl:ha:us-east-1": {
+    "key": "consul:aws:xl:ha:us-east-1",
+    "generated_at": "2026-07-17T04:50:27.708Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This five-server-large architecture supports high-scale service mesh environments managing between 5,000 and 25,000 registered services in us-east-1. Compute resources represent the dominant cost driver at this tier, accounting for over 90% of the $1,373.44 monthly total due to the provisioning of eleven m6i instances. To maintain high availability and control plane stability at this scale, the deployment distributes workloads across five large server nodes and six supporting instances, trading lower compute costs for minimized blast radiuses and consistent consensus performance.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
+  },
+  "nomad:aws:xs:ha:us-east-1": {
+    "key": "nomad:aws:xs:ha:us-east-1",
+    "generated_at": "2026-07-17T04:50:38.952Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This starter production deployment supports up to 50 small jobs in a high-availability configuration across the us-east-1 region. Compute instances represent the dominant cost driver for this tier, accounting for $631 of the $667 total monthly spend. By provisioning separate three-node clusters for both the control plane and client workloads, this architecture ensures quorum and workload isolation at the expense of higher baseline compute costs for a relatively small volume of jobs.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
   }
 }
