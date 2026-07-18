@@ -4003,5 +4003,23 @@
     "source_refs": [
       "https://developer.hashicorp.com/nomad/docs/install/production"
     ]
+  },
+  "influxdb-enterprise:m:ha:on-demand": {
+    "key": "influxdb-enterprise:m:ha:on-demand",
+    "generated_at": "2026-07-18T04:35:22.896Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective option for this high-availability deployment, costing roughly $2,130 less per month than Google Cloud and $330 less per month than Azure. This significant cost disparity is driven by Google Cloud's higher on-demand baseline rates in us-central1 and the lack of automatic sustained use discounts applied to the required machine families. Platform engineers can shift this financial calculus by committing to a one-year or three-year term, which introduces Azure reservation pricing or AWS no-upfront reserved rates to drastically reduce the on-demand premium.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
+  },
+  "opensearch:xl:noha:3yr": {
+    "key": "opensearch:xl:noha:3yr",
+    "generated_at": "2026-07-18T04:35:34.786Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "At a monthly cost of $2,488.35, Azure is the most cost-effective provider for this scale-out configuration, saving you roughly $400 per month over Google Cloud and nearly $800 per month over AWS. This cost advantage is driven by Azure's three-year retail reservation pricing applied directly to the compute instances without requiring hybrid benefit licensing. However, because Google Cloud's committed use discounts vary significantly by machine family and region, selecting an alternative instance type or deploying outside of us-central1 can shift the cost calculus in Google's favor.",
+    "source_refs": [
+      "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
+    ]
   }
 }

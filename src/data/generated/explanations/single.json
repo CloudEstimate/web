@@ -4030,5 +4030,23 @@
     "source_refs": [
       "https://developer.hashicorp.com/nomad/docs/install/production"
     ]
+  },
+  "cockroachdb-self-hosted:aws:xl:ha:us-east-1": {
+    "key": "cockroachdb-self-hosted:aws:xl:ha:us-east-1",
+    "generated_at": "2026-07-18T04:35:32.618Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This seven-node configuration is sized to support high-concurrency regional SQL workloads and manage up to 20 TB of replicated data with high availability enabled. Compute resources represent the dominant cost driver at this tier, accounting for nearly 78% of the $5,044.48 total monthly spend due to the provisioning of 112 vCPUs and 448 GB of RAM across the cluster. To maintain this performance profile, platform engineers must balance the high compute spend against the 14,000 GB of total SSD storage, which represents a smaller but fixed 22% of the monthly budget.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
+  },
+  "keycloak:aws:xl:ha:us-east-1": {
+    "key": "keycloak:aws:xl:ha:us-east-1",
+    "generated_at": "2026-07-18T04:35:34.418Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This four-node extra-large configuration supports high-throughput identity workloads processing between 150 and 500 peak logins per second, as well as intensive federation and brokering operations. Compute resources represent the dominant cost driver at this tier, accounting for over 90% of the $2,302.40 monthly spend due to the deployment of nine total m6i instances. To maintain high availability at this scale, the architecture trades lower storage costs for compute redundancy, distributing the workload across multiple 8-vCPU application and database nodes to prevent single points of failure.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
   }
 }
