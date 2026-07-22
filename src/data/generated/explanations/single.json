@@ -4048,5 +4048,14 @@
     "source_refs": [
       "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
     ]
+  },
+  "nexus-repository:aws:m:ha:us-east-1": {
+    "key": "nexus-repository:aws:m:ha:us-east-1",
+    "generated_at": "2026-07-22T04:55:08.813Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment is sized to support up to 900 requests per second for Sonatype Nexus Repository on AWS. Compute instances represent the dominant cost driver at this tier, accounting for over 93% of the $2,168.32 total monthly spend. To ensure system resilience and performance at this scale, the architecture trades lower-cost shared resources for dedicated, memory-heavy instances, allocating 64 GB of RAM to both the database and search nodes while utilizing three 32 GB application nodes.",
+    "source_refs": [
+      "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
+    ]
   }
 }
