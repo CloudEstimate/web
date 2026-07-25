@@ -4021,5 +4021,14 @@
     "source_refs": [
       "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/"
     ]
+  },
+  "gitlab:xl:ha:3yr": {
+    "key": "gitlab:xl:ha:3yr",
+    "generated_at": "2026-07-25T04:52:24.952Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this high-availability deployment, saving organizations roughly $9,800 monthly compared to Google Cloud and $900 monthly compared to Azure. This cost advantage is driven by AWS No-Upfront Reserved Instance pricing for Linux shared tenancy, which yields deeper discounts at this scale than Azure retail reservations and Google Cloud committed use discounts. However, the financial calculus shifts significantly if organizations can apply the Azure Hybrid Benefit, which is excluded from these figures but reduces Azure licensing costs.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
   }
 }
