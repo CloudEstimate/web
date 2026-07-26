@@ -1455,5 +1455,30 @@
     "validation_failures": 20,
     "llm_total_token_count": 37058,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "30189123934",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "3ac9c9419b077126177921c70c51b97b19032bb7",
+    "started_at": "2026-07-26T05:16:59.199Z",
+    "completed_at": "2026-07-26T05:17:09.078Z",
+    "duration_ms": 9879,
+    "conclusion": "failure",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": null,
+    "pricing": {},
+    "providers": {},
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": "Azure pricing request failed: 429 Too Many Requests for filter \"serviceName eq 'Storage' and armRegionName eq 'eastus'\". Too many requests at this point. Please retry after some time."
   }
 ]
