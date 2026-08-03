@@ -4057,5 +4057,14 @@
     "source_refs": [
       "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html"
     ]
+  },
+  "keycloak:aws:m:noha:us-east-1": {
+    "key": "keycloak:aws:m:noha:us-east-1",
+    "generated_at": "2026-08-03T05:26:02.095Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier configuration supports workloads handling between 25 and 150 peak logins per second. Compute instances represent the dominant cost driver, accounting for over 90% of the $452.48 total monthly spend. By deploying on-demand resources without high availability, this setup reduces immediate costs but introduces a single point of failure for the database layer, which runs on a single storage-heavy instance.",
+    "source_refs": [
+      "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
+    ]
   }
 }
