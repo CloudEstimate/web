@@ -4030,5 +4030,14 @@
     "source_refs": [
       "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
     ]
+  },
+  "edb-postgres-advanced-server:xl:ha:1yr": {
+    "key": "edb-postgres-advanced-server:xl:ha:1yr",
+    "generated_at": "2026-08-05T04:51:23.105Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this configuration, saving organizations roughly $1,500 monthly compared to Google Cloud and about $100 monthly compared to Azure. These cost differences are driven by AWS's highly discounted one-year, no-upfront reserved instance rates for Linux shared tenancy, which outperform Google Cloud's committed use discounts for this database tier. However, the financial calculus shifts in favor of Azure if organizations can apply the Azure Hybrid Benefit, which is excluded from these baseline figures but significantly lowers database licensing costs.",
+    "source_refs": [
+      "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
+    ]
   }
 }
