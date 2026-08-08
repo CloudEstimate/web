@@ -4066,5 +4066,14 @@
     "source_refs": [
       "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing"
     ]
+  },
+  "teleport:gcp:xs:ha:us-central1": {
+    "key": "teleport:gcp:xs:ha:us-central1",
+    "generated_at": "2026-08-08T03:15:00.760Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability, extra-small configuration fits a starter self-hosted Teleport control plane designed for smaller infrastructure estates. Compute resources represent the dominant cost driver at this tier, accounting for $1,134 of the $1,356 total monthly spend due to the distribution of workloads across multiple N2 virtual machines. To maintain high availability at this entry scale, the architecture trades off cost efficiency by running redundant, smaller-capacity nodes rather than consolidating workloads onto fewer, larger instances.",
+    "source_refs": [
+      "https://goteleport.com/docs/reference/deployment/scaling/"
+    ]
   }
 }
