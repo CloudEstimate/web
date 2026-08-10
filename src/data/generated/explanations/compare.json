@@ -4039,5 +4039,14 @@
     "source_refs": [
       "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/"
     ]
+  },
+  "kong-gateway:m:ha:on-demand": {
+    "key": "kong-gateway:m:ha:on-demand",
+    "generated_at": "2026-08-10T03:41:36.464Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this high-availability Kong Gateway deployment, saving organizations roughly $190 per month compared to Google Cloud and $31 per month compared to Azure. These cost differences are driven by the underlying on-demand compute and networking rates of the selected virtual machine families in each provider's respective region. Platform engineers can shift this cost calculus by committing to one-year or three-year terms, which unlock AWS reserved instances, Azure reservation terms, or Google Cloud committed use discounts.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
   }
 }
