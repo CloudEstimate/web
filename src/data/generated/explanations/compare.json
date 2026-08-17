@@ -4048,5 +4048,14 @@
     "source_refs": [
       "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
     ]
+  },
+  "cockroachdb-self-hosted:xl:ha:3yr": {
+    "key": "cockroachdb-self-hosted:xl:ha:3yr",
+    "generated_at": "2026-08-17T02:50:15.355Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this configuration, saving organizations over $3,600 monthly compared to Google Cloud and about $270 compared to Azure. This cost advantage is driven by AWS's three-year, no-upfront reserved instance pricing for Linux shared tenancy, which yields deeper discounts than Google Cloud's committed use discounts for this specific machine family and region. However, the financial calculus shifts if organizations can apply the Azure Hybrid Benefit, which is excluded from these figures but would significantly lower Azure's reservation pricing.",
+    "source_refs": [
+      "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
+    ]
   }
 }
