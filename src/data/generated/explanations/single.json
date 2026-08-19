@@ -4084,5 +4084,14 @@
     "source_refs": [
       "https://developer.hashicorp.com/consul/docs/architecture"
     ]
+  },
+  "nomad:aws:xl:noha:us-east-1": {
+    "key": "nomad:aws:xl:noha:us-east-1",
+    "generated_at": "2026-08-19T02:47:19.820Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-large configuration supports workloads running between 300 and 1,000 jobs, serving as a foundational bootstrap platform for organizations planning to scale to even larger fleets. The primary cost driver at this tier is the compute infrastructure, which requires over $7,700 monthly to run the twenty-five worker nodes and five control plane instances. Because high availability is disabled, this single-region deployment risks service interruption if a critical failure occurs, making the lack of redundancy a key operational tradeoff for the $8,049 monthly spend.",
+    "source_refs": [
+      "https://developer.hashicorp.com/nomad/docs/install/production"
+    ]
   }
 }
