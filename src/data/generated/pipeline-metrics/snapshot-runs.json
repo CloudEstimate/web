@@ -2868,5 +2868,71 @@
     ],
     "llm_total_token_count": 0,
     "error_message": "Azure pricing request failed: 429 Too Many Requests for filter \"serviceName eq 'Storage' and armRegionName eq 'westus3'\". Too many requests at this point. Please retry after some time."
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "32684504954",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "4b3d1502a5e1eb47e85971fb18f5bb37dc8884b3",
+    "started_at": "2026-08-24T02:53:01.445Z",
+    "completed_at": "2026-08-24T02:53:12.907Z",
+    "duration_ms": 11462,
+    "conclusion": "success",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": "2026-08-24T02:53:01.446Z",
+    "pricing": {
+      "azure": "2026-08-24T02:53:01.461Z",
+      "aws": "2026-08-24T02:53:09.394Z",
+      "gcp": "2026-08-24T02:53:12.727Z"
+    },
+    "providers": {
+      "azure": {
+        "retrieved_at": "2026-08-24T02:53:01.461Z",
+        "regions_count": 2,
+        "duration_ms": 3917
+      },
+      "aws": {
+        "retrieved_at": "2026-08-24T02:53:09.394Z",
+        "regions_count": 2,
+        "duration_ms": 8660
+      },
+      "gcp": {
+        "retrieved_at": "2026-08-24T02:53:12.727Z",
+        "regions_count": 2,
+        "duration_ms": 11459
+      }
+    },
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "32684504954",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "4b3d1502a5e1eb47e85971fb18f5bb37dc8884b3",
+    "started_at": "2026-08-24T02:53:13.175Z",
+    "completed_at": "2026-08-24T02:53:36.488Z",
+    "duration_ms": 23313,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 0,
+    "attempted": 13,
+    "skipped_existing": 899,
+    "validation_failures": 13,
+    "llm_total_token_count": 23642,
+    "error_message": null
   }
 ]
