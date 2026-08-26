@@ -4093,5 +4093,14 @@
     "source_refs": [
       "https://developer.hashicorp.com/nomad/docs/install/production"
     ]
+  },
+  "confluence-data-center:gcp:m:noha:us-central1": {
+    "key": "confluence-data-center:gcp:m:noha:us-central1",
+    "generated_at": "2026-08-26T02:55:07.726Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This sizing fits medium-scale deployments handling up to 2.5 million content items or a peak of 350,000 HTTP calls per hour without high availability enabled. The primary cost drivers at this tier are the compute resources, specifically the two n2-standard-4 instances that represent the majority of the $425 monthly spend. By deploying on-demand without a commitment term, this configuration prioritizes flexibility over cost optimization, though it introduces a single point of failure since high availability is disabled.",
+    "source_refs": [
+      "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
+    ]
   }
 }

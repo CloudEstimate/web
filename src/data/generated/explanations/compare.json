@@ -4057,5 +4057,14 @@
     "source_refs": [
       "https://www.cockroachlabs.com/docs/stable/recommended-production-settings"
     ]
+  },
+  "influxdb-enterprise:xs:ha:3yr": {
+    "key": "influxdb-enterprise:xs:ha:3yr",
+    "generated_at": "2026-08-26T02:55:02.930Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "AWS is the most cost-effective provider for this high-availability configuration, undercutting Azure by roughly $50 monthly and Google Cloud by nearly $560 monthly. This significant price gap is driven by AWS's highly discounted three-year, no-upfront reserved instance rates for Linux shared tenancy, whereas Google Cloud's committed use discounts vary strictly by machine family and region. SREs should note that the financial calculus will shift if organizations leverage the Azure Hybrid Benefit, which is excluded from these baseline figures but can drastically reduce Azure licensing costs.",
+    "source_refs": [
+      "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
+    ]
   }
 }
