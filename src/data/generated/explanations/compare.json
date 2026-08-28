@@ -4066,5 +4066,14 @@
     "source_refs": [
       "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/"
     ]
+  },
+  "consul:xs:ha:3yr": {
+    "key": "consul:xs:ha:3yr",
+    "generated_at": "2026-08-28T13:26:14.864Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "Azure is the most cost-effective option for this deployment, saving you roughly $9 per month compared to AWS and nearly $49 per month compared to Google Cloud. These cost differences are driven by the three-year reservation pricing mechanics, which apply Azure's retail reservation terms and AWS's no-upfront reserved rates for Linux shared tenancy against Google Cloud's committed use discounts. Platform engineers must consider that Google Cloud's pricing varies by machine family and region, meaning a shift in the selected VM family or deployment region will alter these cost dynamics.",
+    "source_refs": [
+      "https://developer.hashicorp.com/consul/docs/architecture"
+    ]
   }
 }
