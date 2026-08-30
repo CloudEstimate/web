@@ -3157,5 +3157,30 @@
     "validation_failures": 10,
     "llm_total_token_count": 18642,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "33299509896",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "12f5f54054c37209521c363d549a8e2f7c710cec",
+    "started_at": "2026-08-30T07:34:15.582Z",
+    "completed_at": "2026-08-30T07:34:15.974Z",
+    "duration_ms": 392,
+    "conclusion": "failure",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": null,
+    "pricing": {},
+    "providers": {},
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": "fetch failed"
   }
 ]
