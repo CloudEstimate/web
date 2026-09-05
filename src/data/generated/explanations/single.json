@@ -4102,5 +4102,14 @@
     "source_refs": [
       "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html"
     ]
+  },
+  "apache-kafka-confluent-platform:aws:xl:noha:us-east-1": {
+    "key": "apache-kafka-confluent-platform:aws:xl:noha:us-east-1",
+    "generated_at": "2026-09-05T06:23:14.360Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This extra-large configuration supports high-throughput streaming workloads processing up to 400 MB/s of ingress data with extended retention periods and multiple connectors. Compute instances represent the primary cost driver at $8,129 monthly, which is more than double the $3,972 allocated for storage. To sustain these high ingestion rates, the architecture deploys six m6i.8xlarge brokers equipped with 48,000 GB of aggregate SSD storage, but disabling high availability introduces a single point of failure risk for this massive data volume.",
+    "source_refs": [
+      "https://docs.confluent.io/platform/current/kafka/deployment.html"
+    ]
   }
 }
