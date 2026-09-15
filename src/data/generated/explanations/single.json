@@ -4111,5 +4111,14 @@
     "source_refs": [
       "https://docs.confluent.io/platform/current/kafka/deployment.html"
     ]
+  },
+  "gitlab:azure:xs:ha:westus3": {
+    "key": "gitlab:azure:xs:ha:westus3",
+    "generated_at": "2026-09-15T06:50:25.408Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This high-availability deployment supports up to 500 users under the GitLab 17.11 reference architecture by distributing workloads across seven Azure virtual machines. Compute resources represent the primary cost driver at this tier, accounting for $771 of the $903 monthly total due to the requirement for multiple Standard_D4s_v5 and Standard_D2s_v5 instances to ensure redundancy. To maintain this high-availability posture at a smaller user scale, platform engineers must accept a higher per-user infrastructure cost, as the redundant compute footprint outweighs the $114 spent on storage.",
+    "source_refs": [
+      "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
+    ]
   }
 }
