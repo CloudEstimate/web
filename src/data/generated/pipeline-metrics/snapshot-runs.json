@@ -4288,5 +4288,71 @@
     "validation_failures": 8,
     "llm_total_token_count": 14550,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "35316242731",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "a2c5cfd26f81a6585f1c4006698ae374f0de1e27",
+    "started_at": "2026-09-18T06:45:59.446Z",
+    "completed_at": "2026-09-18T06:46:16.659Z",
+    "duration_ms": 17213,
+    "conclusion": "success",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": "2026-09-18T06:45:59.447Z",
+    "pricing": {
+      "azure": "2026-09-18T06:45:59.471Z",
+      "aws": "2026-09-18T06:46:09.672Z",
+      "gcp": "2026-09-18T06:46:16.419Z"
+    },
+    "providers": {
+      "azure": {
+        "retrieved_at": "2026-09-18T06:45:59.471Z",
+        "regions_count": 2,
+        "duration_ms": 2276
+      },
+      "aws": {
+        "retrieved_at": "2026-09-18T06:46:09.672Z",
+        "regions_count": 2,
+        "duration_ms": 11212
+      },
+      "gcp": {
+        "retrieved_at": "2026-09-18T06:46:16.419Z",
+        "regions_count": 2,
+        "duration_ms": 17210
+      }
+    },
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "35316242731",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "a2c5cfd26f81a6585f1c4006698ae374f0de1e27",
+    "started_at": "2026-09-18T06:46:17.073Z",
+    "completed_at": "2026-09-18T06:46:33.537Z",
+    "duration_ms": 16464,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 0,
+    "attempted": 8,
+    "skipped_existing": 904,
+    "validation_failures": 8,
+    "llm_total_token_count": 14529,
+    "error_message": null
   }
 ]
