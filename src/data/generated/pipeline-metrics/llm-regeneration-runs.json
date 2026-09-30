@@ -3218,5 +3218,51 @@
       "trafficType"
     ],
     "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "36684415399",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "e98c3a6ef723e44ee515a7121b8543a30db7c7a3",
+    "started_at": "2026-09-30T07:34:38.956Z",
+    "completed_at": "2026-09-30T07:35:01.258Z",
+    "duration_ms": 22302,
+    "conclusion": "success",
+    "model": "gemini-3.5-flash",
+    "options": {
+      "maxNewExplanations": 0,
+      "timeBudgetMs": 3900000,
+      "concurrency": 12
+    },
+    "work_items_queued": 8,
+    "attempted": 8,
+    "generated": 0,
+    "skipped_existing": 904,
+    "validation_failures": 8,
+    "llm_api_responses": 24,
+    "llm_api_responses_with_usage_metadata": 24,
+    "llm_api_responses_without_usage_metadata": 0,
+    "llm_api_errors_or_timeouts": 0,
+    "token_usage": {
+      "prompt_token_count": 11391,
+      "candidates_token_count": 3148,
+      "total_token_count": 14539,
+      "cached_content_token_count": 0,
+      "thoughts_token_count": 0,
+      "tool_use_prompt_token_count": 0
+    },
+    "usage_metadata_fields_seen": [
+      "candidatesTokenCount",
+      "candidatesTokensDetails",
+      "promptTokenCount",
+      "promptTokensDetails",
+      "totalTokenCount",
+      "trafficType"
+    ],
+    "error_message": null
   }
 ]
