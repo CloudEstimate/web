@@ -5196,5 +5196,30 @@
     "validation_failures": 8,
     "llm_total_token_count": 13902,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "schedule",
+    "run_id": "37105423119",
+    "run_attempt": "1",
+    "actor": "regnard",
+    "ref": "refs/heads/main",
+    "commit_sha": "5272f3b5ffac1331a011ea2bcff026e1a007d675",
+    "started_at": "2026-10-03T07:09:53.909Z",
+    "completed_at": "2026-10-03T07:09:57.043Z",
+    "duration_ms": 3134,
+    "conclusion": "failure",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": null,
+    "pricing": {},
+    "providers": {},
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": "Azure pricing request failed: 429 Too Many Requests for filter \"serviceName eq 'Virtual Machines' and armRegionName eq 'eastus' and armSkuName eq 'Standard_D2s_v5'\". Too many requests at this point. Please retry after some time."
   }
 ]
