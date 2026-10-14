@@ -4120,5 +4120,14 @@
     "source_refs": [
       "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/"
     ]
+  },
+  "victoria-metrics:aws:m:ha:us-east-1": {
+    "key": "victoria-metrics:aws:m:ha:us-east-1",
+    "generated_at": "2026-10-14T06:49:00.464Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier configuration supports high-ingest workloads by decoupling the insert, query, and storage paths into independent, highly available components. Compute instances represent the primary cost driver at $1,051.20 per month, which is three times the cost of the allocated storage. To maintain high availability across these decoupled paths, the architecture duplicates resources, requiring a tradeoff of increased budget allocation toward redundant compute nodes to prevent single points of failure.",
+    "source_refs": [
+      "https://docs.victoriametrics.com/cluster-victoriametrics/"
+    ]
   }
 }
