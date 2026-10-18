@@ -4129,5 +4129,14 @@
     "source_refs": [
       "https://docs.victoriametrics.com/cluster-victoriametrics/"
     ]
+  },
+  "kong-gateway:aws:m:noha:us-east-1": {
+    "key": "kong-gateway:aws:m:noha:us-east-1",
+    "generated_at": "2026-10-18T06:41:45.374Z",
+    "model": "gemini-3.5-flash",
+    "explanation": "This medium-tier deployment supports workloads processing fewer than 10,000 requests per second and managing under 10,000 configured entities. Compute instances represent the dominant cost driver at this scale, accounting for over 90% of the $452.48 total monthly spend. By opting for a single database node alongside two gateway nodes, this configuration trades high availability for cost efficiency, leaving the deployment vulnerable to a single point of failure.",
+    "source_refs": [
+      "https://developer.konghq.com/gateway/resource-sizing-guidelines/"
+    ]
   }
 }
