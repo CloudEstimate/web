@@ -1,6 +1,6 @@
 {
   "cloud": "gcp",
-  "retrieved_at": "2026-10-19T07:01:39.742Z",
+  "retrieved_at": "2026-10-20T06:45:58.027Z",
   "regions": {
     "us-central1": {
       "compute": {
