@@ -207,12 +207,64 @@ function findManagedDiskItem(items, productName, skuName, meterName) {
   );
 }
 
+const AZURE_MAX_ATTEMPTS = 6;
+const AZURE_BASE_DELAY_MS = 2000;
+const AZURE_MAX_DELAY_MS = 60000;
+
+function isRetryableStatus(status) {
+  return status === 429 || status >= 500;
+}
+
+function getRetryDelayMs(response, attempt) {
+  const retryAfter = Number(response?.headers?.get("retry-after"));
+
+  if (Number.isFinite(retryAfter) && retryAfter > 0) {
+    return Math.min(retryAfter * 1000, AZURE_MAX_DELAY_MS);
+  }
+
+  // Exponential backoff with jitter so parallel requests don't retry in lockstep.
+  const ceiling = Math.min(AZURE_BASE_DELAY_MS * 2 ** (attempt - 1), AZURE_MAX_DELAY_MS);
+  return Math.round(ceiling / 2 + Math.random() * (ceiling / 2));
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// The Azure Retail Prices API rate-limits bursts of requests (HTTP 429). Pricing is fetched for every
+// region × SKU in parallel, so retry transient failures instead of failing the whole snapshot refresh.
+async function fetchAzureWithRetry(url, filter) {
+  for (let attempt = 1; ; attempt += 1) {
+    let response;
+
+    try {
+      response = await fetch(url);
+    } catch (error) {
+      if (attempt >= AZURE_MAX_ATTEMPTS) {
+        throw error;
+      }
+
+      const delayMs = getRetryDelayMs(null, attempt);
+      logger.warn(`Azure pricing request errored (${error.message}) for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`);
+      await sleep(delayMs);
+      continue;
+    }
+
+    if (response.ok || !isRetryableStatus(response.status) || attempt >= AZURE_MAX_ATTEMPTS) {
+      return response;
+    }
+
+    const delayMs = getRetryDelayMs(response, attempt);
+    logger.warn(`Azure pricing request returned ${response.status} for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`);
+    await response.body?.cancel();
+    await sleep(delayMs);
+  }
+}
+
 async function fetchAzureItems(filter) {
   const items = [];
   let url = `${AZURE_BASE_URL}?$filter=${encodeURIComponent(filter)}`;
 
   while (url) {
-    const response = await fetch(url);
+    const response = await fetchAzureWithRetry(url, filter);
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(
