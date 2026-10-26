@@ -17,6 +17,7 @@ jobs:
       CLOUDESTIMATE_GCP_PROJECT_ID: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
       GOOGLE_CLOUD_QUOTA_PROJECT: ${{ vars.CLOUDESTIMATE_GCP_PROJECT_ID }}
     permissions:
+      actions: write
       contents: write
       issues: write
     steps:
@@ -47,6 +48,7 @@ jobs:
           CLOUDESTIMATE_VERTEX_MODEL: ${{ vars.CLOUDESTIMATE_VERTEX_MODEL || 'gemini-3.5-flash' }}
           CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS: ${{ vars.CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS || '3900000' }}
       - name: Commit snapshot updates
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -58,6 +60,15 @@ jobs:
           git commit -m "chore: refresh pricing and explanation snapshots $(date -u +%Y-%m-%d)"
           git pull --rebase origin main
           git push origin main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      # Pushes made with GITHUB_TOKEN do not trigger `on: push` workflows, so the
+      # static site would never rebuild with the new snapshot. workflow_dispatch is
+      # exempt from that restriction, so dispatch the deploy explicitly.
+      - name: Trigger Build and Deploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --repo "${{ github.repository }}" --ref main
       - name: Commit failure metrics
         if: failure()
         run: |
