@@ -1,6 +1,6 @@
 {
   "cloud": "aws",
-  "retrieved_at": "2026-11-08T08:09:07.357Z",
+  "retrieved_at": "2026-11-09T08:45:51.364Z",
   "regions": {
     "us-east-1": {
       "compute": {
