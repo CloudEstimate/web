@@ -2,16 +2,19 @@ slug: cockroachdb-self-hosted
 name: CockroachDB Self-Hosted
 vendor: Cockroach Labs
 category: data-store
+arch_support:
+  - x86_64
+  - arm64
 description: >
-  Self-hosted CockroachDB for resilient SQL workloads that need distributed transactions and scale-out storage.
+  Self-hosted CockroachDB v26.x for resilient distributed SQL workloads needing serializable transactions and multi-zone survivability.
 ref_arch:
   source_url: https://www.cockroachlabs.com/docs/stable/recommended-production-settings
-  version: "CockroachDB stable recommended production settings"
-  retrieved_date: "2026-04-13"
+  version: "CockroachDB v26.x recommended production settings"
+  retrieved_date: "2026-11-11"
 sizes:
   xs:
     label: Extra Small
-    range_description: up to 1 TB replicated OLTP data on a three-node cluster
+    range_description: up to 1 TB replicated OLTP data on a three-node quorum cluster
     ref_arch_tier: three-node-small
     components:
       - role: node
@@ -20,6 +23,11 @@ sizes:
         memory_gb: 16
         storage_gb: 500
         storage_type: ssd
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
   m:
     label: Medium
     range_description: 1 to 5 TB replicated OLTP data on a five-node cluster
@@ -31,9 +39,14 @@ sizes:
         memory_gb: 32
         storage_gb: 1000
         storage_type: ssd
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
   xl:
     label: Extra Large
-    range_description: 5 to 20 TB replicated data or higher-concurrency regional SQL workloads
+    range_description: 5 to 20 TB replicated data or high-concurrency regional SQL workloads
     ref_arch_tier: seven-node-large
     components:
       - role: node
@@ -41,10 +54,15 @@ sizes:
         vcpu: 16
         memory_gb: 64
         storage_gb: 2000
-        storage_type: ssd
+        storage_type: nvme
+    ha_components:
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
 notes:
-  - CockroachDB production guidance starts at a three-node quorum, so redundancy is already reflected in the base topology.
-  - Node sizes align with the product's published CPU, memory, and SSD guidance for production clusters and are normalized to the nearest CloudEstimate VM shape.
+  - CockroachDB requires a commercial license (or free tier registration within published scale thresholds) since the v24.3 CockroachDB Software License transition.
+  - Multi-node Raft quorum is already built into the 3-, 5-, and 7-node base topologies; enabling HA adds managed L4 SQL load balancing across zones.
 disclaimers:
-  - Based on CockroachDB self-hosted production recommendations and expressed as VM-based planning tiers.
-  - Estimate excludes load balancers, backups, changefeeds, geo-partitioned layouts, and network transfer between regions or zones.
+  - Based on CockroachDB v26.x self-hosted production hardware recommendations (4 GB RAM per vCPU, up to ~2.5 TB logical capacity per node).
+  - Estimate excludes CockroachDB Enterprise licensing, backup object storage, Kafka changefeed sinks, and cross-AZ/cross-region replication egress.

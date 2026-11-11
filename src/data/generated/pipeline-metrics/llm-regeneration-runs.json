@@ -4966,5 +4966,143 @@
       "trafficType"
     ],
     "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:45:00.718Z",
+    "completed_at": "2026-11-11T21:45:02.208Z",
+    "duration_ms": 1490,
+    "conclusion": "success",
+    "model": "gemini-3.5-flash-lite",
+    "options": {
+      "maxNewExplanations": 5,
+      "timeBudgetMs": 0,
+      "concurrency": 24
+    },
+    "work_items_queued": 1284,
+    "attempted": 5,
+    "generated": 5,
+    "skipped_existing": 0,
+    "validation_failures": 0,
+    "llm_api_responses": 5,
+    "llm_api_responses_with_usage_metadata": 5,
+    "llm_api_responses_without_usage_metadata": 0,
+    "llm_api_errors_or_timeouts": 0,
+    "token_usage": {
+      "prompt_token_count": 2842,
+      "candidates_token_count": 407,
+      "total_token_count": 3249,
+      "cached_content_token_count": 0,
+      "thoughts_token_count": 0,
+      "tool_use_prompt_token_count": 0
+    },
+    "usage_metadata_fields_seen": [
+      "candidatesTokenCount",
+      "candidatesTokensDetails",
+      "promptTokenCount",
+      "promptTokensDetails",
+      "totalTokenCount",
+      "trafficType"
+    ],
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:45:21.146Z",
+    "completed_at": "2026-11-11T21:47:05.737Z",
+    "duration_ms": 104591,
+    "conclusion": "success",
+    "model": "gemini-3.5-flash-lite",
+    "options": {
+      "maxNewExplanations": 0,
+      "timeBudgetMs": 0,
+      "concurrency": 28
+    },
+    "work_items_queued": 1279,
+    "attempted": 1279,
+    "generated": 1112,
+    "skipped_existing": 5,
+    "validation_failures": 167,
+    "llm_api_responses": 1115,
+    "llm_api_responses_with_usage_metadata": 1115,
+    "llm_api_responses_without_usage_metadata": 0,
+    "llm_api_errors_or_timeouts": 574,
+    "token_usage": {
+      "prompt_token_count": 591716,
+      "candidates_token_count": 96973,
+      "total_token_count": 688689,
+      "cached_content_token_count": 0,
+      "thoughts_token_count": 0,
+      "tool_use_prompt_token_count": 0
+    },
+    "usage_metadata_fields_seen": [
+      "candidatesTokenCount",
+      "candidatesTokensDetails",
+      "promptTokenCount",
+      "promptTokensDetails",
+      "totalTokenCount",
+      "trafficType"
+    ],
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:47:53.587Z",
+    "completed_at": "2026-11-11T21:48:21.917Z",
+    "duration_ms": 28330,
+    "conclusion": "success",
+    "model": "gemini-3.5-flash-lite",
+    "options": {
+      "maxNewExplanations": 0,
+      "timeBudgetMs": 0,
+      "concurrency": 12
+    },
+    "work_items_queued": 167,
+    "attempted": 167,
+    "generated": 167,
+    "skipped_existing": 1117,
+    "validation_failures": 0,
+    "llm_api_responses": 168,
+    "llm_api_responses_with_usage_metadata": 168,
+    "llm_api_responses_without_usage_metadata": 0,
+    "llm_api_errors_or_timeouts": 0,
+    "token_usage": {
+      "prompt_token_count": 89525,
+      "candidates_token_count": 14073,
+      "total_token_count": 103598,
+      "cached_content_token_count": 0,
+      "thoughts_token_count": 0,
+      "tool_use_prompt_token_count": 0
+    },
+    "usage_metadata_fields_seen": [
+      "candidatesTokenCount",
+      "candidatesTokensDetails",
+      "promptTokenCount",
+      "promptTokensDetails",
+      "totalTokenCount",
+      "trafficType"
+    ],
+    "error_message": null
   }
 ]

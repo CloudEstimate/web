@@ -10,9 +10,9 @@ export async function refreshPricingCaches() {
   const bucket = getCacheBucket();
   const shapeMappings = getShapeMappings();
   const today = new Date().toISOString().slice(0, 10);
-  const gcpMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.gcp))];
-  const awsMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.aws))];
-  const azureMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.azure))];
+  const gcpMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.gcp, mapping.arm_gcp]).filter(Boolean))];
+  const awsMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.aws, mapping.arm_aws]).filter(Boolean))];
+  const azureMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.azure, mapping.arm_azure]).filter(Boolean))];
 
   const providers = [
     ["gcp", () => fetchGcpPricing({ regions: providerTargets.gcp.regions, machineTypes: gcpMachineTypes })],

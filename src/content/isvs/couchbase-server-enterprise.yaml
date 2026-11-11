@@ -2,6 +2,9 @@ slug: couchbase-server-enterprise
 name: Couchbase Server Enterprise
 vendor: Couchbase, Inc.
 category: data-store
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-managed Couchbase Server Enterprise for distributed JSON data, caching, and full-text search workloads.
 ref_arch:

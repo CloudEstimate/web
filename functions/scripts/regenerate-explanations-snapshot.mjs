@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { GoogleGenAI } from "@google/genai";
@@ -15,7 +16,7 @@ const pipelineMetricsDir = path.join(repoRoot, "src/data/generated/pipeline-metr
 const llmRunsPath = path.join(pipelineMetricsDir, "llm-regeneration-runs.json");
 const snapshotRunsPath = path.join(pipelineMetricsDir, "snapshot-runs.json");
 
-const CHECKPOINT_INTERVAL = 25;
+const CHECKPOINT_INTERVAL = 50;
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_METRICS_ENTRIES = 400;
 const WORKFLOW_NAME = "regenerate-explanations";
@@ -29,12 +30,17 @@ const TOKEN_USAGE_FIELDS = [
   ["toolUsePromptTokenCount", "tool_use_prompt_token_count"]
 ];
 
+function hashPrompt(prompt) {
+  return crypto.createHash("sha256").update(prompt).digest("hex").slice(0, 16);
+}
+
 async function main() {
   const startedAtMs = Date.now();
   const runMetrics = buildLlmRunMetrics(new Date(startedAtMs).toISOString());
   let attempted = 0;
   let generated = 0;
   let skippedExisting = 0;
+  let prunedStale = 0;
   let validationFailures = 0;
 
   try {
@@ -43,7 +49,7 @@ async function main() {
       project: requireProjectId(),
       location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
     });
-    const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-flash";
+    const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-flash-lite";
     runMetrics.model = model;
     const pricingByCloud = await loadPricing();
     const singleAggregate = await loadAggregate("single.json");
@@ -61,16 +67,22 @@ async function main() {
       return !(options.timeBudgetMs > 0 && Date.now() - startedAtMs >= options.timeBudgetMs);
     };
 
-    const workItems = buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, (n) => {
-      skippedExisting += n;
-    });
+    const workItems = buildWorkQueue(
+      singleAggregate,
+      compareAggregate,
+      pricingByCloud,
+      ({ skipped, pruned }) => {
+        skippedExisting += skipped;
+        prunedStale += pruned;
+      }
+    );
     runMetrics.work_items_queued = workItems.length;
 
     await runWithConcurrency(workItems, options.concurrency, async (item) => {
       if (!canAttemptMore()) return;
 
       attempted += 1;
-      const explanation = await generateWithValidation(ai, model, buildPrompt(item), {
+      const explanation = await generateWithValidation(ai, model, item.prompt, {
         onUsage: (usageMetadata) => recordUsage(runMetrics, usageMetadata),
         onError: () => {
           runMetrics.llm_api_errors_or_timeouts += 1;
@@ -82,6 +94,7 @@ async function main() {
           key: item.key,
           generated_at: new Date().toISOString(),
           model,
+          prompt_hash: item.promptHash,
           explanation,
           source_refs: [item.isv.ref_arch.source_url]
         };
@@ -120,7 +133,7 @@ async function main() {
     await writeLlmRunMetrics(runMetrics);
     await writeSnapshotRunRecord(buildSnapshotRunRecord(runMetrics));
     console.log(
-      `Explanation snapshot regeneration complete. Attempted ${attempted}, generated ${generated}, skipped ${skippedExisting} existing, validation failures ${validationFailures}.`
+      `Explanation snapshot regeneration complete. Attempted ${attempted}, generated ${generated}, skipped ${skippedExisting} fresh, pruned ${prunedStale} orphaned, validation failures ${validationFailures}.`
     );
     console.log(
       `LLM token usage for this run: prompt ${runMetrics.token_usage.prompt_token_count}, output ${runMetrics.token_usage.candidates_token_count}, total ${runMetrics.token_usage.total_token_count}.`
@@ -141,8 +154,10 @@ async function main() {
   }
 }
 
-function buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, onSkip) {
+function buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, onSummary) {
   const workItems = [];
+  const activeSingleKeys = new Set();
+  const activeCompareKeys = new Set();
   let skipped = 0;
 
   for (const isv of getIsvCatalog()) {
@@ -150,28 +165,60 @@ function buildWorkQueue(singleAggregate, compareAggregate, pricingByCloud, onSki
       if (tuple.term !== "on-demand") continue;
 
       const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.region].join(":");
+      activeSingleKeys.add(key);
+      const item = { type: "single", isv, tuple, key };
+      const prompt = buildPrompt(item);
+      const promptHash = hashPrompt(prompt);
+      const existing = singleAggregate[key];
 
-      if (singleAggregate[key]?.explanation) {
+      if (
+        existing?.explanation &&
+        existing.prompt_hash === promptHash &&
+        validateExplanation(existing.explanation).ok
+      ) {
         skipped += 1;
         continue;
       }
 
-      workItems.push({ type: "single", isv, tuple, key });
+      workItems.push({ ...item, prompt, promptHash });
     }
 
     for (const tuple of buildCompareTuples(isv, pricingByCloud)) {
       const key = [isv.slug, tuple.size, tuple.ha ? "ha" : "noha", tuple.term].join(":");
+      activeCompareKeys.add(key);
+      const item = { type: "compare", isv, tuple, key };
+      const prompt = buildPrompt(item);
+      const promptHash = hashPrompt(prompt);
+      const existing = compareAggregate[key];
 
-      if (compareAggregate[key]?.explanation) {
+      if (
+        existing?.explanation &&
+        existing.prompt_hash === promptHash &&
+        validateExplanation(existing.explanation).ok
+      ) {
         skipped += 1;
         continue;
       }
 
-      workItems.push({ type: "compare", isv, tuple, key });
+      workItems.push({ ...item, prompt, promptHash });
     }
   }
 
-  onSkip(skipped);
+  let pruned = 0;
+  for (const key of Object.keys(singleAggregate)) {
+    if (!activeSingleKeys.has(key)) {
+      delete singleAggregate[key];
+      pruned += 1;
+    }
+  }
+  for (const key of Object.keys(compareAggregate)) {
+    if (!activeCompareKeys.has(key)) {
+      delete compareAggregate[key];
+      pruned += 1;
+    }
+  }
+
+  onSummary({ skipped, pruned });
   return workItems;
 }
 
@@ -230,16 +277,22 @@ async function loadAggregate(filename) {
 }
 
 async function writeAggregates(singleAggregate, compareAggregate) {
+  const sortedSingle = Object.fromEntries(
+    Object.entries(singleAggregate).sort(([left], [right]) => left.localeCompare(right))
+  );
+  const sortedCompare = Object.fromEntries(
+    Object.entries(compareAggregate).sort(([left], [right]) => left.localeCompare(right))
+  );
   await fs.mkdir(explanationsDir, { recursive: true });
-  await fs.writeFile(path.join(explanationsDir, "single.json"), `${JSON.stringify(singleAggregate, null, 2)}\n`);
-  await fs.writeFile(path.join(explanationsDir, "compare.json"), `${JSON.stringify(compareAggregate, null, 2)}\n`);
+  await fs.writeFile(path.join(explanationsDir, "single.json"), `${JSON.stringify(sortedSingle, null, 2)}\n`);
+  await fs.writeFile(path.join(explanationsDir, "compare.json"), `${JSON.stringify(sortedCompare, null, 2)}\n`);
 }
 
 function readGenerationOptions() {
   return {
     maxNewExplanations: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_LIMIT"),
     timeBudgetMs: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_TIME_BUDGET_MS"),
-    concurrency: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_CONCURRENCY") || 12
+    concurrency: readPositiveIntegerEnv("CLOUDESTIMATE_EXPLANATION_CONCURRENCY") || 24
   };
 }
 
@@ -260,21 +313,23 @@ function readPositiveIntegerEnv(name) {
 }
 
 async function generateWithValidation(ai, model, userPrompt, hooks = {}) {
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    if (attempt > 0) {
-      await sleep(attempt * 2000);
-    }
+  const thinkingLevel = model.startsWith("gemini-4") ? "LOW" : "MINIMAL";
+  let lastValidationReason = "";
 
+  for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
+      const promptWithFeedback = lastValidationReason
+        ? `${userPrompt}\n\nPrevious draft failed check (${lastValidationReason}). Output strictly 3 to 4 plain sentences totaling 240 to 520 characters.`
+        : userPrompt;
+
       const response = await withTimeout(
         ai.models.generateContent({
           model,
-          contents: userPrompt,
+          contents: promptWithFeedback,
           config: {
             systemInstruction: sharedSystemPrompt,
-            temperature: 0.2,
-            maxOutputTokens: 384,
-            thinkingConfig: { thinkingBudget: 0 }
+            maxOutputTokens: 512,
+            thinkingConfig: { thinkingLevel }
           }
         }),
         REQUEST_TIMEOUT_MS
@@ -283,6 +338,7 @@ async function generateWithValidation(ai, model, userPrompt, hooks = {}) {
       const text = response.text?.trim();
 
       if (!text) {
+        lastValidationReason = "Empty response";
         continue;
       }
 
@@ -290,9 +346,11 @@ async function generateWithValidation(ai, model, userPrompt, hooks = {}) {
       if (validation.ok) {
         return text;
       }
+
+      lastValidationReason = validation.reason;
     } catch {
       hooks.onError?.();
-      // timeout or transient API error — retry with backoff
+      await sleep((attempt + 1) * 1500);
     }
   }
 

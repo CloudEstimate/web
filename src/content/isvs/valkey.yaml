@@ -1,0 +1,81 @@
+slug: valkey
+name: Valkey
+vendor: Linux Foundation
+category: data-store
+arch_support:
+  - x86_64
+  - arm64
+description: >
+  Self-managed Valkey 9.x (BSD-3 Linux Foundation fork of Redis) for low-latency caching, session storage, and clustered key-value workloads.
+ref_arch:
+  source_url: https://valkey.io/topics/cluster-tutorial/
+  version: "Valkey 9.x Cluster & Sentinel deployment guidance"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 25 GB working set on a primary with Sentinel failover option
+    ref_arch_tier: sentinel-small
+    components:
+      - role: primary
+        count: 1
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 100
+        storage_type: nvme
+    ha_components:
+      - role: replica
+        count: 2
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 100
+        storage_type: nvme
+      - role: sentinel
+        count: 3
+        vcpu: 2
+        memory_gb: 4
+        storage_gb: 30
+        storage_type: ssd
+  m:
+    label: Medium
+    range_description: 50 to 250 GB working set across a three-shard Valkey Cluster
+    ref_arch_tier: cluster-three-shard
+    components:
+      - role: primary-shard
+        count: 3
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 250
+        storage_type: nvme
+    ha_components:
+      - role: replica-shard
+        count: 3
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 250
+        storage_type: nvme
+  xl:
+    label: Extra Large
+    range_description: 250 GB to 1.5 TB working set across an eight-shard Valkey Cluster
+    ref_arch_tier: cluster-eight-shard
+    components:
+      - role: primary-shard
+        count: 8
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 500
+        storage_type: nvme
+    ha_components:
+      - role: replica-shard
+        count: 8
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 500
+        storage_type: nvme
+notes:
+  - Valkey 8.x and 9.x introduce multi-threaded async I/O and memory-efficient hash tables while remaining BSD-3 open source under the Linux Foundation.
+  - Provision ~25-30% free RAM headroom per shard for copy-on-write fork snapshots (BGSAVE / AOF rewrite) and replication buffers; Linux arm64 instances deliver strong price-performance here.
+disclaimers:
+  - Based on Valkey Cluster and Sentinel topology documentation paired with standard 1:8 memory-optimized shard sizing.
+  - Estimate excludes client-side proxy pools, cross-region replication, RDB snapshot buckets, and cross-AZ replication bandwidth charges.
+

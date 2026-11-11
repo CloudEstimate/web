@@ -1,11 +1,13 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const componentSchema = z.object({
   role: z.string(),
   count: z.number().int().min(1),
-  vcpu: z.number().int().min(1),
-  memory_gb: z.number().min(0.5),
+  vcpu: z.number().int().min(0),
+  memory_gb: z.number().min(0),
+  gpu: z.number().int().min(0).optional(),
   storage_gb: z.number().int().min(0).optional(),
   storage_type: z.enum(["ssd", "hdd", "nvme", "object"]).optional()
 });
@@ -31,11 +33,14 @@ const isvs = defineCollection({
       "streaming",
       "artifact-repo",
       "identity",
+      "observability",
+      "ai-infrastructure",
       "other"
     ]),
+    arch_support: z.array(z.enum(["x86_64", "arm64"])).optional(),
     description: z.string().max(280),
     ref_arch: z.object({
-      source_url: z.string().url(),
+      source_url: z.url(),
       version: z.string(),
       retrieved_date: z.string()
     }),

@@ -1,0 +1,141 @@
+slug: temporal
+name: Temporal Self-Hosted
+vendor: Temporal Technologies
+category: devops-platform
+arch_support:
+  - x86_64
+  - arm64
+description: >
+  Self-hosted Temporal durable execution cluster for microservice workflows, AI agent orchestration, and long-running sagas.
+ref_arch:
+  source_url: https://docs.temporal.io/self-hosted-guide/Checklist
+  version: "Temporal Server 1.26+ production deployment checklist"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 150 state transitions per second with PostgreSQL persistence
+    ref_arch_tier: starter-postgres
+    components:
+      - role: temporal-service
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: persistence-db
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: nvme
+    ha_components:
+      - role: temporal-service
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: persistence-db-replica
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: 150 to 1,000 state transitions per second with split History, Matching, and Frontend services
+    ref_arch_tier: split-services-medium
+    components:
+      - role: history-service
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 50
+        storage_type: ssd
+      - role: matching-frontend
+        count: 3
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: persistence-db
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: nvme
+      - role: visibility-search
+        count: 3
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: ssd
+    ha_components:
+      - role: history-service
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 50
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  xl:
+    label: Extra Large
+    range_description: 1,000 to 5,000+ state transitions per second with Cassandra persistence and OpenSearch visibility
+    ref_arch_tier: high-scale-cassandra
+    components:
+      - role: history-service
+        count: 6
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 100
+        storage_type: ssd
+      - role: matching-service
+        count: 4
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: frontend-worker
+        count: 4
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: cassandra-node
+        count: 6
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: nvme
+      - role: visibility-opensearch
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: nvme
+    ha_components:
+      - role: cassandra-node
+        count: 3
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 2000
+        storage_type: nvme
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
+notes:
+  - Temporal History shards are memory- and persistence-latency sensitive, whereas Matching and Frontend services are CPU-bound gRPC routers that map well to 1:2 shapes.
+  - PostgreSQL 12+ (with SQL visibility) suffices at Extra Small scale, while Medium and Extra Large separate OpenSearch/Elasticsearch visibility and multi-node persistence.
+disclaimers:
+  - Based on Temporal's self-hosted production checklist and split-role scaling guidance (MIT license).
+  - Estimate excludes application SDK worker fleets (which execute user workflow/activity code), archival buckets, and multi-region Namespace replication.
+

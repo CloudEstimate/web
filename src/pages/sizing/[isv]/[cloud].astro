@@ -4,7 +4,14 @@ import EstimateExplorer from "@/components/EstimateExplorer.astro";
 import IsvCard from "@/components/IsvCard.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildEstimate, buildEstimateMatrix, getDefaultRegion, getDefaultSize } from "@/lib/estimates";
-import { buildBreadcrumbJsonLd, buildCanonical, buildEstimateDescription, buildEstimateProductJsonLd, buildEstimateTitle, buildPageJsonLd } from "@/lib/seo";
+import {
+  buildBreadcrumbJsonLd,
+  buildCanonical,
+  buildEstimateDescription,
+  buildEstimateProductJsonLd,
+  buildEstimateTitle,
+  buildPageJsonLd
+} from "@/lib/seo";
 import { cloudOrder, cloudMeta, siteConfig, type CloudSlug } from "@/lib/site";
 import type { IsvEntry } from "@/lib/types";
 
@@ -57,7 +64,9 @@ const jsonLd = [
     canonical,
     image: new URL(image, siteConfig.url).toString(),
     price: initialEstimate.monthlyTotal,
-    lastModifiedDate: initialEstimate.pricingSnapshotDate
+    lastModifiedDate: initialEstimate.pricingSnapshotDate,
+    isvName: isv.data.name,
+    refArchUrl: isv.data.ref_arch.source_url
   }),
   buildBreadcrumbJsonLd([
     { name: "Home", item: buildCanonical("/") },
@@ -66,8 +75,16 @@ const jsonLd = [
     { name: isv.data.name, item: canonical }
   ])
 ];
-const allIsvs = await getCollection("isvs");
-const relatedIsvs = allIsvs.filter((entry) => entry.data.slug !== isv.data.slug).slice(0, 3);
+const allIsvs = (await getCollection("isvs")).sort((left, right) =>
+  left.data.name.localeCompare(right.data.name)
+);
+const sameCategory = allIsvs.filter(
+  (entry) => entry.data.slug !== isv.data.slug && entry.data.category === isv.data.category
+);
+const otherIsvs = allIsvs.filter(
+  (entry) => entry.data.slug !== isv.data.slug && entry.data.category !== isv.data.category
+);
+const relatedIsvs = [...sameCategory, ...otherIsvs].slice(0, 3);
 ---
 
 <BaseLayout title={title} description={description} canonical={canonical} image={image} jsonLd={jsonLd}>
@@ -76,7 +93,7 @@ const relatedIsvs = allIsvs.filter((entry) => entry.data.slug !== isv.data.slug)
   {relatedIsvs.length > 0 && (
     <section class="page-shell pb-10">
       <div class="space-y-4">
-        <h2 class="section-heading">Other workloads on {cloudMeta[cloud].name}</h2>
+        <h2 class="section-heading">Related workloads on {cloudMeta[cloud].name}</h2>
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {relatedIsvs.map((related) => (
             <IsvCard isv={related} href={`/sizing/${related.data.slug}/${cloud}`} />

@@ -2,6 +2,9 @@ slug: mongodb-enterprise-advanced
 name: MongoDB Enterprise Advanced
 vendor: MongoDB, Inc.
 category: data-store
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-managed MongoDB Enterprise Advanced for replicated document databases and sharded operational workloads.
 ref_arch:

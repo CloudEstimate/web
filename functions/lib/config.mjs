@@ -19,24 +19,50 @@ export const cloudMeta = {
 
 export const providerTargets = {
   gcp: {
-    regions: ["us-central1", "us-east1"],
+    regions: ["us-central1", "us-east1", "europe-west1", "asia-southeast1"],
     storagePatterns: {
-      ssd: { include: [/SSD backed PD Capacity/i] },
-      hdd: { include: [/\bPD Capacity\b/i], exclude: [/SSD/i, /Hyperdisk/i, /Balanced/i] },
-      nvme: { include: [/Hyperdisk Balanced Capacity/i] },
-      object: { include: [/Standard Storage/i] }
+      ssd: {
+        include: [/Balanced PD Capacity/i],
+        exclude: [/Regional/i, /Confidential/i, /Hyperdisk/i, /Replication/i, /Snapshot/i]
+      },
+      hdd: {
+        include: [/\bPD Capacity\b/i],
+        exclude: [/SSD/i, /Hyperdisk/i, /Balanced/i, /Extreme/i, /Regional/i, /Confidential/i, /Snapshot/i]
+      },
+      nvme: {
+        include: [/SSD backed PD Capacity/i],
+        exclude: [/Regional/i, /Confidential/i, /Snapshot/i]
+      },
+      object: {
+        include: [/^Standard Storage/i],
+        exclude: [/Dual-region/i, /Multi-region/i, /Autoclass/i, /Tag/i, /Replication/i]
+      }
     }
   },
   aws: {
-    regions: ["us-east-1", "us-west-2"],
+    regions: ["us-east-1", "us-west-2", "eu-west-1", "ap-southeast-1"],
     regionLabels: {
       "us-east-1": "US East (N. Virginia)",
-      "us-west-2": "US West (Oregon)"
+      "us-west-2": "US West (Oregon)",
+      "eu-west-1": "EU (Ireland)",
+      "ap-southeast-1": "Asia Pacific (Singapore)"
     },
     storageProducts: {
-      ssd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "gp3" && product.attributes?.usagetype?.includes("VolumeUsage") },
-      hdd: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "st1" && product.attributes?.usagetype?.includes("VolumeUsage") },
-      nvme: { serviceCode: "AmazonEC2", matcher: (product) => product.attributes?.volumeApiName === "io2" && product.attributes?.usagetype?.includes("VolumeUsage") },
+      ssd: {
+        serviceCode: "AmazonEC2",
+        matcher: (product) =>
+          product.attributes?.volumeApiName === "gp3" && product.attributes?.usagetype?.includes("VolumeUsage")
+      },
+      hdd: {
+        serviceCode: "AmazonEC2",
+        matcher: (product) =>
+          product.attributes?.volumeApiName === "st1" && product.attributes?.usagetype?.includes("VolumeUsage")
+      },
+      nvme: {
+        serviceCode: "AmazonEC2",
+        matcher: (product) =>
+          product.attributes?.volumeApiName === "io2" && product.attributes?.usagetype?.includes("VolumeUsage")
+      },
       object: {
         serviceCode: "AmazonS3",
         matcher: (product) =>
@@ -46,7 +72,7 @@ export const providerTargets = {
     }
   },
   azure: {
-    regions: ["eastus", "westus3"]
+    regions: ["eastus", "westus3", "westeurope", "southeastasia"]
   }
 };
 

@@ -1,8 +1,15 @@
 ---
 import { getCompareExplanationWithMetadata } from "@/lib/explanations";
 import { buildCompareKey } from "@/lib/estimates";
-import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatUserRange } from "@/lib/format";
-import { cloudMeta, cloudOrder, termOrder, type CommitmentTerm, type SizeSlug } from "@/lib/site";
+import {
+  formatCurrency,
+  formatDate,
+  formatPercent,
+  formatRoleLabel,
+  formatRoundedAnnual,
+  formatUserRange
+} from "@/lib/format";
+import { cloudMeta, cloudOrder, regionLabels, termOrder, type CommitmentTerm, type SizeSlug } from "@/lib/site";
 import type { IsvEntry } from "@/lib/types";
 
 type CompareMatrix = Record<
@@ -39,6 +46,8 @@ const cheapestCloud = cloudOrder.reduce((winner, candidate) =>
 const clientData = {
   slug,
   name: isv.data.name,
+  initialState,
+  regionLabels,
   defaultRegions: initialView.regions,
   sizes: Object.fromEntries(
     sizeOptions.map((size) => [
@@ -115,6 +124,9 @@ const clientData = {
             <button aria-pressed={!initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="false" data-active={!initialState.ha ? "true" : "false"} type="button">Off</button>
             <button aria-pressed={initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="true" data-active={initialState.ha ? "true" : "false"} type="button">On</button>
           </div>
+          <p class="mt-2 text-xs text-subtle" hidden={initialView.estimates.gcp.haAddsComponents} id={`${widgetId}-ha-note`}>
+            Multi-node quorum or replication is already included in this baseline tier.
+          </p>
         </div>
 
         <div>
@@ -135,13 +147,16 @@ const clientData = {
         {cloudOrder.map((cloud) => {
           const estimate = initialView.estimates[cloud];
           const winner = cloud === cheapestCloud;
+          const regionCode = initialView.regions[cloud];
           return (
             <article class="panel overflow-hidden">
               <div class="border-t-4 p-5" style={`border-top-color: ${cloudMeta[cloud].accent};`}>
                 <div class="flex items-start justify-between gap-4">
                   <div>
                     <h2 class="text-lg font-semibold">{cloudMeta[cloud].name}</h2>
-                    <p class="mt-1 text-sm text-muted">Region <span class="mono-data">{initialView.regions[cloud]}</span></p>
+                    <p class="mt-1 text-sm text-muted">
+                      {regionLabels[regionCode] ?? regionCode} <span class="mono-data text-xs">({regionCode})</span>
+                    </p>
                   </div>
                   {winner && <p class="text-sm font-semibold" style="color: var(--color-success);">Lowest monthly cost</p>}
                 </div>
@@ -167,6 +182,12 @@ const clientData = {
                     </tr>
                   </tbody>
                 </table>
+
+                {estimate.armAlternative && (
+                  <p class="mt-3 text-xs text-muted">
+                    Arm64 ({estimate.armAlternative.archFamily}): <span class="mono-data font-medium" style="color: var(--color-success);">{formatCurrency(estimate.armAlternative.monthlyTotal)}/mo</span> (−{formatPercent(estimate.armAlternative.savingsPercent)})
+                  </p>
+                )}
 
                 <div class="mt-5">
                   <p class="mb-2 text-sm font-semibold text-muted">Component summary</p>
@@ -232,6 +253,7 @@ const clientData = {
   if (data) {
     const subheadNode = document.getElementById(`${widgetId}-subhead`);
     const columnsNode = document.getElementById(`${widgetId}-columns`);
+    const haNoteNode = document.getElementById(`${widgetId}-ha-note`);
     const explanationNode = document.getElementById(`${widgetId}-explanation`);
     const copyUrlButton = document.getElementById(`${widgetId}-copy-url`);
     const currency = new Intl.NumberFormat("en-US", {
@@ -246,10 +268,13 @@ const clientData = {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
+    const pct = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 1
+    });
     const state = {
-      size: "m",
-      ha: false,
-      term: "on-demand"
+      size: data.initialState.size,
+      ha: Boolean(data.initialState.ha),
+      term: data.initialState.term
     };
 
     function formatUserRange(value) {
@@ -300,7 +325,7 @@ const clientData = {
       return [state.size, state.ha ? "ha" : "noha", state.term].join(":");
     }
 
-    function render() {
+    function render(options = { syncHistory: false }) {
       const view = data.states[buildKey()];
       if (!view) {
         return;
@@ -308,39 +333,51 @@ const clientData = {
 
       const ranked = Object.entries(view.estimates).sort((left, right) => left[1].monthlyTotal - right[1].monthlyTotal);
       const winner = ranked[0][0];
+      if (haNoteNode) {
+        haNoteNode.hidden = Boolean(view.estimates.gcp.haAddsComponents);
+      }
       subheadNode.textContent = `${data.sizes[state.size].label} — ${formatUserRange(data.sizes[state.size].rangeDescription)}`;
       explanationNode.textContent = view.explanation;
       columnsNode.innerHTML = Object.entries(view.estimates)
-        .map(([cloud, estimate]) => `
-          <article class="panel overflow-hidden">
-            <div class="border-t-4 p-5" style="border-top-color: ${data.clouds[cloud].accent};">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <h2 class="text-lg font-semibold">${data.clouds[cloud].name}</h2>
-                  <p class="mt-1 text-sm text-muted">Region <span class="mono-data">${view.regions[cloud]}</span></p>
+        .map(([cloud, estimate]) => {
+          const regionCode = view.regions[cloud];
+          const regionText = data.regionLabels?.[regionCode] ?? regionCode;
+          const armHtml = estimate.armAlternative
+            ? `<p class="mt-3 text-xs text-muted">Arm64 (${estimate.armAlternative.archFamily}): <span class="mono-data font-medium" style="color: var(--color-success);">${currency.format(estimate.armAlternative.monthlyTotal)}/mo</span> (−${pct.format(estimate.armAlternative.savingsPercent)}%)</p>`
+            : "";
+
+          return `
+            <article class="panel overflow-hidden">
+              <div class="border-t-4 p-5" style="border-top-color: ${data.clouds[cloud].accent};">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 class="text-lg font-semibold">${data.clouds[cloud].name}</h2>
+                    <p class="mt-1 text-sm text-muted">${regionText} <span class="mono-data text-xs">(${regionCode})</span></p>
+                  </div>
+                  ${cloud === winner ? '<p class="text-sm font-semibold" style="color: var(--color-success);">Lowest monthly cost</p>' : ""}
                 </div>
-                ${cloud === winner ? '<p class="text-sm font-semibold" style="color: var(--color-success);">Lowest monthly cost</p>' : ""}
+                <div class="mt-5 space-y-1">
+                  <p class="mono-data text-[2rem] font-semibold">${currency.format(estimate.monthlyTotal)}</p>
+                  <p class="mono-data text-sm text-muted">${annual.format(estimate.annualTotal)}/year</p>
+                </div>
+                <table class="data-table mt-5">
+                  <tbody>
+                    <tr><td>Compute</td><td data-align="right" class="mono-data">${currency.format(estimate.computeTotal)}</td></tr>
+                    <tr><td>Storage</td><td data-align="right" class="mono-data">${currency.format(estimate.storageTotal)}</td></tr>
+                    <tr><td>Other</td><td data-align="right" class="mono-data">${currency.format(estimate.otherTotal)}</td></tr>
+                  </tbody>
+                </table>
+                ${armHtml}
+                <div class="mt-5">
+                  <p class="mb-2 text-sm font-semibold text-muted">Component summary</p>
+                  <ul class="space-y-2 text-sm">
+                    ${estimate.components.slice(0, 5).map((component) => `<li>${component.count} × <span class="mono-data">${component.instanceType}</span> for ${formatRoleLabel(component.role)}</li>`).join("")}
+                  </ul>
+                </div>
               </div>
-              <div class="mt-5 space-y-1">
-                <p class="mono-data text-[2rem] font-semibold">${currency.format(estimate.monthlyTotal)}</p>
-                <p class="mono-data text-sm text-muted">${annual.format(estimate.annualTotal)}/year</p>
-              </div>
-              <table class="data-table mt-5">
-                <tbody>
-                  <tr><td>Compute</td><td data-align="right" class="mono-data">${currency.format(estimate.computeTotal)}</td></tr>
-                  <tr><td>Storage</td><td data-align="right" class="mono-data">${currency.format(estimate.storageTotal)}</td></tr>
-                  <tr><td>Other</td><td data-align="right" class="mono-data">${currency.format(estimate.otherTotal)}</td></tr>
-                </tbody>
-              </table>
-              <div class="mt-5">
-                <p class="mb-2 text-sm font-semibold text-muted">Component summary</p>
-                <ul class="space-y-2 text-sm">
-                  ${estimate.components.slice(0, 5).map((component) => `<li>${component.count} × <span class="mono-data">${component.instanceType}</span> for ${formatRoleLabel(component.role)}</li>`).join("")}
-                </ul>
-              </div>
-            </div>
-          </article>
-        `)
+            </article>
+          `;
+        })
         .join("");
 
       document.querySelectorAll(`[data-size-button]`).forEach((button) => {
@@ -381,25 +418,28 @@ const clientData = {
         aws_pricing_snapshot_date: view.estimates.aws.pricingSnapshotDate,
         azure_pricing_snapshot_date: view.estimates.azure.pricingSnapshotDate
       });
-      history.replaceState({}, "", `${location.pathname}?size=${state.size}&ha=${state.ha}&term=${state.term}`);
+
+      if (options.syncHistory) {
+        history.replaceState({}, "", `/sizing/${data.slug}/compare?size=${state.size}&ha=${state.ha}&term=${state.term}`);
+      }
     }
 
     document.querySelectorAll(`[data-size-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.size = button.dataset.sizeButton;
-        render();
+        render({ syncHistory: true });
       });
     });
     document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.ha = button.dataset.haButton === "true";
-        render();
+        render({ syncHistory: true });
       });
     });
     document.querySelectorAll(`[data-term-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.term = button.dataset.termButton;
-        render();
+        render({ syncHistory: true });
       });
     });
 
@@ -420,16 +460,21 @@ const clientData = {
     });
 
     const params = new URLSearchParams(location.search);
+    let hasQueryOverride = false;
+
     if (params.get("size") && data.sizes[params.get("size")]) {
       state.size = params.get("size");
+      hasQueryOverride = true;
     }
-    if (params.get("ha")) {
+    if (params.get("ha") === "true" || params.get("ha") === "false") {
       state.ha = params.get("ha") === "true";
+      hasQueryOverride = true;
     }
-    if (params.get("term")) {
+    if (params.get("term") && ["on-demand", "1yr", "3yr"].includes(params.get("term"))) {
       state.term = params.get("term");
+      hasQueryOverride = true;
     }
 
-    render();
+    render({ syncHistory: hasQueryOverride });
   }
 </script>

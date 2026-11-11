@@ -25,6 +25,7 @@ export function buildEstimate({ isv, cloud, size, ha, term, region, pricingByClo
     ha,
     regionPricing,
     shapeMappings,
+    archSupport: isv.arch_support ?? [],
     loadBalancerMonthlyUsdFallback: cloudMeta[cloud].loadBalancerMonthlyUsd
   });
 }

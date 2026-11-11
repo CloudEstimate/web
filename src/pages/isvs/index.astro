@@ -2,9 +2,11 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical, buildItemListJsonLd, buildPageJsonLd } from "@/lib/seo";
-import { cloudOrder, cloudMeta } from "@/lib/site";
+import { categoryLabels, cloudOrder, cloudMeta } from "@/lib/site";
 
-const isvs = await getCollection("isvs");
+const isvs = (await getCollection("isvs")).sort((left, right) =>
+  left.data.name.localeCompare(right.data.name)
+);
 const description =
   "Directory of supported self-managed workloads with Google Cloud, AWS, Azure, and compare routes.";
 const jsonLd = [
@@ -33,9 +35,9 @@ const jsonLd = [
 >
   <section class="page-shell py-10 lg:py-14">
     <div class="max-w-3xl space-y-4">
-      <h1 class="text-[2rem] font-semibold tracking-tight">Supported ISVs</h1>
+      <h1 class="text-[2rem] font-semibold tracking-tight">Supported ISVs ({isvs.length})</h1>
       <p class="text-lg text-muted">
-        Directory of workloads currently encoded from public reference architectures and compare routes.
+        Directory of workloads currently encoded from public reference architectures with Google Cloud, AWS, Azure, and side-by-side compare routes.
       </p>
     </div>
 
@@ -59,7 +61,7 @@ const jsonLd = [
                 <a class="font-medium" href={`/sizing/${isv.data.slug}/gcp`}>{isv.data.name}</a>
               </td>
               <td>{isv.data.vendor}</td>
-              <td>{isv.data.category}</td>
+              <td>{categoryLabels[isv.data.category] ?? isv.data.category}</td>
               {cloudOrder.map((cloud) => (
                 <td data-align="right">
                   <a href={`/sizing/${isv.data.slug}/${cloud}`}>{cloudMeta[cloud].name}</a>

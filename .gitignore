@@ -8,4 +8,6 @@ coverage
 !.env.example
 *.log
 .DS_Store
+lh-*.json
 /docs/*
+!/docs/OPERATIONS.md

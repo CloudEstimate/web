@@ -4,7 +4,7 @@
   "main": "index.mjs",
   "type": "module",
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "scripts": {
     "check": "node --check index.mjs && for file in lib/*.mjs lib/providers/*.mjs scripts/*.mjs; do node --check \"$file\"; done",

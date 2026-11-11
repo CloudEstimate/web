@@ -2,22 +2,25 @@ slug: gitlab
 name: GitLab Self-Managed
 vendor: GitLab Inc.
 category: devops-platform
+arch_support:
+  - x86_64
+  - arm64
 description: >
-  Self-managed GitLab for source control, CI/CD, and DevSecOps workflows.
+  Self-managed GitLab 18.x for source control, CI/CD orchestration, package registries, and DevSecOps workflows.
 ref_arch:
-  source_url: https://archives.docs.gitlab.com/17.11/administration/reference_architectures/
-  version: "17.11"
-  retrieved_date: "2026-04-12"
+  source_url: https://docs.gitlab.com/administration/reference_architectures/
+  version: "GitLab 18.x Reference Architectures"
+  retrieved_date: "2026-11-11"
 sizes:
   xs:
     label: Extra Small
-    range_description: up to 500 users
+    range_description: up to 1,000 users (20 RPS)
     ref_arch_tier: 1k-users
     components:
-      - role: application
+      - role: rails-sidekiq
         count: 1
-        vcpu: 4
-        memory_gb: 16
+        vcpu: 8
+        memory_gb: 32
         storage_gb: 200
         storage_type: ssd
       - role: database
@@ -30,17 +33,19 @@ sizes:
         count: 1
         vcpu: 2
         memory_gb: 8
-      - role: object-storage-gateway
+        storage_gb: 50
+        storage_type: ssd
+      - role: object-storage
         count: 1
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
         storage_gb: 300
         storage_type: object
     ha_components:
-      - role: application
+      - role: rails-sidekiq
         count: 1
-        vcpu: 4
-        memory_gb: 16
+        vcpu: 8
+        memory_gb: 32
         storage_gb: 200
         storage_type: ssd
       - role: database-replica
@@ -51,25 +56,31 @@ sizes:
         storage_type: ssd
       - role: load-balancer
         count: 1
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
   s:
     label: Small
-    range_description: 500 to 2,000 users
+    range_description: 1,000 to 2,000 users (40 RPS)
     ref_arch_tier: 2k-users
     components:
-      - role: application
+      - role: webservice
         count: 2
         vcpu: 4
         memory_gb: 16
-        storage_gb: 200
+        storage_gb: 100
+        storage_type: ssd
+      - role: sidekiq
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
         storage_type: ssd
       - role: gitaly
         count: 1
         vcpu: 8
         memory_gb: 32
         storage_gb: 1000
-        storage_type: ssd
+        storage_type: nvme
       - role: database
         count: 1
         vcpu: 8
@@ -80,166 +91,204 @@ sizes:
         count: 1
         vcpu: 4
         memory_gb: 16
-      - role: object-storage-gateway
+        storage_gb: 50
+        storage_type: ssd
+      - role: object-storage
         count: 1
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
         storage_gb: 750
+        storage_type: object
+    ha_components:
+      - role: sidekiq
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: gitaly-replica
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 1000
+        storage_type: nvme
+      - role: database-replica
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: ssd
+      - role: cache-replica
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: 2,000 to 5,000 users (100 RPS)
+    ref_arch_tier: 5k-users
+    components:
+      - role: webservice
+        count: 3
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: sidekiq
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+      - role: gitaly
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 2000
+        storage_type: nvme
+      - role: database
+        count: 1
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 1000
+        storage_type: ssd
+      - role: cache
+        count: 1
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
+      - role: object-storage
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+        storage_gb: 1500
         storage_type: object
     ha_components:
       - role: gitaly-replica
         count: 1
         vcpu: 8
         memory_gb: 32
-        storage_gb: 1000
-        storage_type: ssd
-      - role: database-replica
-        count: 1
-        vcpu: 8
-        memory_gb: 32
-        storage_gb: 500
-        storage_type: ssd
-      - role: cache-replica
-        count: 1
-        vcpu: 4
-        memory_gb: 16
-      - role: load-balancer
-        count: 2
-        vcpu: 2
-        memory_gb: 8
-  m:
-    label: Medium
-    range_description: 2,000 to 5,000 users
-    ref_arch_tier: 5k-users
-    components:
-      - role: application
-        count: 3
-        vcpu: 8
-        memory_gb: 32
-        storage_gb: 250
-        storage_type: ssd
-      - role: gitaly
-        count: 2
-        vcpu: 8
-        memory_gb: 32
         storage_gb: 2000
-        storage_type: ssd
-      - role: database
-        count: 1
-        vcpu: 16
-        memory_gb: 64
-        storage_gb: 1000
-        storage_type: ssd
-      - role: cache
-        count: 1
-        vcpu: 8
-        memory_gb: 32
-      - role: object-storage-gateway
-        count: 1
-        vcpu: 4
-        memory_gb: 16
-        storage_gb: 1500
-        storage_type: object
-    ha_components:
-      - role: application
-        count: 1
-        vcpu: 8
-        memory_gb: 32
-        storage_gb: 250
-        storage_type: ssd
+        storage_type: nvme
       - role: database-replica
-        count: 1
-        vcpu: 16
+        count: 2
+        vcpu: 8
         memory_gb: 64
         storage_gb: 1000
         storage_type: ssd
       - role: cache-replica
-        count: 1
-        vcpu: 8
-        memory_gb: 32
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 50
+        storage_type: ssd
       - role: load-balancer
         count: 2
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
   l:
     label: Large
-    range_description: 5,000 to 10,000 users
+    range_description: 5,000 to 10,000 users (200 RPS)
     ref_arch_tier: 10k-users
     components:
-      - role: application
+      - role: webservice
         count: 4
-        vcpu: 8
+        vcpu: 16
         memory_gb: 32
-        storage_gb: 250
+        storage_gb: 100
+        storage_type: ssd
+      - role: sidekiq
+        count: 4
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
         storage_type: ssd
       - role: gitaly
         count: 3
         vcpu: 16
         memory_gb: 64
         storage_gb: 3000
-        storage_type: ssd
+        storage_type: nvme
       - role: database
         count: 1
         vcpu: 16
-        memory_gb: 64
+        memory_gb: 128
         storage_gb: 1500
         storage_type: ssd
       - role: cache
         count: 2
         vcpu: 8
         memory_gb: 32
-      - role: object-storage-gateway
+        storage_gb: 100
+        storage_type: ssd
+      - role: object-storage
         count: 1
-        vcpu: 4
-        memory_gb: 16
+        vcpu: 0
+        memory_gb: 0
         storage_gb: 3000
         storage_type: object
     ha_components:
       - role: database-replica
-        count: 1
+        count: 2
         vcpu: 16
-        memory_gb: 64
+        memory_gb: 128
         storage_gb: 1500
         storage_type: ssd
       - role: cache-replica
         count: 1
         vcpu: 8
         memory_gb: 32
+        storage_gb: 100
+        storage_type: ssd
       - role: load-balancer
         count: 2
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
   xl:
     label: Extra Large
-    range_description: 10,000 to 25,000 users
+    range_description: 10,000 to 25,000 users (500 RPS)
     ref_arch_tier: 25k-users
     components:
-      - role: application
+      - role: webservice
         count: 6
-        vcpu: 8
+        vcpu: 16
         memory_gb: 32
-        storage_gb: 300
+        storage_gb: 100
+        storage_type: ssd
+      - role: sidekiq
+        count: 6
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 100
         storage_type: ssd
       - role: gitaly
         count: 4
         vcpu: 16
         memory_gb: 64
         storage_gb: 5000
-        storage_type: ssd
+        storage_type: nvme
       - role: database
-        count: 2
+        count: 1
         vcpu: 16
-        memory_gb: 64
+        memory_gb: 128
         storage_gb: 2000
         storage_type: ssd
       - role: cache
         count: 2
         vcpu: 8
-        memory_gb: 32
-      - role: object-storage-gateway
+        memory_gb: 64
+        storage_gb: 100
+        storage_type: ssd
+      - role: object-storage
         count: 1
-        vcpu: 8
-        memory_gb: 32
+        vcpu: 0
+        memory_gb: 0
         storage_gb: 6000
         storage_type: object
     ha_components:
@@ -248,20 +297,27 @@ sizes:
         vcpu: 16
         memory_gb: 64
         storage_gb: 5000
-        storage_type: ssd
+        storage_type: nvme
       - role: database-replica
-        count: 1
+        count: 2
         vcpu: 16
-        memory_gb: 64
+        memory_gb: 128
         storage_gb: 2000
+        storage_type: ssd
+      - role: cache-replica
+        count: 1
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 100
         storage_type: ssd
       - role: load-balancer
         count: 2
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
 notes:
-  - Storage becomes the primary cost driver as repository and artifact data scales.
-  - Estimate excludes GitLab licensing, support, network egress, compliance, and backup storage.
+  - GitLab 18.x reference architectures split compute-heavy Rails webservice nodes (1:2 vCPU-to-RAM) from background Sidekiq workers, memory-heavy PostgreSQL nodes, NVMe-backed Gitaly storage, and native cloud object buckets for artifacts, LFS, and registry blobs.
+  - CI/CD runner fleets are intentionally excluded because runner concurrency depends on pipeline minutes rather than user seat count.
 disclaimers:
-  - Based on GitLab's published reference architectures and simplified to a VM-based baseline.
-  - Production deployments should be verified against workload-specific RPS, monorepos, and CI patterns.
+  - Based on GitLab 18.x published reference architectures (1K through 25K users) normalized to VM-backed Linux Package / Hybrid footprints.
+  - Estimate excludes GitLab Ultimate/Premium licensing, CI/CD runner pools, OpenSearch Advanced Search nodes, GitLab Duo AI add-ons, and backup storage.
+

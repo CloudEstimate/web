@@ -1,0 +1,110 @@
+slug: vllm
+name: vLLM Inference Server
+vendor: vLLM Project
+category: ai-infrastructure
+arch_support:
+  - x86_64
+description: >
+  Self-hosted vLLM open-weight LLM inference engine (Apache 2.0) with PagedAttention KV-cache scheduling, continuous batching, and OpenAI-compatible serving.
+ref_arch:
+  source_url: https://docs.vllm.ai/en/latest/serving/distributed_serving.html
+  version: "vLLM 0.7+ distributed tensor-parallel & replica serving guidance"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: single-GPU 7B to 14B FP8/INT8 open-weight model serving for internal tools
+    ref_arch_tier: single-gpu-inference
+    components:
+      - role: inference-worker
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        gpu: 1
+        storage_gb: 200
+        storage_type: nvme
+    ha_components:
+      - role: inference-worker
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        gpu: 1
+        storage_gb: 200
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: multi-replica GPU serving for 14B to 32B quantized models with prefix caching
+    ref_arch_tier: dual-replica-gpu-inference
+    components:
+      - role: inference-worker
+        count: 2
+        vcpu: 16
+        memory_gb: 64
+        gpu: 1
+        storage_gb: 500
+        storage_type: nvme
+      - role: router-gateway
+        count: 1
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+    ha_components:
+      - role: inference-worker
+        count: 1
+        vcpu: 16
+        memory_gb: 64
+        gpu: 1
+        storage_gb: 500
+        storage_type: nvme
+      - role: router-gateway
+        count: 1
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  xl:
+    label: Extra Large
+    range_description: tensor-parallel 4-GPU nodes serving 70B quantized models at sustained concurrency
+    ref_arch_tier: tensor-parallel-tp4-cluster
+    components:
+      - role: tp4-inference-node
+        count: 2
+        vcpu: 48
+        memory_gb: 192
+        gpu: 4
+        storage_gb: 1000
+        storage_type: nvme
+      - role: router-gateway
+        count: 2
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 100
+        storage_type: ssd
+    ha_components:
+      - role: tp4-inference-node
+        count: 1
+        vcpu: 48
+        memory_gb: 192
+        gpu: 4
+        storage_gb: 1000
+        storage_type: nvme
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
+notes:
+  - GPU accelerator VRAM and memory bandwidth dominate self-hosted vLLM cost; Google Cloud G2 instances attach NVIDIA L4 24 GB GPUs while AWS G4dn and Azure NCas_T4_v3 attach 16 GB T4 GPUs, affecting maximum unquantized context length per replica.
+  - Fast NVMe local or block storage dramatically shortens cold-start weight loading for multi-tens-of-gigabytes safetensors checkpoints.
+disclaimers:
+  - Based on vLLM published tensor-parallel (`--tensor-parallel-size`) and data-parallel replica deployment topologies mapped to widely available cloud inference GPU instances.
+  - Estimate excludes H100/B200 frontier training/prefill clusters, shared model-registry object buckets, and API token-gateway egress charges.
+

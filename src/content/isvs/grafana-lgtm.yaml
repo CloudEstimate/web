@@ -1,0 +1,158 @@
+slug: grafana-lgtm
+name: Grafana LGTM Observability Stack
+vendor: Grafana Labs
+category: observability
+arch_support:
+  - x86_64
+  - arm64
+description: >
+  Self-managed Grafana, Loki, Tempo, and Mimir (AGPLv3) microservices stack for horizontally scalable Prometheus metrics, logs, and distributed traces backed by object storage.
+ref_arch:
+  source_url: https://grafana.com/docs/mimir/latest/manage/plan-and-size/
+  version: "Grafana Mimir 2.15+ & Loki 3.x capacity planning guidance"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: 250K active metric series and 100 GB/day logs in monolithic read-write mode
+    ref_arch_tier: monolithic-small-stack
+    components:
+      - role: lgtm-monolith
+        count: 2
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: ssd
+      - role: grafana-ui
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: object-storage
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+        storage_gb: 2000
+        storage_type: object
+    ha_components:
+      - role: lgtm-monolith
+        count: 1
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: ssd
+      - role: grafana-ui
+        count: 1
+        vcpu: 2
+        memory_gb: 8
+        storage_gb: 50
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: 2 million active metric series and 500 GB/day logs+traces in read/write split mode
+    ref_arch_tier: read-write-split-cluster
+    components:
+      - role: ingester
+        count: 3
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+      - role: querier-distributor
+        count: 2
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 100
+        storage_type: ssd
+      - role: compactor-gateway
+        count: 2
+        vcpu: 4
+        memory_gb: 16
+        storage_gb: 250
+        storage_type: ssd
+      - role: object-storage
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+        storage_gb: 10000
+        storage_type: object
+    ha_components:
+      - role: ingester
+        count: 3
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+      - role: querier-distributor
+        count: 1
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 100
+        storage_type: ssd
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  xl:
+    label: Extra Large
+    range_description: 10 million active metric series and 2 TB/day logs+traces across zone-aware ingesters
+    ref_arch_tier: microservices-zone-aware
+    components:
+      - role: ingester
+        count: 6
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 1000
+        storage_type: nvme
+      - role: querier-store-gateway
+        count: 4
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+      - role: distributor-compactor
+        count: 4
+        vcpu: 8
+        memory_gb: 16
+        storage_gb: 300
+        storage_type: ssd
+      - role: memcached-cache
+        count: 3
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 50
+        storage_type: ssd
+      - role: object-storage
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+        storage_gb: 45000
+        storage_type: object
+    ha_components:
+      - role: ingester
+        count: 3
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 1000
+        storage_type: nvme
+      - role: querier-store-gateway
+        count: 2
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
+notes:
+  - Mimir and Loki keep recent write-ahead logs on 1:8 memory-optimized ingesters with NVMe disks while flushing long-term TSDB blocks and log chunks to low-cost cloud object storage.
+  - All Go-based LGTM components compile cleanly for Linux arm64, offering immediate Graviton, Axion, and Cobalt compute savings on stateless queriers and distributors.
+disclaimers:
+  - Based on Grafana Labs published Mimir and Loki capacity planning ratios (roughly 1 ingester vCPU and 8 GB RAM per 300K active series) plus shared Grafana UI and Tempo components.
+  - Estimate excludes Grafana Enterprise licensing, OpenTelemetry collector agent fleets, and object-storage PUT/GET request charges.

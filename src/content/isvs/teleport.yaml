@@ -2,6 +2,9 @@ slug: teleport
 name: Teleport Self-Hosted
 vendor: Teleport
 category: identity
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-hosted Teleport for infrastructure identity, privileged access, Kubernetes access, and audited remote sessions.
 ref_arch:

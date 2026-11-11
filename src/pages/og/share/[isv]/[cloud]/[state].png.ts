@@ -54,11 +54,19 @@ export function GET({ props }: { props: { isv: IsvEntry; cloud: CloudSlug; state
     region: state.region
   });
 
+  const subtitleParts = [
+    cloudMeta[cloud].name,
+    estimate.sizeLabel,
+    state.ha ? "HA" : null,
+    state.term !== "on-demand" ? state.term : null,
+    state.region
+  ].filter(Boolean);
+
   return new Response(
     new Uint8Array(
       renderOgPng({
         title: isv.data.name,
-        subtitle: `${cloudMeta[cloud].name} · ${estimate.sizeLabel} · ${state.region}`,
+        subtitle: subtitleParts.join(" · "),
         costLabel: `${formatCurrency(estimate.monthlyTotal)}/month`,
         accent: cloudMeta[cloud].accent
       })

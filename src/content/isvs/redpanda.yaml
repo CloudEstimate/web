@@ -2,6 +2,9 @@ slug: redpanda
 name: Redpanda Self-Managed
 vendor: Redpanda Data
 category: streaming
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-managed Redpanda for Kafka-compatible event streaming, durable logs, and high-throughput messaging pipelines.
 ref_arch:

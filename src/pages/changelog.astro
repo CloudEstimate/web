@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
 
 const title = "Changelog | CloudEstimate";
-const description = "Release history for new ISVs, pricing refreshes, and SEO improvements.";
+const description = "Release history for new ISVs, pricing refreshes, and architectural updates.";
 const jsonLd = buildPageJsonLd({
   title: "CloudEstimate changelog",
   description,
@@ -14,6 +14,17 @@ const jsonLd = buildPageJsonLd({
 <BaseLayout title={title} description={description} canonical={buildCanonical("/changelog")} jsonLd={jsonLd}>
   <section class="page-shell-narrow prose-page py-10 lg:py-14">
     <h1>Changelog</h1>
+
+    <h2>2026-11-11</h2>
+    <p>
+      Added — 10 new workloads: Valkey, ClickHouse Self-Managed, HashiCorp Vault Enterprise, Temporal Self-Hosted, Qdrant Self-Managed, vLLM Inference Server, Grafana LGTM Observability Stack, Harbor Registry, Mattermost Enterprise, and SeaweedFS Object Store (bringing the catalog to 34 ISVs).
+    </p>
+    <p>
+      Added — Multi-cloud Terraform / OpenTofu baseline export across Google Cloud, AWS, and Azure, Arm64 cost-savings callouts (Axion C4A, Graviton3/4, Cobalt 100), GPU inference profiles, 12 global regions across North America, Europe, and Asia-Pacific, and static Precomputed AI feeds at <code>/api/v1/catalog.json</code>, <code>/api/v1/estimates/&lt;slug&gt;.json</code>, and <code>/llms.txt</code>.
+    </p>
+    <p>
+      Changed — Upgraded baseline VM families to current-generation Google Cloud N4/C4A/G2, AWS 7th/8th-gen Intel/Graviton, and Azure v6 series; refreshed GitLab 18.x, Jira 10.x / Confluence 9.x Data Center (with March 2029 EOL context), MinIO, Elastic AGPLv3, OpenSearch 3.x, Confluent Platform 8.x KRaft, Redis 8, InfluxDB 3, and CockroachDB v26.x guidance; fixed Google Cloud storage SKU matching and load-balancer double-counting.
+    </p>
 
     <h2>2026-04-13</h2>
     <p>Added — JFrog Artifactory, Sonatype Nexus Repository, Jira Data Center, and Confluence Data Center across Google Cloud, AWS, and Azure.</p>

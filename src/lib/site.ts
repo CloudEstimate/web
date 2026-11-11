@@ -75,6 +75,33 @@ export const cloudMeta = {
   }
 } as const;
 
+export const regionLabels: Record<string, string> = {
+  "us-central1": "us-central1 (Iowa)",
+  "us-east1": "us-east1 (South Carolina)",
+  "europe-west1": "europe-west1 (Belgium)",
+  "asia-southeast1": "asia-southeast1 (Singapore)",
+  "us-east-1": "us-east-1 (N. Virginia)",
+  "us-west-2": "us-west-2 (Oregon)",
+  "eu-west-1": "eu-west-1 (Ireland)",
+  "ap-southeast-1": "ap-southeast-1 (Singapore)",
+  eastus: "eastus (East US)",
+  westus3: "westus3 (West US 3)",
+  westeurope: "westeurope (West Europe)",
+  southeastasia: "southeastasia (Southeast Asia)"
+};
+
+export const categoryLabels: Record<string, string> = {
+  "devops-platform": "DevOps Platform",
+  "data-store": "Data Store",
+  search: "Search",
+  streaming: "Streaming",
+  "artifact-repo": "Artifact Repo",
+  identity: "Identity & Secrets",
+  observability: "Observability",
+  "ai-infrastructure": "AI Infrastructure",
+  other: "Platform & App"
+};
+
 export const cloudOrder = ["gcp", "aws", "azure"] as const;
 export const sizeOrder = ["xs", "s", "m", "l", "xl"] as const;
 export const termOrder = ["on-demand", "1yr", "3yr"] as const;

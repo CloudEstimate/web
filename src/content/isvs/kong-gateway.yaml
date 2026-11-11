@@ -2,12 +2,15 @@ slug: kong-gateway
 name: Kong Gateway
 vendor: Kong Inc.
 category: other
+arch_support:
+  - x86_64
+  - arm64
 description: >
-  Self-managed Kong Gateway for API ingress, service proxying, and policy enforcement across internal and external traffic.
+  Self-managed Kong Gateway 3.x LTS for high-throughput API ingress, AI gateway routing, and policy enforcement.
 ref_arch:
   source_url: https://developer.konghq.com/gateway/resource-sizing-guidelines/
-  version: "Kong Gateway 3.4.x resource sizing guidance"
-  retrieved_date: "2026-04-13"
+  version: "Kong Gateway 3.x LTS resource sizing guidelines"
+  retrieved_date: "2026-11-11"
 sizes:
   xs:
     label: Extra Small
@@ -41,11 +44,11 @@ sizes:
         storage_type: ssd
       - role: load-balancer
         count: 1
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
   m:
     label: Medium
-    range_description: under 10,000 configured entities and under 10,000 requests per second
+    range_description: under 10,000 configured entities and up to 10,000 requests per second
     ref_arch_tier: medium
     components:
       - role: gateway
@@ -75,17 +78,17 @@ sizes:
         storage_type: ssd
       - role: load-balancer
         count: 1
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
   xl:
     label: Extra Large
-    range_description: 10,000 to 50,000 plus configured entities in a central production gateway cluster
+    range_description: 10,000 to 50,000+ configured entities in a central production API gateway cluster
     ref_arch_tier: large
     components:
       - role: gateway
         count: 4
         vcpu: 8
-        memory_gb: 32
+        memory_gb: 16
         storage_gb: 100
         storage_type: ssd
       - role: database
@@ -98,7 +101,7 @@ sizes:
       - role: gateway
         count: 2
         vcpu: 8
-        memory_gb: 32
+        memory_gb: 16
         storage_gb: 100
         storage_type: ssd
       - role: database-replica
@@ -109,11 +112,11 @@ sizes:
         storage_type: ssd
       - role: load-balancer
         count: 2
-        vcpu: 2
-        memory_gb: 8
+        vcpu: 0
+        memory_gb: 0
 notes:
-  - Kong's published sizing guide provides per-node gateway resource bands, while the backing PostgreSQL tier here is a conservative planning baseline because Kong does not publish fixed database sizes.
-  - The gateway node counts reflect clustered self-managed deployments that scale horizontally behind a load balancer.
+  - Gateway data-plane nodes map cleanly to 1:2 compute-optimized shapes (and Linux arm64 instances) because NGINX/OpenResty proxy workers are CPU-bound rather than memory-bound.
+  - DB-less declarative mode eliminates the PostgreSQL tier when configuration is pushed via GitOps or control-plane sync.
 disclaimers:
-  - Based on Kong Gateway resource sizing guidance and deployment topology documentation, translated into VM-based planning tiers.
-  - Estimate excludes Redis-backed rate limiting, developer portal services, Konnect, and workload-specific tuning or benchmark exercises.
+  - Based on Kong Gateway 3.x LTS resource sizing guidelines paired with a conservative self-managed PostgreSQL control-plane store.
+  - Estimate excludes Kong Enterprise / Konnect licensing, Redis rate-limiting clusters, Developer Portal hosts, and L7 data-processing charges.

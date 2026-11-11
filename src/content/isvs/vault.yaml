@@ -1,0 +1,75 @@
+slug: vault
+name: HashiCorp Vault / OpenBao
+vendor: HashiCorp (IBM) / Linux Foundation
+category: identity
+arch_support:
+  - x86_64
+  - arm64
+description: >
+  Self-managed HashiCorp Vault or OpenBao (MPL-2.0 fork) with Integrated Raft Storage for secrets management, PKI, and dynamic credentials.
+ref_arch:
+  source_url: https://developer.hashicorp.com/vault/tutorials/day-one-raft/raft-reference-architecture
+  version: "Vault / OpenBao Integrated Storage (Raft) reference architecture"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: departmental secrets and PKI on a compact 3-node Raft quorum
+    ref_arch_tier: raft-small
+    components:
+      - role: vault-server
+        count: 3
+        vcpu: 4
+        memory_gb: 8
+        storage_gb: 100
+        storage_type: nvme
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: regional production Vault or OpenBao cluster with moderate dynamic lease churn
+    ref_arch_tier: raft-five-node-standard
+    components:
+      - role: vault-server
+        count: 5
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 250
+        storage_type: nvme
+    ha_components:
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  xl:
+    label: Extra Large
+    range_description: high-throughput authentication, PKI signing, and dynamic secrets with performance standbys
+    ref_arch_tier: raft-five-node-large
+    components:
+      - role: vault-server
+        count: 5
+        vcpu: 16
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+    ha_components:
+      - role: dr-replica-node
+        count: 3
+        vcpu: 8
+        memory_gb: 32
+        storage_gb: 500
+        storage_type: nvme
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
+notes:
+  - Integrated Raft Storage eliminates the external Consul storage cluster used in older Vault designs, requiring low-latency NVMe/SSD IOPS for BoltDB write-ahead logs.
+  - Identical hardware topologies apply to both HashiCorp Vault (BSL 1.1 / Enterprise) and OpenBao (Linux Foundation MPL-2.0 open-source fork).
+disclaimers:
+  - Based on HashiCorp's published Integrated Storage (Raft) reference architecture (3- and 5-voter topologies).
+  - Estimate excludes Vault Enterprise licensing, cloud KMS auto-unseal API calls, HSM appliances, and SIEM audit log storage.
+

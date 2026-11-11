@@ -1,6 +1,6 @@
 ---
 import type { IsvEntry } from "@/lib/types";
-import { cloudMeta, cloudOrder } from "@/lib/site";
+import { categoryLabels, cloudMeta, cloudOrder } from "@/lib/site";
 
 type Props = {
   isv: IsvEntry;
@@ -15,6 +15,11 @@ const primaryLabel = href.includes("/compare")
     : href.includes("/azure")
       ? "Open Azure estimate"
       : "Open Google Cloud estimate";
+const categoryLabel = categoryLabels[isv.data.category] ?? isv.data.category;
+const supportsArm = isv.data.arch_support?.includes("arm64") ?? false;
+const usesGpu = Object.values(isv.data.sizes).some((tier) =>
+  tier?.components.some((component) => (component.gpu ?? 0) > 0)
+);
 ---
 
 <article class="interactive-panel p-5">
@@ -30,11 +35,24 @@ const primaryLabel = href.includes("/compare")
 
     <div class="flex flex-wrap gap-2 text-xs text-subtle">
       <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
+        {categoryLabel}
+      </span>
+      <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
         {isv.data.vendor}
       </span>
       <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
         {Object.keys(isv.data.sizes).filter((value) => Boolean(isv.data.sizes[value as keyof typeof isv.data.sizes])).length} sizes
       </span>
+      {supportsArm && (
+        <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
+          Arm64
+        </span>
+      )}
+      {usesGpu && (
+        <span class="rounded-full border px-2 py-1" style="border-color: var(--color-border);">
+          GPU
+        </span>
+      )}
     </div>
 
     <p class="pt-2 text-sm font-medium">
@@ -51,6 +69,5 @@ const primaryLabel = href.includes("/compare")
         Compare
       </a>
     </div>
-
   </div>
 </article>

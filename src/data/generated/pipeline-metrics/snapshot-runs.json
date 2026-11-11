@@ -7606,5 +7606,113 @@
     "validation_failures": 5,
     "llm_total_token_count": 7046,
     "error_message": null
+  },
+  {
+    "workflow_name": "refresh-pricing",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T20:40:38.621Z",
+    "completed_at": "2026-11-11T20:41:56.927Z",
+    "duration_ms": 78306,
+    "conclusion": "success",
+    "artifact_source": "github-actions-pricing-cron",
+    "generated_at": "2026-11-11T20:40:38.622Z",
+    "pricing": {
+      "gcp": "2026-11-11T20:40:47.298Z",
+      "azure": "2026-11-11T20:41:06.104Z",
+      "aws": "2026-11-11T20:41:52.156Z"
+    },
+    "providers": {
+      "gcp": {
+        "retrieved_at": "2026-11-11T20:40:47.298Z",
+        "regions_count": 4,
+        "duration_ms": 10025
+      },
+      "azure": {
+        "retrieved_at": "2026-11-11T20:41:06.104Z",
+        "regions_count": 4,
+        "duration_ms": 27465
+      },
+      "aws": {
+        "retrieved_at": "2026-11-11T20:41:52.156Z",
+        "regions_count": 4,
+        "duration_ms": 78304
+      }
+    },
+    "non_llm_provider_api_calls": [
+      "google-cloud-billing-catalog",
+      "aws-public-pricing-offers",
+      "azure-retail-prices"
+    ],
+    "llm_total_token_count": 0,
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:45:00.718Z",
+    "completed_at": "2026-11-11T21:45:02.208Z",
+    "duration_ms": 1490,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 5,
+    "attempted": 5,
+    "skipped_existing": 0,
+    "validation_failures": 0,
+    "llm_total_token_count": 3249,
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:45:21.146Z",
+    "completed_at": "2026-11-11T21:47:05.737Z",
+    "duration_ms": 104591,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 1112,
+    "attempted": 1279,
+    "skipped_existing": 5,
+    "validation_failures": 167,
+    "llm_total_token_count": 688689,
+    "error_message": null
+  },
+  {
+    "workflow_name": "regenerate-explanations",
+    "scheduled_cron": "0 2 * * *",
+    "event_name": "local",
+    "run_id": null,
+    "run_attempt": null,
+    "actor": null,
+    "ref": null,
+    "commit_sha": null,
+    "started_at": "2026-11-11T21:47:53.587Z",
+    "completed_at": "2026-11-11T21:48:21.917Z",
+    "duration_ms": 28330,
+    "conclusion": "success",
+    "artifact_source": "github-actions-explanations-cron",
+    "generated": 167,
+    "attempted": 167,
+    "skipped_existing": 1117,
+    "validation_failures": 0,
+    "llm_total_token_count": 103598,
+    "error_message": null
   }
 ]

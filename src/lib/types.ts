@@ -18,21 +18,37 @@ export type EstimateComponent = {
   count: number;
   vcpu: number;
   memoryGb: number;
+  provisionedVcpu: number;
+  provisionedMemoryGb: number;
+  gpu: number;
   storageGb: number;
   storageType?: string;
   profile: string;
   instanceType: string;
   unitHourly: number;
+  onDemandMonthlyCompute: number;
   monthlyCompute: number;
   monthlyStorage: number;
+};
+
+export type ArmAlternative = {
+  archFamily: string;
+  monthlyTotal: number;
+  computeTotal: number;
+  savingsMonthlyUsd: number;
+  savingsPercent: number;
+  instanceTypes: string[];
 };
 
 export type EstimateResult = {
   monthlyTotal: number;
   annualTotal: number;
   computeTotal: number;
+  onDemandComputeTotal: number;
   storageTotal: number;
   otherTotal: number;
+  haAddsComponents: boolean;
+  armAlternative: ArmAlternative | null;
   pricingSnapshotDate: string;
   sizeLabel: string;
   sizeDescription: string;
@@ -78,5 +94,6 @@ export type ExplanationCacheEntry = {
   generated_at: string;
   model: string;
   explanation: string;
+  prompt_hash?: string;
   source_refs?: string[];
 };

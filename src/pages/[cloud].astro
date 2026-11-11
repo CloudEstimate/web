@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { buildCanonical, buildItemListJsonLd, buildPageJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
-import { cloudOrder, cloudMeta, type CloudSlug } from "@/lib/site";
+import { categoryLabels, cloudOrder, cloudMeta, type CloudSlug } from "@/lib/site";
 
 export function getStaticPaths() {
   return cloudOrder.map((cloud) => ({
@@ -12,9 +12,11 @@ export function getStaticPaths() {
 }
 
 const { cloud } = Astro.props as { cloud: CloudSlug };
-const isvs = await getCollection("isvs");
+const isvs = (await getCollection("isvs")).sort((left, right) =>
+  left.data.name.localeCompare(right.data.name)
+);
 const title = `Self-Managed Workload Pricing on ${cloudMeta[cloud].name} | CloudEstimate`;
-const description = `Directory of supported self-managed workloads and cost estimates for ${cloudMeta[cloud].name}.`;
+const description = `Directory of ${isvs.length} supported self-managed workloads and cost estimates for ${cloudMeta[cloud].name}.`;
 
 const canonical = buildCanonical(`/${cloud}`);
 const jsonLd = [
@@ -57,7 +59,7 @@ const jsonLd = [
       </nav>
       <h1 class="text-[2rem] font-semibold tracking-tight">{cloudMeta[cloud].name} Estimates</h1>
       <p class="text-lg text-muted">
-        Directory of self-managed workloads supported for {cloudMeta[cloud].name}.
+        Directory of {isvs.length} self-managed workloads supported on {cloudMeta[cloud].name} with Terraform / OpenTofu export.
       </p>
     </div>
 
@@ -78,7 +80,7 @@ const jsonLd = [
                 <a class="font-medium" href={`/sizing/${isv.data.slug}/${cloud}`}>{isv.data.name}</a>
               </td>
               <td>{isv.data.vendor}</td>
-              <td>{isv.data.category}</td>
+              <td>{categoryLabels[isv.data.category] ?? isv.data.category}</td>
               <td data-align="right">
                 <a href={`/sizing/${isv.data.slug}/${cloud}`}>View Estimate</a>
               </td>

@@ -2,6 +2,8 @@ slug: jfrog-artifactory
 name: JFrog Artifactory Self-Hosted
 vendor: JFrog Ltd.
 category: artifact-repo
+arch_support:
+  - x86_64
 description: >
   Self-hosted JFrog Artifactory for binary repositories, release promotion, and software supply chain distribution.
 ref_arch:

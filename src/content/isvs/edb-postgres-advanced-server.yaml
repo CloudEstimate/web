@@ -2,6 +2,9 @@ slug: edb-postgres-advanced-server
 name: EDB Postgres Advanced Server
 vendor: EnterpriseDB Corporation
 category: data-store
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-managed EDB Postgres Advanced Server for enterprise PostgreSQL workloads with optional primary-standby HA.
 ref_arch:

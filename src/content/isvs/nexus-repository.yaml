@@ -2,6 +2,8 @@ slug: nexus-repository
 name: Sonatype Nexus Repository
 vendor: Sonatype, Inc.
 category: artifact-repo
+arch_support:
+  - x86_64
 description: >
   Self-managed Sonatype Nexus Repository for package hosting, caching, and binary distribution across development pipelines.
 ref_arch:

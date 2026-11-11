@@ -11,9 +11,13 @@ type ShapeMapping = {
   profile: string;
   vcpu: number;
   memory_gb: number;
+  gpu?: number;
   gcp: string;
   aws: string;
   azure: string;
+  arm_gcp?: string;
+  arm_aws?: string;
+  arm_azure?: string;
 };
 
 const pricingByCloud = {
@@ -26,6 +30,10 @@ const shapeMappings = loadShapeMappings();
 
 function loadShapeMappings(): ShapeMapping[] {
   return YAML.parse(shapeMappingsRaw) as ShapeMapping[];
+}
+
+export function getShapeMappingsList() {
+  return shapeMappings;
 }
 
 export function getPricingCache(cloud: CloudSlug) {
@@ -45,6 +53,10 @@ export function getDefaultRegion(cloud: CloudSlug) {
 }
 
 export function getDefaultSize(isv: IsvEntry): SizeSlug {
+  if (isv.data.sizes.m) {
+    return "m";
+  }
+
   return (sizeOrder.find((size) => Boolean(isv.data.sizes[size])) ?? "m") as SizeSlug;
 }
 
@@ -85,6 +97,7 @@ export function buildEstimate(input: EstimateInput): EstimateResult {
     ha: input.ha,
     regionPricing,
     shapeMappings,
+    archSupport: input.isv.data.arch_support ?? [],
     loadBalancerMonthlyUsdFallback: 0
   });
 

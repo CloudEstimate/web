@@ -1,42 +1,110 @@
 import { logger } from "firebase-functions/v2";
 
 const AZURE_BASE_URL = "https://prices.azure.com/api/retail/prices";
-const HOURS_PER_MONTH = 365 * 24 / 12;
+const HOURS_PER_MONTH = (365 * 24) / 12;
+const BATCH_SIZE = 8;
+
+const lbMonthlyByRegion = {
+  eastus: 18,
+  westus3: 19,
+  westeurope: 19,
+  southeastasia: 19
+};
 
 export async function fetchAzurePricing({ regions, machineTypes }) {
+  const regionEntries = [];
+  for (const region of regions) {
+    regionEntries.push([region, await getRegionPricing(region, machineTypes)]);
+  }
+
   return {
     cloud: "azure",
     retrieved_at: new Date().toISOString(),
-    regions: Object.fromEntries(
-      await Promise.all(regions.map(async (region) => [region, await getRegionPricing(region, machineTypes)]))
-    )
+    regions: Object.fromEntries(regionEntries)
   };
 }
 
 async function getRegionPricing(region, machineTypes) {
   const [compute, storageItems] = await Promise.all([
-    Object.fromEntries(
-      await Promise.all(
-        machineTypes.map(async (instanceType) => [
-          instanceType,
-          await getVmPricing(region, instanceType)
-        ])
-      )
-    ),
+    getRegionComputePricing(region, machineTypes),
     fetchAzureItems(`serviceName eq 'Storage' and armRegionName eq '${region}'`)
   ]);
 
   return {
     compute,
     storage: {
-      ssd_gb_month_usd: getDiskRate(storageItems, region, "Premium SSD"),
+      ssd_gb_month_usd: getDiskRate(storageItems, region, "Standard SSD"),
       hdd_gb_month_usd: getDiskRate(storageItems, region, "Standard HDD"),
-      nvme_gb_month_usd: getDiskRate(storageItems, region, "Premium SSD v2"),
+      nvme_gb_month_usd: getDiskRate(storageItems, region, "Premium SSD"),
       object_gb_month_usd: getObjectStorageRate(storageItems, region)
     },
     other: {
-      load_balancer_monthly_usd: region === "westus3" ? 19 : 18
+      load_balancer_monthly_usd: lbMonthlyByRegion[region] ?? 18
     }
+  };
+}
+
+async function getRegionComputePricing(region, machineTypes) {
+  const compute = {};
+  const chunks = [];
+  for (let i = 0; i < machineTypes.length; i += BATCH_SIZE) {
+    chunks.push(machineTypes.slice(i, i + BATCH_SIZE));
+  }
+
+  for (const chunk of chunks) {
+    const orClause = chunk.map((sku) => `armSkuName eq '${sku}'`).join(" or ");
+    const batchItems = await fetchAzureItems(
+      `serviceName eq 'Virtual Machines' and armRegionName eq '${region}' and (${orClause})`
+    );
+
+    for (const instanceType of chunk) {
+      const candidates = batchItems.filter(
+        (item) => isLinuxItem(item) && isStandardVmPriceItem(item, instanceType)
+      );
+      const extracted = extractVmRates(candidates, instanceType, region, false);
+      if (extracted) {
+        compute[instanceType] = extracted;
+      } else {
+        compute[instanceType] = await getVmPricing(region, instanceType);
+      }
+    }
+  }
+
+  return compute;
+}
+
+function extractVmRates(candidates, instanceType, region, warnMissing) {
+  const onDemand = candidates.find((item) => getAzurePriceType(item) === "Consumption");
+  const reserved1yr = candidates.find(
+    (item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "1 Year"
+  );
+  const reserved3yr = candidates.find(
+    (item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "3 Years"
+  );
+
+  if (!onDemand) {
+    return null;
+  }
+
+  const onDemandHourly = getVmHourlyRate(onDemand);
+  const reserved1yrHourly = getVmHourlyRate(reserved1yr) ?? onDemandHourly;
+  const reserved3yrHourly = getVmHourlyRate(reserved3yr) ?? reserved1yrHourly;
+
+  if (warnMissing && !reserved1yr) {
+    logger.warn(`Missing Azure 1-year reservation price for ${instanceType} in ${region}; falling back to on-demand.`);
+  }
+  if (warnMissing && !reserved3yr) {
+    logger.warn(
+      `Missing Azure 3-year reservation price for ${instanceType} in ${region}; falling back to ${
+        reserved1yr ? "1-year reservation" : "on-demand"
+      }.`
+    );
+  }
+
+  return {
+    on_demand_hourly_usd: onDemandHourly,
+    reserved_1yr_hourly_usd: reserved1yrHourly,
+    reserved_3yr_hourly_usd: reserved3yrHourly
   };
 }
 
@@ -44,45 +112,26 @@ async function getVmPricing(region, instanceType) {
   const items = await fetchAzureItems(
     `serviceName eq 'Virtual Machines' and armRegionName eq '${region}' and armSkuName eq '${instanceType}'`
   );
-  // Keep the linux filter as a defensive guard for any edge cases that slip through the API filter.
   const candidates = items.filter((item) => isLinuxItem(item) && isStandardVmPriceItem(item, instanceType));
-  const onDemand = candidates.find((item) => getAzurePriceType(item) === "Consumption");
-  const reserved1yr = candidates.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "1 Year");
-  const reserved3yr = candidates.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "3 Years");
+  const extracted = extractVmRates(candidates, instanceType, region, true);
 
-  if (!onDemand) {
-    const fallback = await findVmPricingFallback(region, instanceType);
-
-    if (fallback) {
-      return fallback;
-    }
-
-    throw new Error(`Missing Azure VM pricing for ${instanceType} in ${region}.`);
+  if (extracted) {
+    return extracted;
   }
 
-  const reserved1yrPrice = reserved1yr?.unitPrice ?? onDemand.unitPrice;
-  const reserved3yrPrice = reserved3yr?.unitPrice ?? reserved1yrPrice;
-
-  if (!reserved1yr) {
-    logger.warn(`Missing Azure 1-year reservation price for ${instanceType} in ${region}; falling back to on-demand.`);
+  const fallback = await findVmPricingFallback(region, instanceType);
+  if (fallback) {
+    return fallback;
   }
 
-  if (!reserved3yr) {
-    logger.warn(`Missing Azure 3-year reservation price for ${instanceType} in ${region}; falling back to ${reserved1yr ? "1-year reservation" : "on-demand"}.`);
-  }
-
-  return {
-    on_demand_hourly_usd: getVmHourlyRate(onDemand),
-    reserved_1yr_hourly_usd: getVmHourlyRate(reserved1yr) ?? reserved1yrPrice,
-    reserved_3yr_hourly_usd: getVmHourlyRate(reserved3yr) ?? reserved3yrPrice
-  };
+  throw new Error(`Missing Azure VM pricing for ${instanceType} in ${region}.`);
 }
 
 async function findVmPricingFallback(region, instanceType) {
   const familyPrefix = instanceType.match(/^(Standard_[A-Z]+\d+)/i)?.[1];
 
   if (!familyPrefix) {
-    return findRegionalVmPricingFallback(region, instanceType);
+    return null;
   }
 
   const items = await fetchAzureItems(
@@ -91,58 +140,7 @@ async function findVmPricingFallback(region, instanceType) {
   const linuxItems = items.filter((item) => isLinuxItem(item) && isStandardVmPriceItem(item));
   const exactSkuItems = linuxItems.filter((item) => isSameSku(item, instanceType));
   const candidates = exactSkuItems.length > 0 ? exactSkuItems : linuxItems;
-  const onDemand = candidates.find((item) => getAzurePriceType(item) === "Consumption");
-
-  if (!onDemand) {
-    logger.warn(`Azure fallback query returned no on-demand price for ${instanceType} in ${region}. Trying regional fallback.`);
-    return findRegionalVmPricingFallback(region, instanceType);
-  }
-
-  const reserved1yr = candidates.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "1 Year");
-  const reserved3yr = candidates.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "3 Years");
-
-  logger.warn(
-    `Azure pricing fallback matched ${onDemand.armSkuName ?? "unknown"} for ${instanceType} in ${region}.`
-  );
-
-  return {
-    on_demand_hourly_usd: getVmHourlyRate(onDemand),
-    reserved_1yr_hourly_usd: getVmHourlyRate(reserved1yr) ?? getVmHourlyRate(onDemand),
-    reserved_3yr_hourly_usd: getVmHourlyRate(reserved3yr) ?? getVmHourlyRate(reserved1yr) ?? getVmHourlyRate(onDemand)
-  };
-}
-
-async function findRegionalVmPricingFallback(region, instanceType) {
-  const items = await fetchAzureItems(`serviceName eq 'Virtual Machines' and armRegionName eq '${region}'`);
-  const linuxItems = items.filter((item) => isLinuxItem(item) && isStandardVmPriceItem(item));
-  const grouped = groupVmItemsBySku(linuxItems);
-  const ranked = Array.from(grouped.entries())
-    .map(([sku, skuItems]) => ({
-      sku,
-      skuItems,
-      score: scoreSkuMatch(sku, instanceType)
-    }))
-    .filter((entry) => entry.score < Number.POSITIVE_INFINITY)
-    .sort((left, right) => left.score - right.score);
-
-  const best = ranked.find((entry) => entry.skuItems.some((item) => getAzurePriceType(item) === "Consumption"));
-
-  if (!best) {
-    logger.warn(`Azure regional fallback found no usable VM pricing candidates for ${instanceType} in ${region}.`);
-    return null;
-  }
-
-  const onDemand = best.skuItems.find((item) => getAzurePriceType(item) === "Consumption");
-  const reserved1yr = best.skuItems.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "1 Year");
-  const reserved3yr = best.skuItems.find((item) => getAzurePriceType(item) === "Reservation" && item.reservationTerm === "3 Years");
-
-  logger.warn(`Azure regional fallback matched ${best.sku} for ${instanceType} in ${region}.`);
-
-  return {
-    on_demand_hourly_usd: getVmHourlyRate(onDemand),
-    reserved_1yr_hourly_usd: getVmHourlyRate(reserved1yr) ?? getVmHourlyRate(onDemand),
-    reserved_3yr_hourly_usd: getVmHourlyRate(reserved3yr) ?? getVmHourlyRate(reserved1yr) ?? getVmHourlyRate(onDemand)
-  };
+  return extractVmRates(candidates, instanceType, region, true);
 }
 
 function getDiskRate(items, region, label) {
@@ -174,15 +172,8 @@ function getObjectStorageRate(items, region) {
 }
 
 function findDiskItem(items, label) {
-  if (label === "Premium SSD v2") {
-    return items.find(
-      (item) =>
-        item.productName === "Azure Premium SSD v2" &&
-        item.skuName === "Premium LRS" &&
-        item.meterName === "Premium LRS Provisioned Capacity" &&
-        getAzurePriceType(item) === "Consumption" &&
-        Number(item.tierMinimumUnits ?? 0) === 0
-    );
+  if (label === "Standard SSD") {
+    return findManagedDiskItem(items, "Standard SSD Managed Disks", "E30 LRS", "E30 LRS Disk");
   }
 
   if (label === "Premium SSD") {
@@ -222,15 +213,12 @@ function getRetryDelayMs(response, attempt) {
     return Math.min(retryAfter * 1000, AZURE_MAX_DELAY_MS);
   }
 
-  // Exponential backoff with jitter so parallel requests don't retry in lockstep.
   const ceiling = Math.min(AZURE_BASE_DELAY_MS * 2 ** (attempt - 1), AZURE_MAX_DELAY_MS);
   return Math.round(ceiling / 2 + Math.random() * (ceiling / 2));
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// The Azure Retail Prices API rate-limits bursts of requests (HTTP 429). Pricing is fetched for every
-// region × SKU in parallel, so retry transient failures instead of failing the whole snapshot refresh.
 async function fetchAzureWithRetry(url, filter) {
   for (let attempt = 1; ; attempt += 1) {
     let response;
@@ -243,7 +231,9 @@ async function fetchAzureWithRetry(url, filter) {
       }
 
       const delayMs = getRetryDelayMs(null, attempt);
-      logger.warn(`Azure pricing request errored (${error.message}) for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`);
+      logger.warn(
+        `Azure pricing request errored (${error.message}) for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`
+      );
       await sleep(delayMs);
       continue;
     }
@@ -253,7 +243,9 @@ async function fetchAzureWithRetry(url, filter) {
     }
 
     const delayMs = getRetryDelayMs(response, attempt);
-    logger.warn(`Azure pricing request returned ${response.status} for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`);
+    logger.warn(
+      `Azure pricing request returned ${response.status} for filter ${filter}; retrying in ${delayMs}ms (attempt ${attempt}/${AZURE_MAX_ATTEMPTS}).`
+    );
     await response.body?.cancel();
     await sleep(delayMs);
   }
@@ -349,63 +341,9 @@ function normalizeSkuName(value) {
     .replace(/_/g, "");
 }
 
-function groupVmItemsBySku(items) {
-  const groups = new Map();
-
-  for (const item of items) {
-    const sku = item.armSkuName ?? item.skuName;
-
-    if (!sku) {
-      continue;
-    }
-
-    const existing = groups.get(sku) ?? [];
-    existing.push(item);
-    groups.set(sku, existing);
-  }
-
-  return groups;
-}
-
-function scoreSkuMatch(candidateSku, targetSku) {
-  const candidate = parseSku(candidateSku);
-  const target = parseSku(targetSku);
-
-  if (!candidate || !target) {
-    return Number.POSITIVE_INFINITY;
-  }
-
-  if (candidate.family !== target.family) {
-    return Number.POSITIVE_INFINITY;
-  }
-
-  const versionPenalty = candidate.version === target.version ? 0 : 1000;
-  const variantPenalty = candidate.variant === target.variant ? 0 : 100;
-  const sizePenalty = Math.abs(candidate.size - target.size);
-  return versionPenalty + variantPenalty + sizePenalty;
-}
-
-function parseSku(value) {
-  const normalized = String(value ?? "").trim();
-  const match = normalized.match(/^Standard_([A-Za-z]+)(\d+)([A-Za-z]*)_v(\d+)$/i);
-
-  if (!match) {
-    return null;
-  }
-
-  return {
-    family: match[1].toLowerCase(),
-    size: Number(match[2]),
-    variant: match[3].toLowerCase(),
-    version: Number(match[4])
-  };
-}
-
 function inferDiskSizeGb(item) {
-  const candidates = [item.armSkuName, item.skuName, item.meterName]
-    .filter(Boolean)
-    .join(" ");
-  const match = candidates.match(/\b[PS](\d{1,2})\b/i);
+  const candidates = [item.armSkuName, item.skuName, item.meterName].filter(Boolean).join(" ");
+  const match = candidates.match(/\b[PSE](\d{1,2})\b/i);
   const diskSizeByTier = {
     1: 4,
     2: 8,

@@ -3,9 +3,14 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import IsvCard from "@/components/IsvCard.astro";
 import { buildCanonical, buildPageJsonLd } from "@/lib/seo";
-import { precomputedAI, siteConfig } from "@/lib/site";
+import { categoryLabels, precomputedAI, siteConfig } from "@/lib/site";
 
-const isvs = await getCollection("isvs");
+const isvs = (await getCollection("isvs")).sort((left, right) =>
+  left.data.name.localeCompare(right.data.name)
+);
+const categories = Array.from(new Set(isvs.map((isv) => isv.data.category))).sort((left, right) =>
+  (categoryLabels[left] ?? left).localeCompare(categoryLabels[right] ?? right)
+);
 const title = "Self-managed workload sizing across Google Cloud, AWS, and Azure | CloudEstimate";
 const description =
   "A worked example of the Precomputed AI design pattern for reference-architecture-based sizing across Google Cloud, AWS, and Azure.";
@@ -28,11 +33,11 @@ const jsonLd = buildPageJsonLd({
     <div class="home-hero">
       <h1>Size self-managed workloads across Google Cloud, AWS, and Azure.</h1>
       <p>
-        Reference-architecture-based sizing and monthly cost estimates, served from precomputed artifacts.
+        Reference-architecture-based sizing and monthly cost estimates across {isvs.length} workloads and 12 global regions, served from precomputed artifacts.
       </p>
     </div>
 
-    <div class="mt-10">
+    <div class="mt-10 space-y-4">
       <div class="home-filter-grid">
         <div>
           <label class="field-label" for="isv-filter">Filter ISVs</label>
@@ -41,10 +46,21 @@ const jsonLd = buildPageJsonLd({
             style="border-color: var(--color-border);"
             id="isv-filter"
             type="search"
-            placeholder="Filter by ISV or vendor"
+            placeholder="Filter by ISV, vendor, or category"
           />
         </div>
         <p class="home-filter-note">No signup, no guessing.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+        <button class="button-chip" data-category-chip="all" data-active="true" type="button">
+          All ({isvs.length})
+        </button>
+        {categories.map((category) => (
+          <button class="button-chip" data-category-chip={category} data-active="false" type="button">
+            {categoryLabels[category] ?? category}
+          </button>
+        ))}
       </div>
     </div>
 
@@ -57,7 +73,10 @@ const jsonLd = buildPageJsonLd({
 
     <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3" id="isv-grid">
       {isvs.map((isv) => (
-        <div data-filter-card={`${isv.data.name} ${isv.data.vendor} ${isv.data.slug}`.toLowerCase()}>
+        <div
+          data-filter-card={`${isv.data.name} ${isv.data.vendor} ${isv.data.slug} ${categoryLabels[isv.data.category] ?? isv.data.category}`.toLowerCase()}
+          data-filter-category={isv.data.category}
+        >
           <IsvCard isv={isv} />
         </div>
       ))}
@@ -95,21 +114,38 @@ const jsonLd = buildPageJsonLd({
   <script is:inline>
     const input = document.getElementById("isv-filter");
     const cards = Array.from(document.querySelectorAll("[data-filter-card]"));
+    const chips = Array.from(document.querySelectorAll("[data-category-chip]"));
     const count = document.getElementById("isv-count");
+    let activeCategory = "all";
 
-    input?.addEventListener("input", () => {
-      const query = input.value.trim().toLowerCase();
+    function applyFilter() {
+      const query = (input?.value || "").trim().toLowerCase();
       let visible = 0;
+
       cards.forEach((card) => {
-        const matches = card.dataset.filterCard.includes(query);
+        const matchesQuery = !query || card.dataset.filterCard.includes(query);
+        const matchesCategory = activeCategory === "all" || card.dataset.filterCategory === activeCategory;
+        const matches = matchesQuery && matchesCategory;
         card.style.display = matches ? "" : "none";
         if (matches) {
           visible += 1;
         }
       });
+
       if (count) {
         count.textContent = `${visible} shown`;
       }
+    }
+
+    input?.addEventListener("input", applyFilter);
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        activeCategory = chip.dataset.categoryChip || "all";
+        chips.forEach((candidate) => {
+          candidate.dataset.active = String(candidate === chip);
+        });
+        applyFilter();
+      });
     });
   </script>
 </BaseLayout>

@@ -1,11 +1,16 @@
+import crypto from "node:crypto";
 import { GoogleGenAI } from "@google/genai";
 import { logger } from "firebase-functions/v2";
-import { requireEnv, requireProjectId } from "./config.mjs";
+import { requireProjectId } from "./config.mjs";
 import { buildCompareTuples, buildEstimateTuples } from "./estimate-engine.mjs";
 import { buildComparePrompt, buildSinglePrompt, sharedSystemPrompt } from "./prompts.mjs";
 import { findLatestFile, getCacheBucket, readJson, writeJson } from "./storage.mjs";
 import { validateExplanation } from "./validate-explanation.mjs";
 import { getIsvCatalog } from "./runtime-data.mjs";
+
+function hashPrompt(prompt) {
+  return crypto.createHash("sha256").update(prompt).digest("hex").slice(0, 16);
+}
 
 export async function regenerateExplanationCaches() {
   const ai = new GoogleGenAI({
@@ -13,7 +18,7 @@ export async function regenerateExplanationCaches() {
     project: requireProjectId(),
     location: process.env.CLOUDESTIMATE_GCP_LOCATION ?? "global"
   });
-  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-pro";
+  const model = process.env.CLOUDESTIMATE_VERTEX_MODEL ?? "gemini-3.5-flash-lite";
   const bucket = getCacheBucket();
   const pricingByCloud = await loadLatestPricing(bucket);
   const singleAggregate = {};
@@ -21,8 +26,10 @@ export async function regenerateExplanationCaches() {
 
   for (const isv of getIsvCatalog()) {
     for (const tuple of buildEstimateTuples(isv, pricingByCloud)) {
-      const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.term, tuple.region].join(":");
-      const explanation = await generateWithValidation(ai, model, buildSinglePrompt({
+      if (tuple.term !== "on-demand") continue;
+
+      const key = [isv.slug, tuple.cloud, tuple.size, tuple.ha ? "ha" : "noha", tuple.region].join(":");
+      const prompt = buildSinglePrompt({
         isv,
         size: isv.sizes[tuple.size],
         cloudName: tuple.cloud === "gcp" ? "Google Cloud" : tuple.cloud === "aws" ? "AWS" : "Azure",
@@ -30,7 +37,8 @@ export async function regenerateExplanationCaches() {
         ha: tuple.ha,
         term: tuple.term,
         estimate: tuple.estimate
-      }));
+      });
+      const explanation = await generateWithValidation(ai, model, prompt);
 
       if (!explanation) {
         logger.warn(`Skipping single-cloud explanation after validation failures for ${key}.`);
@@ -41,6 +49,7 @@ export async function regenerateExplanationCaches() {
         key,
         generated_at: new Date().toISOString(),
         model,
+        prompt_hash: hashPrompt(prompt),
         explanation,
         source_refs: [isv.ref_arch.source_url]
       };
@@ -51,13 +60,14 @@ export async function regenerateExplanationCaches() {
 
     for (const tuple of buildCompareTuples(isv, pricingByCloud)) {
       const key = [isv.slug, tuple.size, tuple.ha ? "ha" : "noha", tuple.term].join(":");
-      const explanation = await generateWithValidation(ai, model, buildComparePrompt({
+      const prompt = buildComparePrompt({
         isv,
         size: isv.sizes[tuple.size],
         ha: tuple.ha,
         term: tuple.term,
         estimates: tuple.estimates
-      }));
+      });
+      const explanation = await generateWithValidation(ai, model, prompt);
 
       if (!explanation) {
         logger.warn(`Skipping compare explanation after validation failures for ${key}.`);
@@ -68,6 +78,7 @@ export async function regenerateExplanationCaches() {
         key,
         generated_at: new Date().toISOString(),
         model,
+        prompt_hash: hashPrompt(prompt),
         explanation,
         source_refs: [isv.ref_arch.source_url]
       };
@@ -97,17 +108,27 @@ async function loadLatestPricing(bucket) {
 }
 
 async function generateWithValidation(ai, model, userPrompt) {
+  const thinkingLevel = model.startsWith("gemini-4") ? "LOW" : "MINIMAL";
+  let lastReason = "";
+
   for (let attempt = 0; attempt < 3; attempt += 1) {
+    const promptWithFeedback = lastReason
+      ? `${userPrompt}\n\nPrevious draft failed check (${lastReason}). Output strictly 3 to 4 plain sentences totaling 240 to 520 characters.`
+      : userPrompt;
+
     const response = await ai.models.generateContent({
       model,
-      contents: userPrompt,
+      contents: promptWithFeedback,
       config: {
-        systemInstruction: sharedSystemPrompt
+        systemInstruction: sharedSystemPrompt,
+        maxOutputTokens: 512,
+        thinkingConfig: { thinkingLevel }
       }
     });
     const text = response.text?.trim();
 
     if (!text) {
+      lastReason = "Empty response";
       continue;
     }
 
@@ -116,6 +137,7 @@ async function generateWithValidation(ai, model, userPrompt) {
       return text;
     }
 
+    lastReason = validation.reason;
     logger.warn(`Explanation validation failed: ${validation.reason}`);
   }
 

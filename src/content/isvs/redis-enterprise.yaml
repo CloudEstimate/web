@@ -1,13 +1,16 @@
 slug: redis-enterprise
 name: Redis Enterprise
-vendor: Redis Ltd.
+vendor: Redis Inc.
 category: data-store
+arch_support:
+  - x86_64
+  - arm64
 description: >
-  Self-managed Redis Enterprise cluster for low-latency caching, session storage, and data services.
+  Self-managed Redis Enterprise Software (Redis 8 engine) for sub-millisecond caching, session stores, and real-time vector/JSON workloads.
 ref_arch:
-  source_url: https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/
-  version: "7.22"
-  retrieved_date: "2026-04-12"
+  source_url: https://redis.io/docs/latest/operate/rs/installing-upgrading/install/plan-deployment/hardware-requirements/
+  version: "Redis Enterprise 7.22+ / Redis 8 hardware requirements"
+  retrieved_date: "2026-11-11"
 sizes:
   xs:
     label: Extra Small
@@ -17,10 +20,10 @@ sizes:
       - role: cluster-node
         count: 1
         vcpu: 4
-        memory_gb: 16
+        memory_gb: 32
         storage_gb: 100
         storage_type: nvme
-      - role: admin-node
+      - role: quorum-node
         count: 1
         vcpu: 2
         memory_gb: 8
@@ -30,7 +33,7 @@ sizes:
       - role: cluster-node
         count: 2
         vcpu: 4
-        memory_gb: 16
+        memory_gb: 32
         storage_gb: 100
         storage_type: nvme
   s:
@@ -41,20 +44,14 @@ sizes:
       - role: cluster-node
         count: 3
         vcpu: 4
-        memory_gb: 16
+        memory_gb: 32
         storage_gb: 150
         storage_type: nvme
-      - role: proxy
-        count: 1
-        vcpu: 2
-        memory_gb: 8
-        storage_gb: 50
-        storage_type: ssd
     ha_components:
       - role: cluster-node
         count: 2
         vcpu: 4
-        memory_gb: 16
+        memory_gb: 32
         storage_gb: 150
         storage_type: nvme
   m:
@@ -65,20 +62,14 @@ sizes:
       - role: cluster-node
         count: 3
         vcpu: 8
-        memory_gb: 32
+        memory_gb: 64
         storage_gb: 400
         storage_type: nvme
-      - role: proxy
-        count: 2
-        vcpu: 2
-        memory_gb: 8
-        storage_gb: 50
-        storage_type: ssd
     ha_components:
       - role: cluster-node
         count: 2
         vcpu: 8
-        memory_gb: 32
+        memory_gb: 64
         storage_gb: 400
         storage_type: nvme
   l:
@@ -88,21 +79,15 @@ sizes:
     components:
       - role: cluster-node
         count: 5
-        vcpu: 8
-        memory_gb: 32
+        vcpu: 16
+        memory_gb: 128
         storage_gb: 750
         storage_type: nvme
-      - role: proxy
-        count: 2
-        vcpu: 4
-        memory_gb: 16
-        storage_gb: 100
-        storage_type: ssd
     ha_components:
       - role: cluster-node
         count: 2
-        vcpu: 8
-        memory_gb: 32
+        vcpu: 16
+        memory_gb: 128
         storage_gb: 750
         storage_type: nvme
   xl:
@@ -112,26 +97,20 @@ sizes:
     components:
       - role: cluster-node
         count: 5
-        vcpu: 16
-        memory_gb: 64
+        vcpu: 32
+        memory_gb: 256
         storage_gb: 1500
         storage_type: nvme
-      - role: proxy
-        count: 2
-        vcpu: 4
-        memory_gb: 16
-        storage_gb: 100
-        storage_type: ssd
     ha_components:
       - role: cluster-node
         count: 2
-        vcpu: 16
-        memory_gb: 64
+        vcpu: 32
+        memory_gb: 256
         storage_gb: 1500
         storage_type: nvme
 notes:
-  - Redis Enterprise clusters need spare capacity to preserve failover headroom.
-  - NVMe-backed storage matters more than CPU once persistence and auto-tiering are enabled.
+  - Cluster data nodes map to 1:8 memory-optimized instances to reflect RAM-bound shard sizing, with high-IOPS NVMe/SSD persistence for AOF and Auto Tiering (Redis on Flash).
+  - Note that Redis 8.0+ offers AGPLv3 open-source licensing for Community Edition alongside commercial Redis Enterprise Software subscriptions; see Valkey for the BSD-3 Linux Foundation fork.
 disclaimers:
-  - Based on Redis Enterprise hardware guidance and encoded as a VM-based planning baseline.
-  - Estimate excludes Redis licensing, cross-region replication, backups, and network transfer.
+  - Based on Redis Enterprise published hardware requirements normalized to cloud VM shapes.
+  - Estimate excludes commercial Redis Enterprise shard licensing, Active-Active geo-replication, backup buckets, and cross-zone network transfer.

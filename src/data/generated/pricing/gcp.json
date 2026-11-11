@@ -1,40 +1,190 @@
 {
   "cloud": "gcp",
-  "retrieved_at": "2026-11-11T08:30:21.702Z",
+  "retrieved_at": "2026-11-11T20:40:47.298Z",
   "regions": {
     "us-central1": {
       "compute": {
-        "n2-standard-2": {
-          "on_demand_hourly_usd": 0.09711800000000001,
-          "reserved_1yr_hourly_usd": 0.061182,
-          "reserved_3yr_hourly_usd": 0.043706
+        "n4-highcpu-2": {
+          "on_demand_hourly_usd": 0.07654,
+          "reserved_1yr_hourly_usd": 0.04822,
+          "reserved_3yr_hourly_usd": 0.034444
         },
-        "n2-standard-4": {
-          "on_demand_hourly_usd": 0.19423600000000002,
-          "reserved_1yr_hourly_usd": 0.122364,
-          "reserved_3yr_hourly_usd": 0.087412
+        "c4a-highcpu-2": {
+          "on_demand_hourly_usd": 0.07576,
+          "reserved_1yr_hourly_usd": 0.04998,
+          "reserved_3yr_hourly_usd": 0.0341
         },
-        "n2-standard-8": {
-          "on_demand_hourly_usd": 0.38847200000000004,
-          "reserved_1yr_hourly_usd": 0.244728,
-          "reserved_3yr_hourly_usd": 0.174824
+        "n4-highcpu-4": {
+          "on_demand_hourly_usd": 0.15308,
+          "reserved_1yr_hourly_usd": 0.09644,
+          "reserved_3yr_hourly_usd": 0.068888
         },
-        "n2-standard-16": {
-          "on_demand_hourly_usd": 0.7769440000000001,
-          "reserved_1yr_hourly_usd": 0.489456,
-          "reserved_3yr_hourly_usd": 0.349648
+        "c4a-highcpu-4": {
+          "on_demand_hourly_usd": 0.15152,
+          "reserved_1yr_hourly_usd": 0.09996,
+          "reserved_3yr_hourly_usd": 0.0682
         },
-        "n2-standard-32": {
-          "on_demand_hourly_usd": 1.5538880000000002,
-          "reserved_1yr_hourly_usd": 0.978912,
-          "reserved_3yr_hourly_usd": 0.699296
+        "n4-highcpu-8": {
+          "on_demand_hourly_usd": 0.30616,
+          "reserved_1yr_hourly_usd": 0.19288,
+          "reserved_3yr_hourly_usd": 0.137776
+        },
+        "c4a-highcpu-8": {
+          "on_demand_hourly_usd": 0.30304,
+          "reserved_1yr_hourly_usd": 0.19992,
+          "reserved_3yr_hourly_usd": 0.1364
+        },
+        "n4-highcpu-16": {
+          "on_demand_hourly_usd": 0.61232,
+          "reserved_1yr_hourly_usd": 0.38576,
+          "reserved_3yr_hourly_usd": 0.275552
+        },
+        "c4a-highcpu-16": {
+          "on_demand_hourly_usd": 0.60608,
+          "reserved_1yr_hourly_usd": 0.39984,
+          "reserved_3yr_hourly_usd": 0.2728
+        },
+        "n4-highcpu-32": {
+          "on_demand_hourly_usd": 1.22464,
+          "reserved_1yr_hourly_usd": 0.77152,
+          "reserved_3yr_hourly_usd": 0.551104
+        },
+        "c4a-highcpu-32": {
+          "on_demand_hourly_usd": 1.21216,
+          "reserved_1yr_hourly_usd": 0.79968,
+          "reserved_3yr_hourly_usd": 0.5456
+        },
+        "n4-standard-2": {
+          "on_demand_hourly_usd": 0.0907,
+          "reserved_1yr_hourly_usd": 0.05714,
+          "reserved_3yr_hourly_usd": 0.040816
+        },
+        "c4a-standard-2": {
+          "on_demand_hourly_usd": 0.08979999999999999,
+          "reserved_1yr_hourly_usd": 0.059219999999999995,
+          "reserved_3yr_hourly_usd": 0.04042
+        },
+        "n4-standard-4": {
+          "on_demand_hourly_usd": 0.1814,
+          "reserved_1yr_hourly_usd": 0.11428,
+          "reserved_3yr_hourly_usd": 0.081632
+        },
+        "c4a-standard-4": {
+          "on_demand_hourly_usd": 0.17959999999999998,
+          "reserved_1yr_hourly_usd": 0.11843999999999999,
+          "reserved_3yr_hourly_usd": 0.08084
+        },
+        "n4-standard-8": {
+          "on_demand_hourly_usd": 0.3628,
+          "reserved_1yr_hourly_usd": 0.22856,
+          "reserved_3yr_hourly_usd": 0.163264
+        },
+        "c4a-standard-8": {
+          "on_demand_hourly_usd": 0.35919999999999996,
+          "reserved_1yr_hourly_usd": 0.23687999999999998,
+          "reserved_3yr_hourly_usd": 0.16168
+        },
+        "n4-standard-16": {
+          "on_demand_hourly_usd": 0.7256,
+          "reserved_1yr_hourly_usd": 0.45712,
+          "reserved_3yr_hourly_usd": 0.326528
+        },
+        "c4a-standard-16": {
+          "on_demand_hourly_usd": 0.7183999999999999,
+          "reserved_1yr_hourly_usd": 0.47375999999999996,
+          "reserved_3yr_hourly_usd": 0.32336
+        },
+        "n4-standard-32": {
+          "on_demand_hourly_usd": 1.4512,
+          "reserved_1yr_hourly_usd": 0.91424,
+          "reserved_3yr_hourly_usd": 0.653056
+        },
+        "c4a-standard-32": {
+          "on_demand_hourly_usd": 1.4367999999999999,
+          "reserved_1yr_hourly_usd": 0.9475199999999999,
+          "reserved_3yr_hourly_usd": 0.64672
+        },
+        "n4-standard-64": {
+          "on_demand_hourly_usd": 2.9024,
+          "reserved_1yr_hourly_usd": 1.82848,
+          "reserved_3yr_hourly_usd": 1.306112
+        },
+        "c4a-standard-64": {
+          "on_demand_hourly_usd": 2.8735999999999997,
+          "reserved_1yr_hourly_usd": 1.8950399999999998,
+          "reserved_3yr_hourly_usd": 1.29344
+        },
+        "n4-highmem-2": {
+          "on_demand_hourly_usd": 0.11902,
+          "reserved_1yr_hourly_usd": 0.07498,
+          "reserved_3yr_hourly_usd": 0.053559999999999997
+        },
+        "c4a-highmem-2": {
+          "on_demand_hourly_usd": 0.11788,
+          "reserved_1yr_hourly_usd": 0.07769999999999999,
+          "reserved_3yr_hourly_usd": 0.053059999999999996
+        },
+        "n4-highmem-4": {
+          "on_demand_hourly_usd": 0.23804,
+          "reserved_1yr_hourly_usd": 0.14996,
+          "reserved_3yr_hourly_usd": 0.10711999999999999
+        },
+        "c4a-highmem-4": {
+          "on_demand_hourly_usd": 0.23576,
+          "reserved_1yr_hourly_usd": 0.15539999999999998,
+          "reserved_3yr_hourly_usd": 0.10611999999999999
+        },
+        "n4-highmem-8": {
+          "on_demand_hourly_usd": 0.47608,
+          "reserved_1yr_hourly_usd": 0.29992,
+          "reserved_3yr_hourly_usd": 0.21423999999999999
+        },
+        "c4a-highmem-8": {
+          "on_demand_hourly_usd": 0.47152,
+          "reserved_1yr_hourly_usd": 0.31079999999999997,
+          "reserved_3yr_hourly_usd": 0.21223999999999998
+        },
+        "n4-highmem-16": {
+          "on_demand_hourly_usd": 0.95216,
+          "reserved_1yr_hourly_usd": 0.59984,
+          "reserved_3yr_hourly_usd": 0.42847999999999997
+        },
+        "c4a-highmem-16": {
+          "on_demand_hourly_usd": 0.94304,
+          "reserved_1yr_hourly_usd": 0.6215999999999999,
+          "reserved_3yr_hourly_usd": 0.42447999999999997
+        },
+        "n4-highmem-32": {
+          "on_demand_hourly_usd": 1.90432,
+          "reserved_1yr_hourly_usd": 1.19968,
+          "reserved_3yr_hourly_usd": 0.8569599999999999
+        },
+        "c4a-highmem-32": {
+          "on_demand_hourly_usd": 1.88608,
+          "reserved_1yr_hourly_usd": 1.2431999999999999,
+          "reserved_3yr_hourly_usd": 0.8489599999999999
+        },
+        "g2-standard-8": {
+          "on_demand_hourly_usd": 0.8536242709999999,
+          "reserved_1yr_hourly_usd": 0.537783286,
+          "reserved_3yr_hourly_usd": 0.38413089899999997
+        },
+        "g2-standard-16": {
+          "on_demand_hourly_usd": 1.147208303,
+          "reserved_1yr_hourly_usd": 0.722741222,
+          "reserved_3yr_hourly_usd": 0.516243691
+        },
+        "g2-standard-48": {
+          "on_demand_hourly_usd": 4.001665148,
+          "reserved_1yr_hourly_usd": 2.521049016,
+          "reserved_3yr_hourly_usd": 1.80074918
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 0.34,
-        "hdd_gb_month_usd": 0.125,
-        "nvme_gb_month_usd": 0.08,
-        "object_gb_month_usd": 0.022
+        "ssd_gb_month_usd": 0.1,
+        "hdd_gb_month_usd": 0.04,
+        "nvme_gb_month_usd": 0.17,
+        "object_gb_month_usd": 0.02
       },
       "other": {
         "load_balancer_monthly_usd": 18
@@ -42,40 +192,566 @@
     },
     "us-east1": {
       "compute": {
-        "n2-standard-2": {
-          "on_demand_hourly_usd": 0.09711800000000001,
-          "reserved_1yr_hourly_usd": 0.061182,
-          "reserved_3yr_hourly_usd": 0.043706
+        "n4-highcpu-2": {
+          "on_demand_hourly_usd": 0.07654,
+          "reserved_1yr_hourly_usd": 0.04822,
+          "reserved_3yr_hourly_usd": 0.034444
         },
-        "n2-standard-4": {
-          "on_demand_hourly_usd": 0.19423600000000002,
-          "reserved_1yr_hourly_usd": 0.122364,
-          "reserved_3yr_hourly_usd": 0.087412
+        "c4a-highcpu-2": {
+          "on_demand_hourly_usd": 0.07576,
+          "reserved_1yr_hourly_usd": 0.04998,
+          "reserved_3yr_hourly_usd": 0.0341
         },
-        "n2-standard-8": {
-          "on_demand_hourly_usd": 0.38847200000000004,
-          "reserved_1yr_hourly_usd": 0.244728,
-          "reserved_3yr_hourly_usd": 0.174824
+        "n4-highcpu-4": {
+          "on_demand_hourly_usd": 0.15308,
+          "reserved_1yr_hourly_usd": 0.09644,
+          "reserved_3yr_hourly_usd": 0.068888
         },
-        "n2-standard-16": {
-          "on_demand_hourly_usd": 0.7769440000000001,
-          "reserved_1yr_hourly_usd": 0.489456,
-          "reserved_3yr_hourly_usd": 0.349648
+        "c4a-highcpu-4": {
+          "on_demand_hourly_usd": 0.15152,
+          "reserved_1yr_hourly_usd": 0.09996,
+          "reserved_3yr_hourly_usd": 0.0682
         },
-        "n2-standard-32": {
-          "on_demand_hourly_usd": 1.5538880000000002,
-          "reserved_1yr_hourly_usd": 0.978912,
-          "reserved_3yr_hourly_usd": 0.699296
+        "n4-highcpu-8": {
+          "on_demand_hourly_usd": 0.30616,
+          "reserved_1yr_hourly_usd": 0.19288,
+          "reserved_3yr_hourly_usd": 0.137776
+        },
+        "c4a-highcpu-8": {
+          "on_demand_hourly_usd": 0.30304,
+          "reserved_1yr_hourly_usd": 0.19992,
+          "reserved_3yr_hourly_usd": 0.1364
+        },
+        "n4-highcpu-16": {
+          "on_demand_hourly_usd": 0.61232,
+          "reserved_1yr_hourly_usd": 0.38576,
+          "reserved_3yr_hourly_usd": 0.275552
+        },
+        "c4a-highcpu-16": {
+          "on_demand_hourly_usd": 0.60608,
+          "reserved_1yr_hourly_usd": 0.39984,
+          "reserved_3yr_hourly_usd": 0.2728
+        },
+        "n4-highcpu-32": {
+          "on_demand_hourly_usd": 1.22464,
+          "reserved_1yr_hourly_usd": 0.77152,
+          "reserved_3yr_hourly_usd": 0.551104
+        },
+        "c4a-highcpu-32": {
+          "on_demand_hourly_usd": 1.21216,
+          "reserved_1yr_hourly_usd": 0.79968,
+          "reserved_3yr_hourly_usd": 0.5456
+        },
+        "n4-standard-2": {
+          "on_demand_hourly_usd": 0.0907,
+          "reserved_1yr_hourly_usd": 0.05714,
+          "reserved_3yr_hourly_usd": 0.040816
+        },
+        "c4a-standard-2": {
+          "on_demand_hourly_usd": 0.08979999999999999,
+          "reserved_1yr_hourly_usd": 0.059219999999999995,
+          "reserved_3yr_hourly_usd": 0.04042
+        },
+        "n4-standard-4": {
+          "on_demand_hourly_usd": 0.1814,
+          "reserved_1yr_hourly_usd": 0.11428,
+          "reserved_3yr_hourly_usd": 0.081632
+        },
+        "c4a-standard-4": {
+          "on_demand_hourly_usd": 0.17959999999999998,
+          "reserved_1yr_hourly_usd": 0.11843999999999999,
+          "reserved_3yr_hourly_usd": 0.08084
+        },
+        "n4-standard-8": {
+          "on_demand_hourly_usd": 0.3628,
+          "reserved_1yr_hourly_usd": 0.22856,
+          "reserved_3yr_hourly_usd": 0.163264
+        },
+        "c4a-standard-8": {
+          "on_demand_hourly_usd": 0.35919999999999996,
+          "reserved_1yr_hourly_usd": 0.23687999999999998,
+          "reserved_3yr_hourly_usd": 0.16168
+        },
+        "n4-standard-16": {
+          "on_demand_hourly_usd": 0.7256,
+          "reserved_1yr_hourly_usd": 0.45712,
+          "reserved_3yr_hourly_usd": 0.326528
+        },
+        "c4a-standard-16": {
+          "on_demand_hourly_usd": 0.7183999999999999,
+          "reserved_1yr_hourly_usd": 0.47375999999999996,
+          "reserved_3yr_hourly_usd": 0.32336
+        },
+        "n4-standard-32": {
+          "on_demand_hourly_usd": 1.4512,
+          "reserved_1yr_hourly_usd": 0.91424,
+          "reserved_3yr_hourly_usd": 0.653056
+        },
+        "c4a-standard-32": {
+          "on_demand_hourly_usd": 1.4367999999999999,
+          "reserved_1yr_hourly_usd": 0.9475199999999999,
+          "reserved_3yr_hourly_usd": 0.64672
+        },
+        "n4-standard-64": {
+          "on_demand_hourly_usd": 2.9024,
+          "reserved_1yr_hourly_usd": 1.82848,
+          "reserved_3yr_hourly_usd": 1.306112
+        },
+        "c4a-standard-64": {
+          "on_demand_hourly_usd": 2.8735999999999997,
+          "reserved_1yr_hourly_usd": 1.8950399999999998,
+          "reserved_3yr_hourly_usd": 1.29344
+        },
+        "n4-highmem-2": {
+          "on_demand_hourly_usd": 0.11902,
+          "reserved_1yr_hourly_usd": 0.07498,
+          "reserved_3yr_hourly_usd": 0.053559999999999997
+        },
+        "c4a-highmem-2": {
+          "on_demand_hourly_usd": 0.11788,
+          "reserved_1yr_hourly_usd": 0.07769999999999999,
+          "reserved_3yr_hourly_usd": 0.053059999999999996
+        },
+        "n4-highmem-4": {
+          "on_demand_hourly_usd": 0.23804,
+          "reserved_1yr_hourly_usd": 0.14996,
+          "reserved_3yr_hourly_usd": 0.10711999999999999
+        },
+        "c4a-highmem-4": {
+          "on_demand_hourly_usd": 0.23576,
+          "reserved_1yr_hourly_usd": 0.15539999999999998,
+          "reserved_3yr_hourly_usd": 0.10611999999999999
+        },
+        "n4-highmem-8": {
+          "on_demand_hourly_usd": 0.47608,
+          "reserved_1yr_hourly_usd": 0.29992,
+          "reserved_3yr_hourly_usd": 0.21423999999999999
+        },
+        "c4a-highmem-8": {
+          "on_demand_hourly_usd": 0.47152,
+          "reserved_1yr_hourly_usd": 0.31079999999999997,
+          "reserved_3yr_hourly_usd": 0.21223999999999998
+        },
+        "n4-highmem-16": {
+          "on_demand_hourly_usd": 0.95216,
+          "reserved_1yr_hourly_usd": 0.59984,
+          "reserved_3yr_hourly_usd": 0.42847999999999997
+        },
+        "c4a-highmem-16": {
+          "on_demand_hourly_usd": 0.94304,
+          "reserved_1yr_hourly_usd": 0.6215999999999999,
+          "reserved_3yr_hourly_usd": 0.42447999999999997
+        },
+        "n4-highmem-32": {
+          "on_demand_hourly_usd": 1.90432,
+          "reserved_1yr_hourly_usd": 1.19968,
+          "reserved_3yr_hourly_usd": 0.8569599999999999
+        },
+        "c4a-highmem-32": {
+          "on_demand_hourly_usd": 1.88608,
+          "reserved_1yr_hourly_usd": 1.2431999999999999,
+          "reserved_3yr_hourly_usd": 0.8489599999999999
+        },
+        "g2-standard-8": {
+          "on_demand_hourly_usd": 0.8536242709999999,
+          "reserved_1yr_hourly_usd": 0.537783286,
+          "reserved_3yr_hourly_usd": 0.38413089899999997
+        },
+        "g2-standard-16": {
+          "on_demand_hourly_usd": 1.147208303,
+          "reserved_1yr_hourly_usd": 0.722741222,
+          "reserved_3yr_hourly_usd": 0.516243691
+        },
+        "g2-standard-48": {
+          "on_demand_hourly_usd": 4.001665148,
+          "reserved_1yr_hourly_usd": 2.521049016,
+          "reserved_3yr_hourly_usd": 1.80074918
         }
       },
       "storage": {
-        "ssd_gb_month_usd": 0.34,
-        "hdd_gb_month_usd": 0.125,
-        "nvme_gb_month_usd": 0.09,
-        "object_gb_month_usd": 0.022
+        "ssd_gb_month_usd": 0.1,
+        "hdd_gb_month_usd": 0.04,
+        "nvme_gb_month_usd": 0.17,
+        "object_gb_month_usd": 0.02
       },
       "other": {
         "load_balancer_monthly_usd": 18
+      }
+    },
+    "europe-west1": {
+      "compute": {
+        "n4-highcpu-2": {
+          "on_demand_hourly_usd": 0.084278196,
+          "reserved_1yr_hourly_usd": 0.053095052,
+          "reserved_3yr_hourly_usd": 0.037926288
+        },
+        "c4a-highcpu-2": {
+          "on_demand_hourly_usd": 0.08341934000000001,
+          "reserved_1yr_hourly_usd": 0.05503298,
+          "reserved_3yr_hourly_usd": 0.03754752
+        },
+        "n4-highcpu-4": {
+          "on_demand_hourly_usd": 0.168556392,
+          "reserved_1yr_hourly_usd": 0.106190104,
+          "reserved_3yr_hourly_usd": 0.075852576
+        },
+        "c4a-highcpu-4": {
+          "on_demand_hourly_usd": 0.16683868000000002,
+          "reserved_1yr_hourly_usd": 0.11006596,
+          "reserved_3yr_hourly_usd": 0.07509504
+        },
+        "n4-highcpu-8": {
+          "on_demand_hourly_usd": 0.337112784,
+          "reserved_1yr_hourly_usd": 0.212380208,
+          "reserved_3yr_hourly_usd": 0.151705152
+        },
+        "c4a-highcpu-8": {
+          "on_demand_hourly_usd": 0.33367736000000003,
+          "reserved_1yr_hourly_usd": 0.22013192,
+          "reserved_3yr_hourly_usd": 0.15019008
+        },
+        "n4-highcpu-16": {
+          "on_demand_hourly_usd": 0.674225568,
+          "reserved_1yr_hourly_usd": 0.424760416,
+          "reserved_3yr_hourly_usd": 0.303410304
+        },
+        "c4a-highcpu-16": {
+          "on_demand_hourly_usd": 0.6673547200000001,
+          "reserved_1yr_hourly_usd": 0.44026384,
+          "reserved_3yr_hourly_usd": 0.30038016
+        },
+        "n4-highcpu-32": {
+          "on_demand_hourly_usd": 1.348451136,
+          "reserved_1yr_hourly_usd": 0.849520832,
+          "reserved_3yr_hourly_usd": 0.606820608
+        },
+        "c4a-highcpu-32": {
+          "on_demand_hourly_usd": 1.3347094400000001,
+          "reserved_1yr_hourly_usd": 0.88052768,
+          "reserved_3yr_hourly_usd": 0.60076032
+        },
+        "n4-standard-2": {
+          "on_demand_hourly_usd": 0.099869772,
+          "reserved_1yr_hourly_usd": 0.06291686399999999,
+          "reserved_3yr_hourly_usd": 0.044942496
+        },
+        "c4a-standard-2": {
+          "on_demand_hourly_usd": 0.09887878,
+          "reserved_1yr_hourly_usd": 0.06520714,
+          "reserved_3yr_hourly_usd": 0.04450648
+        },
+        "n4-standard-4": {
+          "on_demand_hourly_usd": 0.199739544,
+          "reserved_1yr_hourly_usd": 0.12583372799999998,
+          "reserved_3yr_hourly_usd": 0.089884992
+        },
+        "c4a-standard-4": {
+          "on_demand_hourly_usd": 0.19775756,
+          "reserved_1yr_hourly_usd": 0.13041428,
+          "reserved_3yr_hourly_usd": 0.08901296
+        },
+        "n4-standard-8": {
+          "on_demand_hourly_usd": 0.399479088,
+          "reserved_1yr_hourly_usd": 0.25166745599999996,
+          "reserved_3yr_hourly_usd": 0.179769984
+        },
+        "c4a-standard-8": {
+          "on_demand_hourly_usd": 0.39551512,
+          "reserved_1yr_hourly_usd": 0.26082856,
+          "reserved_3yr_hourly_usd": 0.17802592
+        },
+        "n4-standard-16": {
+          "on_demand_hourly_usd": 0.798958176,
+          "reserved_1yr_hourly_usd": 0.5033349119999999,
+          "reserved_3yr_hourly_usd": 0.359539968
+        },
+        "c4a-standard-16": {
+          "on_demand_hourly_usd": 0.79103024,
+          "reserved_1yr_hourly_usd": 0.52165712,
+          "reserved_3yr_hourly_usd": 0.35605184
+        },
+        "n4-standard-32": {
+          "on_demand_hourly_usd": 1.597916352,
+          "reserved_1yr_hourly_usd": 1.0066698239999998,
+          "reserved_3yr_hourly_usd": 0.719079936
+        },
+        "c4a-standard-32": {
+          "on_demand_hourly_usd": 1.58206048,
+          "reserved_1yr_hourly_usd": 1.04331424,
+          "reserved_3yr_hourly_usd": 0.71210368
+        },
+        "n4-standard-64": {
+          "on_demand_hourly_usd": 3.195832704,
+          "reserved_1yr_hourly_usd": 2.0133396479999996,
+          "reserved_3yr_hourly_usd": 1.438159872
+        },
+        "c4a-standard-64": {
+          "on_demand_hourly_usd": 3.16412096,
+          "reserved_1yr_hourly_usd": 2.08662848,
+          "reserved_3yr_hourly_usd": 1.42420736
+        },
+        "n4-highmem-2": {
+          "on_demand_hourly_usd": 0.13105292400000002,
+          "reserved_1yr_hourly_usd": 0.08256048799999999,
+          "reserved_3yr_hourly_usd": 0.058974912000000004
+        },
+        "c4a-highmem-2": {
+          "on_demand_hourly_usd": 0.12979766,
+          "reserved_1yr_hourly_usd": 0.08555546,
+          "reserved_3yr_hourly_usd": 0.0584244
+        },
+        "n4-highmem-4": {
+          "on_demand_hourly_usd": 0.26210584800000003,
+          "reserved_1yr_hourly_usd": 0.16512097599999997,
+          "reserved_3yr_hourly_usd": 0.11794982400000001
+        },
+        "c4a-highmem-4": {
+          "on_demand_hourly_usd": 0.25959532,
+          "reserved_1yr_hourly_usd": 0.17111092,
+          "reserved_3yr_hourly_usd": 0.1168488
+        },
+        "n4-highmem-8": {
+          "on_demand_hourly_usd": 0.5242116960000001,
+          "reserved_1yr_hourly_usd": 0.33024195199999995,
+          "reserved_3yr_hourly_usd": 0.23589964800000002
+        },
+        "c4a-highmem-8": {
+          "on_demand_hourly_usd": 0.51919064,
+          "reserved_1yr_hourly_usd": 0.34222184,
+          "reserved_3yr_hourly_usd": 0.2336976
+        },
+        "n4-highmem-16": {
+          "on_demand_hourly_usd": 1.0484233920000001,
+          "reserved_1yr_hourly_usd": 0.6604839039999999,
+          "reserved_3yr_hourly_usd": 0.47179929600000003
+        },
+        "c4a-highmem-16": {
+          "on_demand_hourly_usd": 1.03838128,
+          "reserved_1yr_hourly_usd": 0.68444368,
+          "reserved_3yr_hourly_usd": 0.4673952
+        },
+        "n4-highmem-32": {
+          "on_demand_hourly_usd": 2.0968467840000002,
+          "reserved_1yr_hourly_usd": 1.3209678079999998,
+          "reserved_3yr_hourly_usd": 0.9435985920000001
+        },
+        "c4a-highmem-32": {
+          "on_demand_hourly_usd": 2.07676256,
+          "reserved_1yr_hourly_usd": 1.36888736,
+          "reserved_3yr_hourly_usd": 0.9347904
+        },
+        "g2-standard-8": {
+          "on_demand_hourly_usd": 0.9399257080000001,
+          "reserved_1yr_hourly_usd": 0.592153232,
+          "reserved_3yr_hourly_usd": 0.422966492
+        },
+        "g2-standard-16": {
+          "on_demand_hourly_usd": 1.2631911160000002,
+          "reserved_1yr_hourly_usd": 0.795810464,
+          "reserved_3yr_hourly_usd": 0.568435884
+        },
+        "g2-standard-48": {
+          "on_demand_hourly_usd": 4.406233648000001,
+          "reserved_1yr_hourly_usd": 2.775927392,
+          "reserved_3yr_hourly_usd": 1.9828047519999998
+        }
+      },
+      "storage": {
+        "ssd_gb_month_usd": 0.1,
+        "hdd_gb_month_usd": 0.04,
+        "nvme_gb_month_usd": 0.17,
+        "object_gb_month_usd": 0.02
+      },
+      "other": {
+        "load_balancer_monthly_usd": 19
+      }
+    },
+    "asia-southeast1": {
+      "compute": {
+        "n4-highcpu-2": {
+          "on_demand_hourly_usd": 0.094427392,
+          "reserved_1yr_hourly_usd": 0.059489024,
+          "reserved_3yr_hourly_usd": 0.042493555999999995
+        },
+        "c4a-highcpu-2": {
+          "on_demand_hourly_usd": 0.09346512,
+          "reserved_1yr_hourly_usd": 0.061660339999999994,
+          "reserved_3yr_hourly_usd": 0.04206918
+        },
+        "n4-highcpu-4": {
+          "on_demand_hourly_usd": 0.188854784,
+          "reserved_1yr_hourly_usd": 0.118978048,
+          "reserved_3yr_hourly_usd": 0.08498711199999999
+        },
+        "c4a-highcpu-4": {
+          "on_demand_hourly_usd": 0.18693024,
+          "reserved_1yr_hourly_usd": 0.12332067999999999,
+          "reserved_3yr_hourly_usd": 0.08413836
+        },
+        "n4-highcpu-8": {
+          "on_demand_hourly_usd": 0.377709568,
+          "reserved_1yr_hourly_usd": 0.237956096,
+          "reserved_3yr_hourly_usd": 0.16997422399999998
+        },
+        "c4a-highcpu-8": {
+          "on_demand_hourly_usd": 0.37386048,
+          "reserved_1yr_hourly_usd": 0.24664135999999998,
+          "reserved_3yr_hourly_usd": 0.16827672
+        },
+        "n4-highcpu-16": {
+          "on_demand_hourly_usd": 0.755419136,
+          "reserved_1yr_hourly_usd": 0.475912192,
+          "reserved_3yr_hourly_usd": 0.33994844799999996
+        },
+        "c4a-highcpu-16": {
+          "on_demand_hourly_usd": 0.74772096,
+          "reserved_1yr_hourly_usd": 0.49328271999999995,
+          "reserved_3yr_hourly_usd": 0.33655344
+        },
+        "n4-highcpu-32": {
+          "on_demand_hourly_usd": 1.510838272,
+          "reserved_1yr_hourly_usd": 0.951824384,
+          "reserved_3yr_hourly_usd": 0.6798968959999999
+        },
+        "c4a-highcpu-32": {
+          "on_demand_hourly_usd": 1.49544192,
+          "reserved_1yr_hourly_usd": 0.9865654399999999,
+          "reserved_3yr_hourly_usd": 0.67310688
+        },
+        "n4-standard-2": {
+          "on_demand_hourly_usd": 0.11189658400000001,
+          "reserved_1yr_hourly_usd": 0.070493628,
+          "reserved_3yr_hourly_usd": 0.05035469199999999
+        },
+        "c4a-standard-2": {
+          "on_demand_hourly_usd": 0.11078627999999999,
+          "reserved_1yr_hourly_usd": 0.07305974,
+          "reserved_3yr_hourly_usd": 0.049866179999999996
+        },
+        "n4-standard-4": {
+          "on_demand_hourly_usd": 0.22379316800000001,
+          "reserved_1yr_hourly_usd": 0.140987256,
+          "reserved_3yr_hourly_usd": 0.10070938399999999
+        },
+        "c4a-standard-4": {
+          "on_demand_hourly_usd": 0.22157255999999997,
+          "reserved_1yr_hourly_usd": 0.14611948,
+          "reserved_3yr_hourly_usd": 0.09973235999999999
+        },
+        "n4-standard-8": {
+          "on_demand_hourly_usd": 0.44758633600000003,
+          "reserved_1yr_hourly_usd": 0.281974512,
+          "reserved_3yr_hourly_usd": 0.20141876799999997
+        },
+        "c4a-standard-8": {
+          "on_demand_hourly_usd": 0.44314511999999995,
+          "reserved_1yr_hourly_usd": 0.29223896,
+          "reserved_3yr_hourly_usd": 0.19946471999999998
+        },
+        "n4-standard-16": {
+          "on_demand_hourly_usd": 0.8951726720000001,
+          "reserved_1yr_hourly_usd": 0.563949024,
+          "reserved_3yr_hourly_usd": 0.40283753599999994
+        },
+        "c4a-standard-16": {
+          "on_demand_hourly_usd": 0.8862902399999999,
+          "reserved_1yr_hourly_usd": 0.58447792,
+          "reserved_3yr_hourly_usd": 0.39892943999999997
+        },
+        "n4-standard-32": {
+          "on_demand_hourly_usd": 1.7903453440000001,
+          "reserved_1yr_hourly_usd": 1.127898048,
+          "reserved_3yr_hourly_usd": 0.8056750719999999
+        },
+        "c4a-standard-32": {
+          "on_demand_hourly_usd": 1.7725804799999998,
+          "reserved_1yr_hourly_usd": 1.16895584,
+          "reserved_3yr_hourly_usd": 0.7978588799999999
+        },
+        "n4-standard-64": {
+          "on_demand_hourly_usd": 3.5806906880000002,
+          "reserved_1yr_hourly_usd": 2.255796096,
+          "reserved_3yr_hourly_usd": 1.6113501439999998
+        },
+        "c4a-standard-64": {
+          "on_demand_hourly_usd": 3.5451609599999996,
+          "reserved_1yr_hourly_usd": 2.33791168,
+          "reserved_3yr_hourly_usd": 1.5957177599999999
+        },
+        "n4-highmem-2": {
+          "on_demand_hourly_usd": 0.146834968,
+          "reserved_1yr_hourly_usd": 0.092502836,
+          "reserved_3yr_hourly_usd": 0.06607696399999999
+        },
+        "c4a-highmem-2": {
+          "on_demand_hourly_usd": 0.1454286,
+          "reserved_1yr_hourly_usd": 0.09585853999999999,
+          "reserved_3yr_hourly_usd": 0.06546018
+        },
+        "n4-highmem-4": {
+          "on_demand_hourly_usd": 0.293669936,
+          "reserved_1yr_hourly_usd": 0.185005672,
+          "reserved_3yr_hourly_usd": 0.13215392799999998
+        },
+        "c4a-highmem-4": {
+          "on_demand_hourly_usd": 0.2908572,
+          "reserved_1yr_hourly_usd": 0.19171707999999998,
+          "reserved_3yr_hourly_usd": 0.13092036
+        },
+        "n4-highmem-8": {
+          "on_demand_hourly_usd": 0.587339872,
+          "reserved_1yr_hourly_usd": 0.370011344,
+          "reserved_3yr_hourly_usd": 0.26430785599999995
+        },
+        "c4a-highmem-8": {
+          "on_demand_hourly_usd": 0.5817144,
+          "reserved_1yr_hourly_usd": 0.38343415999999997,
+          "reserved_3yr_hourly_usd": 0.26184072
+        },
+        "n4-highmem-16": {
+          "on_demand_hourly_usd": 1.174679744,
+          "reserved_1yr_hourly_usd": 0.740022688,
+          "reserved_3yr_hourly_usd": 0.5286157119999999
+        },
+        "c4a-highmem-16": {
+          "on_demand_hourly_usd": 1.1634288,
+          "reserved_1yr_hourly_usd": 0.7668683199999999,
+          "reserved_3yr_hourly_usd": 0.52368144
+        },
+        "n4-highmem-32": {
+          "on_demand_hourly_usd": 2.349359488,
+          "reserved_1yr_hourly_usd": 1.480045376,
+          "reserved_3yr_hourly_usd": 1.0572314239999998
+        },
+        "c4a-highmem-32": {
+          "on_demand_hourly_usd": 2.3268576,
+          "reserved_1yr_hourly_usd": 1.5337366399999999,
+          "reserved_3yr_hourly_usd": 1.04736288
+        },
+        "g2-standard-8": {
+          "on_demand_hourly_usd": 1.053116256,
+          "reserved_1yr_hourly_usd": 0.663463208,
+          "reserved_3yr_hourly_usd": 0.473902284
+        },
+        "g2-standard-16": {
+          "on_demand_hourly_usd": 1.415310912,
+          "reserved_1yr_hourly_usd": 0.891645816,
+          "reserved_3yr_hourly_usd": 0.636889868
+        },
+        "g2-standard-48": {
+          "on_demand_hourly_usd": 4.936854336,
+          "reserved_1yr_hourly_usd": 3.110218048,
+          "reserved_3yr_hourly_usd": 2.221584304
+        }
+      },
+      "storage": {
+        "ssd_gb_month_usd": 0.11,
+        "hdd_gb_month_usd": 0.044,
+        "nvme_gb_month_usd": 0.187,
+        "object_gb_month_usd": 0.02
+      },
+      "other": {
+        "load_balancer_monthly_usd": 19
       }
     }
   }

@@ -4,23 +4,27 @@
     "name": "Apache Kafka via Confluent Platform",
     "vendor": "Confluent, Inc.",
     "category": "streaming",
-    "description": "Self-managed Apache Kafka deployed with Confluent Platform for event streaming, durable logs, and integration pipelines.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Confluent Platform 8.x (Apache Kafka 4.x KRaft) for durable event streaming, schema governance, and Connect pipelines.\n",
     "ref_arch": {
       "source_url": "https://docs.confluent.io/platform/current/kafka/deployment.html",
-      "version": "Confluent Platform current self-managed deployment guidance",
-      "retrieved_date": "2026-04-13"
+      "version": "Confluent Platform 8.x (Apache Kafka 4.x KRaft-only)",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
         "label": "Extra Small",
-        "range_description": "up to 50 MB/s ingress with short retention windows",
+        "range_description": "up to 50 MB/s ingress with short local retention windows",
         "ref_arch_tier": "departmental-cluster",
         "components": [
           {
             "role": "broker",
             "count": 3,
-            "vcpu": 16,
-            "memory_gb": 64,
+            "vcpu": 8,
+            "memory_gb": 32,
             "storage_gb": 2000,
             "storage_type": "ssd"
           },
@@ -65,17 +69,17 @@
         "components": [
           {
             "role": "broker",
-            "count": 3,
-            "vcpu": 32,
-            "memory_gb": 128,
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
             "storage_gb": 4000,
             "storage_type": "ssd"
           },
           {
             "role": "kraft-controller",
             "count": 3,
-            "vcpu": 2,
-            "memory_gb": 8,
+            "vcpu": 4,
+            "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
           },
@@ -107,7 +111,7 @@
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "150 to 400 MB/s ingress with longer retention and more connectors",
+        "range_description": "150 to 400 MB/s ingress with longer retention and wider connector fan-out",
         "ref_arch_tier": "large-cluster",
         "components": [
           {
@@ -121,15 +125,15 @@
           {
             "role": "kraft-controller",
             "count": 5,
-            "vcpu": 2,
-            "memory_gb": 8,
+            "vcpu": 4,
+            "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
           },
           {
             "role": "connect",
             "count": 4,
-            "vcpu": 4,
+            "vcpu": 8,
             "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
@@ -154,12 +158,163 @@
       }
     },
     "notes": [
-      "Broker, controller, Connect, and Control Center roles follow Confluent's published self-managed deployment guidance and are rounded to CloudEstimate's VM shape set.",
-      "The base tiers already assume quorum and replication on the Kafka side, so HA overhead is baked into the baseline topology."
+      "Confluent Platform 8.x runs Apache Kafka 4.x with mandatory KRaft metadata controllers (ZooKeeper has been completely removed).",
+      "Enabling Tiered Storage to S3, GCS, or Azure Blob can significantly shrink per-broker block disk sizes when retention exceeds 24-48 hours."
     ],
     "disclaimers": [
-      "Based on Confluent Platform self-managed deployment guidance and translated into VM-based planning tiers.",
-      "Estimate excludes producer and consumer application hosts, ksqlDB, Flink services, tiered storage, network transfer, and Confluent licensing."
+      "Based on Confluent Platform 8.x self-managed production deployment guidance normalized to cloud VM shapes.",
+      "Estimate excludes Confluent Enterprise licensing, Apache Flink compute pools, Tiered Storage bucket capacity, and cross-AZ replication traffic charges."
+    ]
+  },
+  {
+    "slug": "clickhouse",
+    "name": "ClickHouse Self-Managed",
+    "vendor": "ClickHouse, Inc.",
+    "category": "observability",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed ClickHouse columnar OLAP and observability analytics cluster with ClickHouse Keeper coordination.\n",
+    "ref_arch": {
+      "source_url": "https://clickhouse.com/docs/en/operations/tips",
+      "version": "ClickHouse production sizing & ClickHouse Keeper quorum guidance",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 2 TB compressed analytical or log data on a single shard",
+        "ref_arch_tier": "single-shard-starter",
+        "components": [
+          {
+            "role": "clickhouse-server",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "clickhouse-replica",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "clickhouse-keeper",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "2 to 15 TB compressed data across two replicated shards",
+        "ref_arch_tier": "two-shard-replicated",
+        "components": [
+          {
+            "role": "clickhouse-server",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 4000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "clickhouse-keeper",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "clickhouse-replica",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 4000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "15 to 100 TB compressed analytical or OpenTelemetry observability data",
+        "ref_arch_tier": "four-shard-replicated",
+        "components": [
+          {
+            "role": "clickhouse-server",
+            "count": 4,
+            "vcpu": 32,
+            "memory_gb": 128,
+            "storage_gb": 8000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "clickhouse-keeper",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 30000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "clickhouse-replica",
+            "count": 4,
+            "vcpu": 32,
+            "memory_gb": 128,
+            "storage_gb": 8000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Dedicated 3-node ClickHouse Keeper Raft quorums replace Apache ZooKeeper for ReplicatedMergeTree coordination in modern ClickHouse deployments.",
+      "Extra Large includes tiered S3/GCS/Blob object storage alongside hot NVMe disks for cold-tier MergeTree partitions, and ClickHouse runs natively with high throughput on Linux arm64 CPUs."
+    ],
+    "disclaimers": [
+      "Based on ClickHouse self-managed operational sizing tips (1:4 CPU-to-RAM ratio and dedicated Keeper quorums).",
+      "Estimate excludes OpenTelemetry collector fleets, Kafka/Vector ingestion pipelines, backup buckets, and cross-AZ replication egress."
     ]
   },
   {
@@ -167,16 +322,20 @@
     "name": "CockroachDB Self-Hosted",
     "vendor": "Cockroach Labs",
     "category": "data-store",
-    "description": "Self-hosted CockroachDB for resilient SQL workloads that need distributed transactions and scale-out storage.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-hosted CockroachDB v26.x for resilient distributed SQL workloads needing serializable transactions and multi-zone survivability.\n",
     "ref_arch": {
       "source_url": "https://www.cockroachlabs.com/docs/stable/recommended-production-settings",
-      "version": "CockroachDB stable recommended production settings",
-      "retrieved_date": "2026-04-13"
+      "version": "CockroachDB v26.x recommended production settings",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
         "label": "Extra Small",
-        "range_description": "up to 1 TB replicated OLTP data on a three-node cluster",
+        "range_description": "up to 1 TB replicated OLTP data on a three-node quorum cluster",
         "ref_arch_tier": "three-node-small",
         "components": [
           {
@@ -186,6 +345,14 @@
             "memory_gb": 16,
             "storage_gb": 500,
             "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
@@ -202,11 +369,19 @@
             "storage_gb": 1000,
             "storage_type": "ssd"
           }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
         ]
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "5 to 20 TB replicated data or higher-concurrency regional SQL workloads",
+        "range_description": "5 to 20 TB replicated data or high-concurrency regional SQL workloads",
         "ref_arch_tier": "seven-node-large",
         "components": [
           {
@@ -215,18 +390,26 @@
             "vcpu": 16,
             "memory_gb": 64,
             "storage_gb": 2000,
-            "storage_type": "ssd"
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       }
     },
     "notes": [
-      "CockroachDB production guidance starts at a three-node quorum, so redundancy is already reflected in the base topology.",
-      "Node sizes align with the product's published CPU, memory, and SSD guidance for production clusters and are normalized to the nearest CloudEstimate VM shape."
+      "CockroachDB requires a commercial license (or free tier registration within published scale thresholds) since the v24.3 CockroachDB Software License transition.",
+      "Multi-node Raft quorum is already built into the 3-, 5-, and 7-node base topologies; enabling HA adds managed L4 SQL load balancing across zones."
     ],
     "disclaimers": [
-      "Based on CockroachDB self-hosted production recommendations and expressed as VM-based planning tiers.",
-      "Estimate excludes load balancers, backups, changefeeds, geo-partitioned layouts, and network transfer between regions or zones."
+      "Based on CockroachDB v26.x self-hosted production hardware recommendations (4 GB RAM per vCPU, up to ~2.5 TB logical capacity per node).",
+      "Estimate excludes CockroachDB Enterprise licensing, backup object storage, Kafka changefeed sinks, and cross-AZ/cross-region replication egress."
     ]
   },
   {
@@ -234,11 +417,14 @@
     "name": "Confluence Data Center",
     "vendor": "Atlassian",
     "category": "other",
-    "description": "Self-managed Confluence Data Center for enterprise documentation, knowledge bases, and collaborative editing.\n",
+    "arch_support": [
+      "x86_64"
+    ],
+    "description": "Self-managed Confluence Data Center 9.x for existing enterprise knowledge bases and collaborative editing ahead of the 2029 EOL.\n",
     "ref_arch": {
-      "source_url": "https://confluence.atlassian.com/security/confluence-data-center-infrastructure-recommendations-1409093099.html",
-      "version": "Confluence Data Center 6.13-6.15 benchmark guidance",
-      "retrieved_date": "2026-04-13"
+      "source_url": "https://confluence.atlassian.com/enterprise/confluence-data-center-load-profiles-946603546.html",
+      "version": "Confluence Data Center 9.x LTS load profiles",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "m": {
@@ -250,27 +436,49 @@
             "role": "application",
             "count": 2,
             "vcpu": 4,
-            "memory_gb": 8
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
           },
           {
             "role": "database",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
           },
           {
             "role": "synchrony",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "shared-home",
             "count": 1,
             "vcpu": 2,
-            "memory_gb": 4
+            "memory_gb": 8,
+            "storage_gb": 500,
+            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          },
+          {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
@@ -283,27 +491,49 @@
             "role": "application",
             "count": 3,
             "vcpu": 8,
-            "memory_gb": 16
+            "memory_gb": 32,
+            "storage_gb": 300,
+            "storage_type": "ssd"
           },
           {
             "role": "database",
             "count": 1,
-            "vcpu": 4,
-            "memory_gb": 16
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 750,
+            "storage_type": "ssd"
           },
           {
             "role": "synchrony",
             "count": 2,
-            "vcpu": 2,
-            "memory_gb": 4
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "shared-home",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 750,
+            "storage_type": "ssd"
+          },
+          {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
@@ -316,38 +546,68 @@
             "role": "application",
             "count": 4,
             "vcpu": 16,
-            "memory_gb": 32
+            "memory_gb": 32,
+            "storage_gb": 400,
+            "storage_type": "ssd"
           },
           {
             "role": "database",
             "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 1500,
+            "storage_type": "ssd"
           },
           {
             "role": "synchrony",
-            "count": 2,
-            "vcpu": 2,
-            "memory_gb": 4
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "search-index",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "shared-home",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 2500,
+            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 1500,
+            "storage_type": "ssd"
+          },
+          {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       }
     },
     "notes": [
-      "Medium, Large, and XLarge tiers map to Atlassian's published Confluence Data Center benchmark recommendations, with Synchrony added from Atlassian's sample enterprise deployment topology.",
-      "The Large tier uses the low-cost recommendation, while the XLarge tier uses the stability recommendation to preserve cluster fault tolerance."
+      "Atlassian ended Confluence Data Center sales to new customers on March 30, 2026; license expansions for existing customers end March 30, 2028 ahead of full Data Center end of life on March 28, 2029.",
+      "Confluence Data Center 9.x pairs clustered application and Synchrony nodes with shared-home storage and optional external OpenSearch at Extra Large scale."
     ],
     "disclaimers": [
-      "Estimate excludes shared-home EFS/NFS storage, collaborative editing proxy details, Marketplace app overhead, and managed database HA costs not captured in the benchmark summary.",
-      "The HA toggle models load balancer overhead only; clustered Confluence application and Synchrony nodes are already represented in the base deployment."
+      "Based on Atlassian Confluence Data Center 9.x load profiles and enterprise architecture guidance, normalized to VM-backed compute and storage tiers.",
+      "Estimate excludes Atlassian Data Center licensing, Marketplace plugins, backup snapshots, and Cloud migration staging environments."
     ]
   },
   {
@@ -355,6 +615,10 @@
     "name": "Consul",
     "vendor": "HashiCorp, Inc.",
     "category": "other",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Consul for service discovery, service mesh control, and network configuration across distributed workloads.\n",
     "ref_arch": {
       "source_url": "https://developer.hashicorp.com/consul/docs/architecture",
@@ -454,6 +718,10 @@
     "name": "Couchbase Server Enterprise",
     "vendor": "Couchbase, Inc.",
     "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Couchbase Server Enterprise for distributed JSON data, caching, and full-text search workloads.\n",
     "ref_arch": {
       "source_url": "https://docs.couchbase.com/server/current/install/sizing-general.html",
@@ -553,6 +821,10 @@
     "name": "EDB Postgres Advanced Server",
     "vendor": "EnterpriseDB Corporation",
     "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed EDB Postgres Advanced Server for enterprise PostgreSQL workloads with optional primary-standby HA.\n",
     "ref_arch": {
       "source_url": "https://www.enterprisedb.com/docs/epas/latest/planning/planning_prerequisites/epas_requirements/",
@@ -713,14 +985,18 @@
   },
   {
     "slug": "elasticsearch-oss",
-    "name": "Elasticsearch OSS",
+    "name": "Elasticsearch Self-Managed",
     "vendor": "Elastic",
     "category": "search",
-    "description": "Legacy-style self-managed Elasticsearch baseline for community and OSS estates running search and log analytics clusters.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Elasticsearch 8.16+ / 9.x (AGPLv3 / Elastic License) for full-text search, log analytics, and hybrid vector retrieval.\n",
     "ref_arch": {
       "source_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html",
-      "version": "Current self-managed guidance; OSS distribution lineage froze at 7.10",
-      "retrieved_date": "2026-04-13"
+      "version": "Elasticsearch 9.x self-managed production settings (AGPLv3 restored in 8.16+)",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -749,8 +1025,8 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
@@ -763,7 +1039,7 @@
             "role": "data-node",
             "count": 3,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 64,
             "storage_gb": 1000,
             "storage_type": "nvme"
           },
@@ -794,14 +1070,14 @@
             "role": "data-node",
             "count": 6,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 2000,
             "storage_type": "nvme"
           },
           {
             "role": "master-node",
             "count": 3,
-            "vcpu": 2,
+            "vcpu": 4,
             "memory_gb": 8,
             "storage_gb": 100,
             "storage_type": "ssd"
@@ -809,7 +1085,7 @@
           {
             "role": "coordinating-node",
             "count": 2,
-            "vcpu": 4,
+            "vcpu": 8,
             "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
@@ -818,12 +1094,12 @@
       }
     },
     "notes": [
-      "The OSS distribution is a legacy concept after the 7.10 fork, so this entry should be read as a community-style self-managed Elasticsearch planning baseline.",
-      "Hot-tier node sizes follow Elasticsearch self-managed heap and storage guidance, normalized to the VM shapes available in CloudEstimate."
+      "Elastic restored OSI-approved open-source licensing via AGPLv3 starting in Elasticsearch 8.16 alongside SSPL and Elastic License v2, keeping the URL slug elasticsearch-oss stable for existing bookmarks.",
+      "Hot data nodes use 1:8 memory-optimized instances (up to 31 GB JVM heap plus OS page cache) paired with high-IOPS SSD/NVMe storage."
     ],
     "disclaimers": [
-      "Based on Elastic's public self-managed operational guidance and translated into a legacy OSS-style VM baseline.",
-      "Estimate excludes snapshots, warm or frozen tiers, security features tied to commercial distributions, machine learning nodes, and network transfer."
+      "Based on Elastic's published self-managed heap, master quorum, and hot-tier operational guidance.",
+      "Estimate excludes Elastic commercial subscriptions, warm/cold/frozen searchable-snapshot tiers, Kibana hosts, ML nodes, and snapshot object storage."
     ]
   },
   {
@@ -831,23 +1107,27 @@
     "name": "GitLab Self-Managed",
     "vendor": "GitLab Inc.",
     "category": "devops-platform",
-    "description": "Self-managed GitLab for source control, CI/CD, and DevSecOps workflows.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed GitLab 18.x for source control, CI/CD orchestration, package registries, and DevSecOps workflows.\n",
     "ref_arch": {
-      "source_url": "https://archives.docs.gitlab.com/17.11/administration/reference_architectures/",
-      "version": "17.11",
-      "retrieved_date": "2026-04-12"
+      "source_url": "https://docs.gitlab.com/administration/reference_architectures/",
+      "version": "GitLab 18.x Reference Architectures",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
         "label": "Extra Small",
-        "range_description": "up to 500 users",
+        "range_description": "up to 1,000 users (20 RPS)",
         "ref_arch_tier": "1k-users",
         "components": [
           {
-            "role": "application",
+            "role": "rails-sidekiq",
             "count": 1,
-            "vcpu": 4,
-            "memory_gb": 16,
+            "vcpu": 8,
+            "memory_gb": 32,
             "storage_gb": 200,
             "storage_type": "ssd"
           },
@@ -863,23 +1143,25 @@
             "role": "cache",
             "count": 1,
             "vcpu": 2,
-            "memory_gb": 8
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
           },
           {
-            "role": "object-storage-gateway",
+            "role": "object-storage",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8,
+            "vcpu": 0,
+            "memory_gb": 0,
             "storage_gb": 300,
             "storage_type": "object"
           }
         ],
         "ha_components": [
           {
-            "role": "application",
+            "role": "rails-sidekiq",
             "count": 1,
-            "vcpu": 4,
-            "memory_gb": 16,
+            "vcpu": 8,
+            "memory_gb": 32,
             "storage_gb": 200,
             "storage_type": "ssd"
           },
@@ -894,22 +1176,30 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "s": {
         "label": "Small",
-        "range_description": "500 to 2,000 users",
+        "range_description": "1,000 to 2,000 users (40 RPS)",
         "ref_arch_tier": "2k-users",
         "components": [
           {
-            "role": "application",
+            "role": "webservice",
             "count": 2,
             "vcpu": 4,
             "memory_gb": 16,
-            "storage_gb": 200,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "sidekiq",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
             "storage_type": "ssd"
           },
           {
@@ -918,7 +1208,7 @@
             "vcpu": 8,
             "memory_gb": 32,
             "storage_gb": 1000,
-            "storage_type": "ssd"
+            "storage_type": "nvme"
           },
           {
             "role": "database",
@@ -932,14 +1222,111 @@
             "role": "cache",
             "count": 1,
             "vcpu": 4,
-            "memory_gb": 16
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
           },
           {
-            "role": "object-storage-gateway",
+            "role": "object-storage",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8,
+            "vcpu": 0,
+            "memory_gb": 0,
             "storage_gb": 750,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "sidekiq",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "gitaly-replica",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "database-replica",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache-replica",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "2,000 to 5,000 users (100 RPS)",
+        "ref_arch_tier": "5k-users",
+        "components": [
+          {
+            "role": "webservice",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "sidekiq",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "gitaly",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 2000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 1500,
             "storage_type": "object"
           }
         ],
@@ -949,117 +1336,52 @@
             "count": 1,
             "vcpu": 8,
             "memory_gb": 32,
-            "storage_gb": 1000,
-            "storage_type": "ssd"
+            "storage_gb": 2000,
+            "storage_type": "nvme"
           },
           {
             "role": "database-replica",
-            "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32,
-            "storage_gb": 500,
-            "storage_type": "ssd"
-          },
-          {
-            "role": "cache-replica",
-            "count": 1,
-            "vcpu": 4,
-            "memory_gb": 16
-          },
-          {
-            "role": "load-balancer",
-            "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8
-          }
-        ]
-      },
-      "m": {
-        "label": "Medium",
-        "range_description": "2,000 to 5,000 users",
-        "ref_arch_tier": "5k-users",
-        "components": [
-          {
-            "role": "application",
-            "count": 3,
-            "vcpu": 8,
-            "memory_gb": 32,
-            "storage_gb": 250,
-            "storage_type": "ssd"
-          },
-          {
-            "role": "gitaly",
             "count": 2,
             "vcpu": 8,
-            "memory_gb": 32,
-            "storage_gb": 2000,
-            "storage_type": "ssd"
-          },
-          {
-            "role": "database",
-            "count": 1,
-            "vcpu": 16,
             "memory_gb": 64,
             "storage_gb": 1000,
             "storage_type": "ssd"
           },
           {
-            "role": "cache",
-            "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32
-          },
-          {
-            "role": "object-storage-gateway",
-            "count": 1,
+            "role": "cache-replica",
+            "count": 2,
             "vcpu": 4,
             "memory_gb": 16,
-            "storage_gb": 1500,
-            "storage_type": "object"
-          }
-        ],
-        "ha_components": [
-          {
-            "role": "application",
-            "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32,
-            "storage_gb": 250,
+            "storage_gb": 50,
             "storage_type": "ssd"
-          },
-          {
-            "role": "database-replica",
-            "count": 1,
-            "vcpu": 16,
-            "memory_gb": 64,
-            "storage_gb": 1000,
-            "storage_type": "ssd"
-          },
-          {
-            "role": "cache-replica",
-            "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32
           },
           {
             "role": "load-balancer",
             "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "l": {
         "label": "Large",
-        "range_description": "5,000 to 10,000 users",
+        "range_description": "5,000 to 10,000 users (200 RPS)",
         "ref_arch_tier": "10k-users",
         "components": [
           {
-            "role": "application",
+            "role": "webservice",
             "count": 4,
-            "vcpu": 8,
+            "vcpu": 16,
             "memory_gb": 32,
-            "storage_gb": 250,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "sidekiq",
+            "count": 4,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
             "storage_type": "ssd"
           },
           {
@@ -1068,13 +1390,13 @@
             "vcpu": 16,
             "memory_gb": 64,
             "storage_gb": 3000,
-            "storage_type": "ssd"
+            "storage_type": "nvme"
           },
           {
             "role": "database",
             "count": 1,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 1500,
             "storage_type": "ssd"
           },
@@ -1082,13 +1404,15 @@
             "role": "cache",
             "count": 2,
             "vcpu": 8,
-            "memory_gb": 32
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
           },
           {
-            "role": "object-storage-gateway",
+            "role": "object-storage",
             "count": 1,
-            "vcpu": 4,
-            "memory_gb": 16,
+            "vcpu": 0,
+            "memory_gb": 0,
             "storage_gb": 3000,
             "storage_type": "object"
           }
@@ -1096,9 +1420,9 @@
         "ha_components": [
           {
             "role": "database-replica",
-            "count": 1,
+            "count": 2,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 1500,
             "storage_type": "ssd"
           },
@@ -1106,27 +1430,37 @@
             "role": "cache-replica",
             "count": 1,
             "vcpu": 8,
-            "memory_gb": 32
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
           },
           {
             "role": "load-balancer",
             "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "10,000 to 25,000 users",
+        "range_description": "10,000 to 25,000 users (500 RPS)",
         "ref_arch_tier": "25k-users",
         "components": [
           {
-            "role": "application",
+            "role": "webservice",
             "count": 6,
-            "vcpu": 8,
+            "vcpu": 16,
             "memory_gb": 32,
-            "storage_gb": 300,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "sidekiq",
+            "count": 6,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
             "storage_type": "ssd"
           },
           {
@@ -1135,13 +1469,13 @@
             "vcpu": 16,
             "memory_gb": 64,
             "storage_gb": 5000,
-            "storage_type": "ssd"
+            "storage_type": "nvme"
           },
           {
             "role": "database",
-            "count": 2,
+            "count": 1,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 2000,
             "storage_type": "ssd"
           },
@@ -1149,13 +1483,15 @@
             "role": "cache",
             "count": 2,
             "vcpu": 8,
-            "memory_gb": 32
+            "memory_gb": 64,
+            "storage_gb": 100,
+            "storage_type": "ssd"
           },
           {
-            "role": "object-storage-gateway",
+            "role": "object-storage",
             "count": 1,
-            "vcpu": 8,
-            "memory_gb": 32,
+            "vcpu": 0,
+            "memory_gb": 0,
             "storage_gb": 6000,
             "storage_type": "object"
           }
@@ -1167,32 +1503,494 @@
             "vcpu": 16,
             "memory_gb": 64,
             "storage_gb": 5000,
-            "storage_type": "ssd"
+            "storage_type": "nvme"
           },
           {
             "role": "database-replica",
-            "count": 1,
+            "count": 2,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 2000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache-replica",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 100,
             "storage_type": "ssd"
           },
           {
             "role": "load-balancer",
             "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       }
     },
     "notes": [
-      "Storage becomes the primary cost driver as repository and artifact data scales.",
-      "Estimate excludes GitLab licensing, support, network egress, compliance, and backup storage."
+      "GitLab 18.x reference architectures split compute-heavy Rails webservice nodes (1:2 vCPU-to-RAM) from background Sidekiq workers, memory-heavy PostgreSQL nodes, NVMe-backed Gitaly storage, and native cloud object buckets for artifacts, LFS, and registry blobs.",
+      "CI/CD runner fleets are intentionally excluded because runner concurrency depends on pipeline minutes rather than user seat count."
     ],
     "disclaimers": [
-      "Based on GitLab's published reference architectures and simplified to a VM-based baseline.",
-      "Production deployments should be verified against workload-specific RPS, monorepos, and CI patterns."
+      "Based on GitLab 18.x published reference architectures (1K through 25K users) normalized to VM-backed Linux Package / Hybrid footprints.",
+      "Estimate excludes GitLab Ultimate/Premium licensing, CI/CD runner pools, OpenSearch Advanced Search nodes, GitLab Duo AI add-ons, and backup storage."
+    ]
+  },
+  {
+    "slug": "grafana-lgtm",
+    "name": "Grafana LGTM Observability Stack",
+    "vendor": "Grafana Labs",
+    "category": "observability",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Grafana, Loki, Tempo, and Mimir (AGPLv3) microservices stack for horizontally scalable Prometheus metrics, logs, and distributed traces backed by object storage.\n",
+    "ref_arch": {
+      "source_url": "https://grafana.com/docs/mimir/latest/manage/plan-and-size/",
+      "version": "Grafana Mimir 2.15+ & Loki 3.x capacity planning guidance",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "250K active metric series and 100 GB/day logs in monolithic read-write mode",
+        "ref_arch_tier": "monolithic-small-stack",
+        "components": [
+          {
+            "role": "lgtm-monolith",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "grafana-ui",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 2000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "lgtm-monolith",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "grafana-ui",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "2 million active metric series and 500 GB/day logs+traces in read/write split mode",
+        "ref_arch_tier": "read-write-split-cluster",
+        "components": [
+          {
+            "role": "ingester",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "querier-distributor",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "compactor-gateway",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 250,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 10000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "ingester",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "querier-distributor",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "10 million active metric series and 2 TB/day logs+traces across zone-aware ingesters",
+        "ref_arch_tier": "microservices-zone-aware",
+        "components": [
+          {
+            "role": "ingester",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "querier-store-gateway",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "distributor-compactor",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "memcached-cache",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 45000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "ingester",
+            "count": 3,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "querier-store-gateway",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Mimir and Loki keep recent write-ahead logs on 1:8 memory-optimized ingesters with NVMe disks while flushing long-term TSDB blocks and log chunks to low-cost cloud object storage.",
+      "All Go-based LGTM components compile cleanly for Linux arm64, offering immediate Graviton, Axion, and Cobalt compute savings on stateless queriers and distributors."
+    ],
+    "disclaimers": [
+      "Based on Grafana Labs published Mimir and Loki capacity planning ratios (roughly 1 ingester vCPU and 8 GB RAM per 300K active series) plus shared Grafana UI and Tempo components.",
+      "Estimate excludes Grafana Enterprise licensing, OpenTelemetry collector agent fleets, and object-storage PUT/GET request charges."
+    ]
+  },
+  {
+    "slug": "harbor",
+    "name": "Harbor Registry",
+    "vendor": "CNCF / Harbor Project",
+    "category": "artifact-repo",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "CNCF graduated open-source OCI container, Helm chart, and AI model artifact registry (Apache 2.0) with RBAC, vulnerability scanning, and multi-site replication.\n",
+    "ref_arch": {
+      "source_url": "https://goharbor.io/docs/latest/install-config/installation-prereqs/",
+      "version": "Harbor 2.12+ installation prerequisites & HA architecture",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "small platform team registry storing 1 TB of container images and Helm charts",
+        "ref_arch_tier": "single-node-compose",
+        "components": [
+          {
+            "role": "harbor-core",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 160,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 1000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "harbor-core",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 160,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache",
+            "count": 2,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 40,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "organization registry with concurrent CI/CD pulls, Trivy scanning, and 5 TB OCI blobs",
+        "ref_arch_tier": "decoupled-ha-ready",
+        "components": [
+          {
+            "role": "harbor-core-jobservice",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "trivy-scanner",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 150,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 250,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 5000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "harbor-core-jobservice",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 250,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cache-replica",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "enterprise multi-cluster OCI & AI model registry with 25 TB storage and heavy pull bursts",
+        "ref_arch_tier": "enterprise-scale-registry",
+        "components": [
+          {
+            "role": "harbor-core-registry",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 32,
+            "storage_gb": 250,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "trivy-scanner",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 300,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "cache",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 25000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "harbor-core-registry",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 32,
+            "storage_gb": 250,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "cache-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Offloading immutable OCI image layers and AI model weights to native S3/GCS/Azure Blob object storage keeps Harbor registry pods stateless and avoids resizing block volumes.",
+      "Concurrent Trivy vulnerability scans and PostgreSQL manifest metadata queries drive CPU and RAM sizing during peak CI/CD build storms."
+    ],
+    "disclaimers": [
+      "Based on Harbor hardware prerequisites and HA Helm architecture separating Harbor Core/Registry, Trivy scanners, PostgreSQL, Valkey/Redis, and cloud object storage.",
+      "Estimate excludes cross-region replication egress, CDN layer caching, and P2P Dragonfly/Kraken node agents."
     ]
   },
   {
@@ -1200,11 +1998,14 @@
     "name": "InfluxDB Enterprise",
     "vendor": "InfluxData, Inc.",
     "category": "data-store",
-    "description": "Self-managed InfluxDB Enterprise for high-ingest time-series monitoring, telemetry, and operational analytics.\n",
+    "arch_support": [
+      "x86_64"
+    ],
+    "description": "Self-managed InfluxDB Enterprise for high-ingest time-series telemetry, operational monitoring, and sensor analytics.\n",
     "ref_arch": {
       "source_url": "https://docs.influxdata.com/enterprise_influxdb/v1/guides/hardware_sizing/",
-      "version": "InfluxDB Enterprise v1 hardware sizing guidelines",
-      "retrieved_date": "2026-04-13"
+      "version": "InfluxDB Enterprise v1 TSM sizing (with InfluxDB 3 Enterprise FDAP context)",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -1255,7 +2056,7 @@
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "400,000 to 750,000 plus writes per second and 5 to 10 million plus series",
+        "range_description": "400,000 to 750,000+ writes per second and 5 to 10 million+ series",
         "ref_arch_tier": "large-rf3",
         "components": [
           {
@@ -1278,12 +2079,12 @@
       }
     },
     "notes": [
-      "Meta nodes stay small and odd-numbered, while data nodes scale out in even counts to reflect the vendor's own cluster guidance.",
-      "Write-rate and series-cardinality bands are taken directly from InfluxDB Enterprise sizing guidance and normalized to CloudEstimate's billable VM shapes."
+      "These tiers model the stateful v1 TSM meta-and-data-node topology; teams adopting InfluxDB 3 Enterprise (Apache Arrow / Parquet on object storage) typically shift long-term retention from local SSDs to S3/GCS/Blob object storage.",
+      "Meta nodes remain compact odd-numbered Raft quorums while data nodes scale out in pairs to preserve replication factor balance."
     ],
     "disclaimers": [
-      "Based on InfluxDB Enterprise hardware sizing guidance and translated into VM-based planning tiers.",
-      "Estimate excludes Kapacitor, query relays, backup infrastructure, object storage, and network transfer between zones or regions."
+      "Based on InfluxDB Enterprise v1 published hardware sizing guidelines normalized to cloud VM shapes.",
+      "Estimate excludes commercial InfluxDB Enterprise or InfluxDB 3 Enterprise licensing, object-store retention tiers, Kapacitor, and cross-zone network transfer."
     ]
   },
   {
@@ -1291,6 +2092,9 @@
     "name": "JFrog Artifactory Self-Hosted",
     "vendor": "JFrog Ltd.",
     "category": "artifact-repo",
+    "arch_support": [
+      "x86_64"
+    ],
     "description": "Self-hosted JFrog Artifactory for binary repositories, release promotion, and software supply chain distribution.\n",
     "ref_arch": {
       "source_url": "https://jfrog.com/reference-architecture/self-managed/deployment/sizing/",
@@ -1444,75 +2248,173 @@
     "name": "Jira Data Center",
     "vendor": "Atlassian",
     "category": "other",
-    "description": "Self-managed Jira Data Center for enterprise issue tracking and service management workloads.\n",
+    "arch_support": [
+      "x86_64"
+    ],
+    "description": "Self-managed Jira Data Center 10.x for existing enterprise issue tracking and service management estates ahead of the 2029 EOL.\n",
     "ref_arch": {
-      "source_url": "https://confluence.atlassian.com/security/infrastructure-recommendations-for-enterprise-jira-instances-on-aws-1409092894.html",
-      "version": "Jira Data Center 9.12 benchmark guidance",
-      "retrieved_date": "2026-04-13"
+      "source_url": "https://confluence.atlassian.com/enterprise/jira-data-center-size-profiles-955171062.html",
+      "version": "Jira Data Center 10.x LTS enterprise size profiles",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
-      "l": {
-        "label": "Large",
-        "range_description": "600,000 to 2,000,000 issues or 10,000 to 100,000 users",
-        "ref_arch_tier": "large",
+      "m": {
+        "label": "Medium",
+        "range_description": "100,000 to 600,000 issues or up to 10,000 users",
+        "ref_arch_tier": "medium",
         "components": [
           {
             "role": "application",
             "count": 2,
-            "vcpu": 8,
-            "memory_gb": 16
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
           },
           {
             "role": "database",
             "count": 1,
             "vcpu": 4,
-            "memory_gb": 16
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "shared-home",
+            "count": 1,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 500,
+            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          },
+          {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "l": {
+        "label": "Large",
+        "range_description": "600,000 to 2,000,000 issues or 10,000 to 50,000 users",
+        "ref_arch_tier": "large",
+        "components": [
+          {
+            "role": "application",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 750,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "shared-home",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 1000,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 750,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "above the Large Jira profile thresholds",
+        "range_description": "over 2,000,000 issues or 50,000 to 100,000+ users with OpenSearch indexing",
         "ref_arch_tier": "xlarge",
         "components": [
           {
             "role": "application",
             "count": 5,
             "vcpu": 16,
-            "memory_gb": 32
+            "memory_gb": 32,
+            "storage_gb": 400,
+            "storage_type": "ssd"
           },
           {
             "role": "database",
             "count": 1,
             "vcpu": 16,
-            "memory_gb": 64
+            "memory_gb": 64,
+            "storage_gb": 1500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "search-index",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "shared-home",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 2000,
+            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 1500,
+            "storage_type": "ssd"
+          },
+          {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       }
     },
     "notes": [
-      "Large and XLarge shapes follow Atlassian's AWS infrastructure recommendations for Jira Data Center clustered deployments.",
-      "The Large tier maps to the Jira 9.12 cost-effective recommendation, while the XLarge tier maps to the Jira 9.12 best-performance recommendation."
+      "Atlassian ended Jira Data Center sales to new customers on March 30, 2026; existing customer license expansions close March 30, 2028 ahead of full Data Center end of life (read-only mode) on March 28, 2029.",
+      "Jira Data Center 10.x supports external OpenSearch indexing on Extra Large estates and requires shared-home NFS/filestore plus PostgreSQL/Aurora-class database storage."
     ],
     "disclaimers": [
-      "Estimate excludes shared-home storage, managed database Multi-AZ overhead, Marketplace app overhead, and other supporting services not explicitly sized in the recommendation summary.",
-      "The HA toggle models front-end load balancer overhead only; Atlassian Data Center clustering itself is already represented in the base node counts."
+      "Based on Atlassian Jira Data Center 10.x size profiles and AWS deployment guidance, normalized to VM-backed compute and storage baselines.",
+      "Estimate excludes Atlassian Data Center subscription renewals, Marketplace apps, Cloud migration tooling, and external CDN or WAF layers."
     ]
   },
   {
@@ -1520,6 +2422,10 @@
     "name": "Keycloak",
     "vendor": "Keycloak",
     "category": "identity",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Keycloak for identity, authentication, SSO, and federation across internal and customer-facing apps.\n",
     "ref_arch": {
       "source_url": "https://www.keycloak.org/high-availability/single-cluster/concepts-memory-and-cpu-sizing",
@@ -1667,11 +2573,15 @@
     "name": "Kong Gateway",
     "vendor": "Kong Inc.",
     "category": "other",
-    "description": "Self-managed Kong Gateway for API ingress, service proxying, and policy enforcement across internal and external traffic.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Kong Gateway 3.x LTS for high-throughput API ingress, AI gateway routing, and policy enforcement.\n",
     "ref_arch": {
       "source_url": "https://developer.konghq.com/gateway/resource-sizing-guidelines/",
-      "version": "Kong Gateway 3.4.x resource sizing guidance",
-      "retrieved_date": "2026-04-13"
+      "version": "Kong Gateway 3.x LTS resource sizing guidelines",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -1716,14 +2626,14 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "m": {
         "label": "Medium",
-        "range_description": "under 10,000 configured entities and under 10,000 requests per second",
+        "range_description": "under 10,000 configured entities and up to 10,000 requests per second",
         "ref_arch_tier": "medium",
         "components": [
           {
@@ -1763,21 +2673,21 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "10,000 to 50,000 plus configured entities in a central production gateway cluster",
+        "range_description": "10,000 to 50,000+ configured entities in a central production API gateway cluster",
         "ref_arch_tier": "large",
         "components": [
           {
             "role": "gateway",
             "count": 4,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
           },
@@ -1795,7 +2705,7 @@
             "role": "gateway",
             "count": 2,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
           },
@@ -1810,19 +2720,234 @@
           {
             "role": "load-balancer",
             "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       }
     },
     "notes": [
-      "Kong's published sizing guide provides per-node gateway resource bands, while the backing PostgreSQL tier here is a conservative planning baseline because Kong does not publish fixed database sizes.",
-      "The gateway node counts reflect clustered self-managed deployments that scale horizontally behind a load balancer."
+      "Gateway data-plane nodes map cleanly to 1:2 compute-optimized shapes (and Linux arm64 instances) because NGINX/OpenResty proxy workers are CPU-bound rather than memory-bound.",
+      "DB-less declarative mode eliminates the PostgreSQL tier when configuration is pushed via GitOps or control-plane sync."
     ],
     "disclaimers": [
-      "Based on Kong Gateway resource sizing guidance and deployment topology documentation, translated into VM-based planning tiers.",
-      "Estimate excludes Redis-backed rate limiting, developer portal services, Konnect, and workload-specific tuning or benchmark exercises."
+      "Based on Kong Gateway 3.x LTS resource sizing guidelines paired with a conservative self-managed PostgreSQL control-plane store.",
+      "Estimate excludes Kong Enterprise / Konnect licensing, Redis rate-limiting clusters, Developer Portal hosts, and L7 data-processing charges."
+    ]
+  },
+  {
+    "slug": "mattermost",
+    "name": "Mattermost Enterprise",
+    "vendor": "Mattermost, Inc.",
+    "category": "other",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-hosted team messaging, incident response, and voice/screen collaboration platform deployed in sovereign and regulated enterprise clouds.\n",
+    "ref_arch": {
+      "source_url": "https://docs.mattermost.com/deploy/scaling-for-enterprise.html",
+      "version": "Mattermost 10.x enterprise scaling & Calls rtcd architecture",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 1,000 active users with channels, playbooks, and file attachments",
+        "ref_arch_tier": "up-to-1000-users",
+        "components": [
+          {
+            "role": "application",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 500,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "application",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "1,000 to 5,000 active users with dedicated Calls WebRTC rtcd media nodes",
+        "ref_arch_tier": "5000-users-enterprise",
+        "components": [
+          {
+            "role": "application",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 150,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "calls-rtcd",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 2000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "application",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 150,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "10,000 to 25,000 active users with Elasticsearch indexing and Calls rtcd cluster",
+        "ref_arch_tier": "25000-users-enterprise",
+        "components": [
+          {
+            "role": "application",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database",
+            "count": 1,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "search-index",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "calls-rtcd",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 80,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "object-storage",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0,
+            "storage_gb": 8000,
+            "storage_type": "object"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "application",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 200,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "database-replica",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Mattermost separates Go application servers, PostgreSQL message stores, S3-compatible file storage, and 1:2 compute-optimized `rtcd` voice/screen WebRTC media nodes above 1,000 concurrent users.",
+      "PostgreSQL read replicas and dedicated OpenSearch/Elasticsearch clusters absorb full-text message search load on 10,000+ seat deployments."
+    ],
+    "disclaimers": [
+      "Based on Mattermost 10.x Enterprise scaling guidelines for Go app servers, PostgreSQL, Calls `rtcd` services, and object storage attachments.",
+      "Estimate excludes Mattermost Enterprise/Professional seat subscriptions, mobile push proxy hosting, and WebRTC UDP egress bandwidth."
     ]
   },
   {
@@ -1830,11 +2955,15 @@
     "name": "MinIO",
     "vendor": "MinIO, Inc.",
     "category": "data-store",
-    "description": "Self-managed MinIO object storage for S3-compatible buckets, data lakes, and application blob storage.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed MinIO / AIStor S3-compatible object storage for data lakes, AI training repositories, and blob storage.\n",
     "ref_arch": {
       "source_url": "https://min.io/docs/minio/linux/operations/installation.html",
-      "version": "Community install topologies with current MinIO reference hardware",
-      "retrieved_date": "2026-04-13"
+      "version": "MinIO / AIStor erasure-coded reference topologies (post-Feb 2026 CE archive)",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -1863,8 +2992,8 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
@@ -1881,6 +3010,14 @@
             "storage_gb": 30000,
             "storage_type": "nvme"
           }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
         ]
       },
       "xl": {
@@ -1896,16 +3033,24 @@
             "storage_gb": 30000,
             "storage_type": "nvme"
           }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
         ]
       }
     },
     "notes": [
-      "Production-oriented MinIO deployments generally start at an erasure-coded multi-node layout, so the HA toggle expands the smallest tier into a four-node cluster.",
-      "The published MinIO reference hardware for large-scale object storage is often beefier than the generic VM sizes available here, so these are conservative planning baselines rather than vendor-certified hardware clones."
+      "MinIO archived the open-source minio/minio Community Edition repository in February 2026 after ending prebuilt community binary releases in October 2025; new supported deployments require commercial MinIO AIStor licensing or an open-source alternative such as SeaweedFS.",
+      "Production-oriented deployments start at a four-node erasure-coded layout, so the HA toggle expands the Extra Small tier into four storage nodes and adds managed load balancing on larger tiers."
     ],
     "disclaimers": [
-      "Based on MinIO community deployment topologies and public reference hardware guidance, translated into VM-based object-storage planning tiers.",
-      "Estimate excludes external load balancers beyond the small HA add-on, raw-to-usable erasure coding overhead, backups, replication, and high-bandwidth networking costs."
+      "Based on MinIO erasure-coded deployment topologies and public reference hardware guidance, translated into VM-based object-storage planning tiers.",
+      "Estimate excludes commercial AIStor subscription fees, raw-to-usable parity overhead, cross-site replication, and high-bandwidth egress charges."
     ]
   },
   {
@@ -1913,6 +3058,10 @@
     "name": "MongoDB Enterprise Advanced",
     "vendor": "MongoDB, Inc.",
     "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed MongoDB Enterprise Advanced for replicated document databases and sharded operational workloads.\n",
     "ref_arch": {
       "source_url": "https://www.mongodb.com/docs/manual/administration/production-notes/",
@@ -1996,6 +3145,10 @@
     "name": "Neo4j Enterprise",
     "vendor": "Neo4j, Inc.",
     "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Neo4j Enterprise for transactional graph databases, path analysis, and graph-backed applications.\n",
     "ref_arch": {
       "source_url": "https://neo4j.com/docs/operations-manual/current/clustering/clustering-advanced/",
@@ -2079,6 +3232,9 @@
     "name": "Sonatype Nexus Repository",
     "vendor": "Sonatype, Inc.",
     "category": "artifact-repo",
+    "arch_support": [
+      "x86_64"
+    ],
     "description": "Self-managed Sonatype Nexus Repository for package hosting, caching, and binary distribution across development pipelines.\n",
     "ref_arch": {
       "source_url": "https://help.sonatype.com/en/sonatype-nexus-repository-reference-architectures.html",
@@ -2223,6 +3379,10 @@
     "name": "Nomad",
     "vendor": "HashiCorp, Inc.",
     "category": "other",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Nomad for workload orchestration across VM, container, and batch platforms.\n",
     "ref_arch": {
       "source_url": "https://developer.hashicorp.com/nomad/docs/install/production",
@@ -2312,13 +3472,17 @@
   {
     "slug": "opensearch",
     "name": "OpenSearch",
-    "vendor": "The OpenSearch Project",
+    "vendor": "OpenSearch Software Foundation",
     "category": "search",
-    "description": "Self-managed OpenSearch for full-text search, observability pipelines, and analytics clusters.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed OpenSearch 3.x (Linux Foundation Apache 2.0) for full-text search, log analytics, and vector search pipelines.\n",
     "ref_arch": {
-      "source_url": "https://docs.opensearch.org/docs/2.17/tuning-your-cluster/",
-      "version": "OpenSearch 2.17 cluster tuning guidance",
-      "retrieved_date": "2026-04-13"
+      "source_url": "https://docs.opensearch.org/docs/latest/tuning-your-cluster/",
+      "version": "OpenSearch 3.x cluster tuning and sizing guidance",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -2347,21 +3511,21 @@
           {
             "role": "load-balancer",
             "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8
+            "vcpu": 0,
+            "memory_gb": 0
           }
         ]
       },
       "m": {
         "label": "Medium",
-        "range_description": "100 GB to 1 TB hot data on a cluster with dedicated managers",
+        "range_description": "100 GB to 1 TB hot data on a cluster with dedicated cluster managers",
         "ref_arch_tier": "dedicated-cluster-manager-medium",
         "components": [
           {
             "role": "data-node",
             "count": 3,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 64,
             "storage_gb": 1000,
             "storage_type": "nvme"
           },
@@ -2385,21 +3549,21 @@
       },
       "xl": {
         "label": "Extra Large",
-        "range_description": "1 to 5 TB hot data on a larger scale-out cluster",
+        "range_description": "1 to 5 TB hot data on a scale-out search and vector cluster",
         "ref_arch_tier": "scale-out-large",
         "components": [
           {
             "role": "data-node",
             "count": 6,
             "vcpu": 16,
-            "memory_gb": 64,
+            "memory_gb": 128,
             "storage_gb": 2000,
             "storage_type": "nvme"
           },
           {
             "role": "cluster-manager",
             "count": 3,
-            "vcpu": 2,
+            "vcpu": 4,
             "memory_gb": 8,
             "storage_gb": 100,
             "storage_type": "ssd"
@@ -2407,7 +3571,7 @@
           {
             "role": "coordinating-node",
             "count": 2,
-            "vcpu": 4,
+            "vcpu": 8,
             "memory_gb": 16,
             "storage_gb": 100,
             "storage_type": "ssd"
@@ -2416,24 +3580,147 @@
       }
     },
     "notes": [
-      "OpenSearch cluster-manager and data-node separation follows official cluster tuning patterns for production deployments.",
-      "NVMe-backed local disks are used for the hot data tier because search and ingest performance tends to be storage-latency sensitive."
+      "Governed under the Linux Foundation's OpenSearch Software Foundation, OpenSearch 3.x (Lucene 10) benefits strongly from memory-optimized 1:8 data nodes and Linux arm64 instances.",
+      "Cluster-manager quorum and coordinating roles are separated from hot data nodes at Medium and Extra Large tiers."
     ],
     "disclaimers": [
-      "Based on OpenSearch cluster tuning and operational guidance, translated into VM-based planning tiers.",
-      "Estimate excludes warm or cold tiers, snapshots, machine-learning plugins, remote storage, and network transfer."
+      "Based on OpenSearch 3.x official cluster tuning guidance normalized to cloud VM shapes.",
+      "Estimate excludes OpenSearch Dashboards hosts, Data Prepper ingestion fleets, warm/cold remote-backed storage, and snapshot buckets."
+    ]
+  },
+  {
+    "slug": "qdrant",
+    "name": "Qdrant Self-Managed",
+    "vendor": "Qdrant Solutions GmbH",
+    "category": "ai-infrastructure",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Qdrant vector database (Apache 2.0) for low-latency HNSW similarity search, RAG retrieval, and hybrid semantic filtering.\n",
+    "ref_arch": {
+      "source_url": "https://qdrant.tech/documentation/guides/capacity-planning/",
+      "version": "Qdrant 1.13+ capacity planning & distributed cluster guidance",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 5 million 1536-dim vectors (FP32/Scalar Quantization) on a single node",
+        "ref_arch_tier": "single-node-vector",
+        "components": [
+          {
+            "role": "qdrant-node",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "qdrant-node",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 200,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "10 to 50 million 1536-dim vectors across a 3-node Raft-coordinated HNSW cluster",
+        "ref_arch_tier": "three-node-distributed",
+        "components": [
+          {
+            "role": "qdrant-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "qdrant-node",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "50 to 250 million vectors with replicated shards and mmap/scalar quantization",
+        "ref_arch_tier": "six-node-high-scale",
+        "components": [
+          {
+            "role": "qdrant-node",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "qdrant-node",
+            "count": 3,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 1500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Qdrant's capacity formula (num_vectors * dim * 4 bytes * 1.5x HNSW graph overhead) makes 1:8 memory-optimized VMs and fast NVMe mmap storage the primary cost levers.",
+      "Enabling int8 scalar or binary quantization cuts in-memory footprint by 4x to 24x, and Qdrant's Rust engine compiles natively for SIMD/NEON on Linux arm64 instances."
+    ],
+    "disclaimers": [
+      "Based on Qdrant's published RAM/disk capacity planning formulas and distributed Raft cluster topology.",
+      "Estimate excludes embedding generation GPUs, snapshot object storage buckets, and cross-AZ gRPC shard replication traffic."
     ]
   },
   {
     "slug": "redis-enterprise",
     "name": "Redis Enterprise",
-    "vendor": "Redis Ltd.",
+    "vendor": "Redis Inc.",
     "category": "data-store",
-    "description": "Self-managed Redis Enterprise cluster for low-latency caching, session storage, and data services.\n",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Redis Enterprise Software (Redis 8 engine) for sub-millisecond caching, session stores, and real-time vector/JSON workloads.\n",
     "ref_arch": {
-      "source_url": "https://redis.io/docs/latest/operate/rs/7.22/installing-upgrading/install/plan-deployment/hardware-requirements/",
-      "version": "7.22",
-      "retrieved_date": "2026-04-12"
+      "source_url": "https://redis.io/docs/latest/operate/rs/installing-upgrading/install/plan-deployment/hardware-requirements/",
+      "version": "Redis Enterprise 7.22+ / Redis 8 hardware requirements",
+      "retrieved_date": "2026-11-11"
     },
     "sizes": {
       "xs": {
@@ -2445,12 +3732,12 @@
             "role": "cluster-node",
             "count": 1,
             "vcpu": 4,
-            "memory_gb": 16,
+            "memory_gb": 32,
             "storage_gb": 100,
             "storage_type": "nvme"
           },
           {
-            "role": "admin-node",
+            "role": "quorum-node",
             "count": 1,
             "vcpu": 2,
             "memory_gb": 8,
@@ -2463,7 +3750,7 @@
             "role": "cluster-node",
             "count": 2,
             "vcpu": 4,
-            "memory_gb": 16,
+            "memory_gb": 32,
             "storage_gb": 100,
             "storage_type": "nvme"
           }
@@ -2478,17 +3765,9 @@
             "role": "cluster-node",
             "count": 3,
             "vcpu": 4,
-            "memory_gb": 16,
+            "memory_gb": 32,
             "storage_gb": 150,
             "storage_type": "nvme"
-          },
-          {
-            "role": "proxy",
-            "count": 1,
-            "vcpu": 2,
-            "memory_gb": 8,
-            "storage_gb": 50,
-            "storage_type": "ssd"
           }
         ],
         "ha_components": [
@@ -2496,7 +3775,7 @@
             "role": "cluster-node",
             "count": 2,
             "vcpu": 4,
-            "memory_gb": 16,
+            "memory_gb": 32,
             "storage_gb": 150,
             "storage_type": "nvme"
           }
@@ -2511,17 +3790,9 @@
             "role": "cluster-node",
             "count": 3,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 64,
             "storage_gb": 400,
             "storage_type": "nvme"
-          },
-          {
-            "role": "proxy",
-            "count": 2,
-            "vcpu": 2,
-            "memory_gb": 8,
-            "storage_gb": 50,
-            "storage_type": "ssd"
           }
         ],
         "ha_components": [
@@ -2529,7 +3800,7 @@
             "role": "cluster-node",
             "count": 2,
             "vcpu": 8,
-            "memory_gb": 32,
+            "memory_gb": 64,
             "storage_gb": 400,
             "storage_type": "nvme"
           }
@@ -2543,26 +3814,18 @@
           {
             "role": "cluster-node",
             "count": 5,
-            "vcpu": 8,
-            "memory_gb": 32,
+            "vcpu": 16,
+            "memory_gb": 128,
             "storage_gb": 750,
             "storage_type": "nvme"
-          },
-          {
-            "role": "proxy",
-            "count": 2,
-            "vcpu": 4,
-            "memory_gb": 16,
-            "storage_gb": 100,
-            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
             "role": "cluster-node",
             "count": 2,
-            "vcpu": 8,
-            "memory_gb": 32,
+            "vcpu": 16,
+            "memory_gb": 128,
             "storage_gb": 750,
             "storage_type": "nvme"
           }
@@ -2576,26 +3839,18 @@
           {
             "role": "cluster-node",
             "count": 5,
-            "vcpu": 16,
-            "memory_gb": 64,
+            "vcpu": 32,
+            "memory_gb": 256,
             "storage_gb": 1500,
             "storage_type": "nvme"
-          },
-          {
-            "role": "proxy",
-            "count": 2,
-            "vcpu": 4,
-            "memory_gb": 16,
-            "storage_gb": 100,
-            "storage_type": "ssd"
           }
         ],
         "ha_components": [
           {
             "role": "cluster-node",
             "count": 2,
-            "vcpu": 16,
-            "memory_gb": 64,
+            "vcpu": 32,
+            "memory_gb": 256,
             "storage_gb": 1500,
             "storage_type": "nvme"
           }
@@ -2603,12 +3858,12 @@
       }
     },
     "notes": [
-      "Redis Enterprise clusters need spare capacity to preserve failover headroom.",
-      "NVMe-backed storage matters more than CPU once persistence and auto-tiering are enabled."
+      "Cluster data nodes map to 1:8 memory-optimized instances to reflect RAM-bound shard sizing, with high-IOPS NVMe/SSD persistence for AOF and Auto Tiering (Redis on Flash).",
+      "Note that Redis 8.0+ offers AGPLv3 open-source licensing for Community Edition alongside commercial Redis Enterprise Software subscriptions; see Valkey for the BSD-3 Linux Foundation fork."
     ],
     "disclaimers": [
-      "Based on Redis Enterprise hardware guidance and encoded as a VM-based planning baseline.",
-      "Estimate excludes Redis licensing, cross-region replication, backups, and network transfer."
+      "Based on Redis Enterprise published hardware requirements normalized to cloud VM shapes.",
+      "Estimate excludes commercial Redis Enterprise shard licensing, Active-Active geo-replication, backup buckets, and cross-zone network transfer."
     ]
   },
   {
@@ -2616,6 +3871,10 @@
     "name": "Redpanda Self-Managed",
     "vendor": "Redpanda Data",
     "category": "streaming",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed Redpanda for Kafka-compatible event streaming, durable logs, and high-throughput messaging pipelines.\n",
     "ref_arch": {
       "source_url": "https://docs.redpanda.com/current/deploy/redpanda/manual/production/requirements/",
@@ -2679,10 +3938,189 @@
     ]
   },
   {
+    "slug": "seaweedfs",
+    "name": "SeaweedFS Object Store",
+    "vendor": "SeaweedFS Project",
+    "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Open-source distributed file system and S3-compatible object store (Apache 2.0) built around O(1) disk-seek volume servers, Raft masters, and POSIX/S3 filers.\n",
+    "ref_arch": {
+      "source_url": "https://github.com/seaweedfs/seaweedfs/wiki/Production-Setup",
+      "version": "SeaweedFS 3.80+ production Raft master, volume & S3 filer setup",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "12 TB raw S3-compatible object and blob storage for small apps and backups",
+        "ref_arch_tier": "compact-raft-cluster",
+        "components": [
+          {
+            "role": "master-filer",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 80,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "volume-server",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 4000,
+            "storage_type": "hdd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "48 TB high-throughput S3 object and AI dataset storage with dedicated filers",
+        "ref_arch_tier": "dedicated-filer-cluster",
+        "components": [
+          {
+            "role": "master",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "filer-s3",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 300,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "volume-server",
+            "count": 6,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 8000,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "filer-s3",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 300,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "volume-server",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 8000,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "192 TB NVMe/SSD erasure-coded S3 object lake for analytics and ML checkpoints",
+        "ref_arch_tier": "enterprise-erasure-coded",
+        "components": [
+          {
+            "role": "master",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "filer-s3",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 800,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "metadata-store",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "volume-server",
+            "count": 12,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 16000,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "filer-s3",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 800,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "volume-server",
+            "count": 4,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 16000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Unlike per-file metadata object stores, SeaweedFS packs small blobs into multi-gigabyte volumes so volume servers retrieve objects in a single disk read while separate S3/POSIX filers manage directory paths.",
+      "Frequently adopted in 2026 as a permissively licensed Apache 2.0 self-hosted S3 alternative following the February 2026 MinIO Community Edition archive."
+    ],
+    "disclaimers": [
+      "Based on SeaweedFS production deployment guidance separating 3-node Raft masters, stateless S3/Filer gateways, filer metadata backing stores, and storage-dense volume servers.",
+      "Estimate models raw block storage before replication or Reed-Solomon 10+4 erasure coding overhead and excludes cross-region S3 egress."
+    ]
+  },
+  {
     "slug": "teleport",
     "name": "Teleport Self-Hosted",
     "vendor": "Teleport",
     "category": "identity",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-hosted Teleport for infrastructure identity, privileged access, Kubernetes access, and audited remote sessions.\n",
     "ref_arch": {
       "source_url": "https://goteleport.com/docs/reference/deployment/scaling/",
@@ -2834,10 +4272,417 @@
     ]
   },
   {
+    "slug": "temporal",
+    "name": "Temporal Self-Hosted",
+    "vendor": "Temporal Technologies",
+    "category": "devops-platform",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-hosted Temporal durable execution cluster for microservice workflows, AI agent orchestration, and long-running sagas.\n",
+    "ref_arch": {
+      "source_url": "https://docs.temporal.io/self-hosted-guide/Checklist",
+      "version": "Temporal Server 1.26+ production deployment checklist",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 150 state transitions per second with PostgreSQL persistence",
+        "ref_arch_tier": "starter-postgres",
+        "components": [
+          {
+            "role": "temporal-service",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "persistence-db",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "temporal-service",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "persistence-db-replica",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "150 to 1,000 state transitions per second with split History, Matching, and Frontend services",
+        "ref_arch_tier": "split-services-medium",
+        "components": [
+          {
+            "role": "history-service",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "matching-frontend",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "persistence-db",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "visibility-search",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 16,
+            "storage_gb": 300,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "history-service",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "1,000 to 5,000+ state transitions per second with Cassandra persistence and OpenSearch visibility",
+        "ref_arch_tier": "high-scale-cassandra",
+        "components": [
+          {
+            "role": "history-service",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "matching-service",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "frontend-worker",
+            "count": 4,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "cassandra-node",
+            "count": 6,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "visibility-opensearch",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "cassandra-node",
+            "count": 3,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 2000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Temporal History shards are memory- and persistence-latency sensitive, whereas Matching and Frontend services are CPU-bound gRPC routers that map well to 1:2 shapes.",
+      "PostgreSQL 12+ (with SQL visibility) suffices at Extra Small scale, while Medium and Extra Large separate OpenSearch/Elasticsearch visibility and multi-node persistence."
+    ],
+    "disclaimers": [
+      "Based on Temporal's self-hosted production checklist and split-role scaling guidance (MIT license).",
+      "Estimate excludes application SDK worker fleets (which execute user workflow/activity code), archival buckets, and multi-region Namespace replication."
+    ]
+  },
+  {
+    "slug": "valkey",
+    "name": "Valkey",
+    "vendor": "Linux Foundation",
+    "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed Valkey 9.x (BSD-3 Linux Foundation fork of Redis) for low-latency caching, session storage, and clustered key-value workloads.\n",
+    "ref_arch": {
+      "source_url": "https://valkey.io/topics/cluster-tutorial/",
+      "version": "Valkey 9.x Cluster & Sentinel deployment guidance",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "up to 25 GB working set on a primary with Sentinel failover option",
+        "ref_arch_tier": "sentinel-small",
+        "components": [
+          {
+            "role": "primary",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "replica",
+            "count": 2,
+            "vcpu": 4,
+            "memory_gb": 32,
+            "storage_gb": 100,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "sentinel",
+            "count": 3,
+            "vcpu": 2,
+            "memory_gb": 4,
+            "storage_gb": 30,
+            "storage_type": "ssd"
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "50 to 250 GB working set across a three-shard Valkey Cluster",
+        "ref_arch_tier": "cluster-three-shard",
+        "components": [
+          {
+            "role": "primary-shard",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 250,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "replica-shard",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 64,
+            "storage_gb": 250,
+            "storage_type": "nvme"
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "250 GB to 1.5 TB working set across an eight-shard Valkey Cluster",
+        "ref_arch_tier": "cluster-eight-shard",
+        "components": [
+          {
+            "role": "primary-shard",
+            "count": 8,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "replica-shard",
+            "count": 8,
+            "vcpu": 16,
+            "memory_gb": 128,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Valkey 8.x and 9.x introduce multi-threaded async I/O and memory-efficient hash tables while remaining BSD-3 open source under the Linux Foundation.",
+      "Provision ~25-30% free RAM headroom per shard for copy-on-write fork snapshots (BGSAVE / AOF rewrite) and replication buffers; Linux arm64 instances deliver strong price-performance here."
+    ],
+    "disclaimers": [
+      "Based on Valkey Cluster and Sentinel topology documentation paired with standard 1:8 memory-optimized shard sizing.",
+      "Estimate excludes client-side proxy pools, cross-region replication, RDB snapshot buckets, and cross-AZ replication bandwidth charges."
+    ]
+  },
+  {
+    "slug": "vault",
+    "name": "HashiCorp Vault / OpenBao",
+    "vendor": "HashiCorp (IBM) / Linux Foundation",
+    "category": "identity",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
+    "description": "Self-managed HashiCorp Vault or OpenBao (MPL-2.0 fork) with Integrated Raft Storage for secrets management, PKI, and dynamic credentials.\n",
+    "ref_arch": {
+      "source_url": "https://developer.hashicorp.com/vault/tutorials/day-one-raft/raft-reference-architecture",
+      "version": "Vault / OpenBao Integrated Storage (Raft) reference architecture",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "departmental secrets and PKI on a compact 3-node Raft quorum",
+        "ref_arch_tier": "raft-small",
+        "components": [
+          {
+            "role": "vault-server",
+            "count": 3,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 100,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "regional production Vault or OpenBao cluster with moderate dynamic lease churn",
+        "ref_arch_tier": "raft-five-node-standard",
+        "components": [
+          {
+            "role": "vault-server",
+            "count": 5,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 250,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "high-throughput authentication, PKI signing, and dynamic secrets with performance standbys",
+        "ref_arch_tier": "raft-five-node-large",
+        "components": [
+          {
+            "role": "vault-server",
+            "count": 5,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "dr-replica-node",
+            "count": 3,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "Integrated Raft Storage eliminates the external Consul storage cluster used in older Vault designs, requiring low-latency NVMe/SSD IOPS for BoltDB write-ahead logs.",
+      "Identical hardware topologies apply to both HashiCorp Vault (BSL 1.1 / Enterprise) and OpenBao (Linux Foundation MPL-2.0 open-source fork)."
+    ],
+    "disclaimers": [
+      "Based on HashiCorp's published Integrated Storage (Raft) reference architecture (3- and 5-voter topologies).",
+      "Estimate excludes Vault Enterprise licensing, cloud KMS auto-unseal API calls, HSM appliances, and SIEM audit log storage."
+    ]
+  },
+  {
     "slug": "victoria-metrics",
     "name": "VictoriaMetrics",
     "vendor": "VictoriaMetrics",
-    "category": "data-store",
+    "category": "observability",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-managed VictoriaMetrics for long-retention metrics storage, Prometheus remote write, and cost-conscious observability backends.\n",
     "ref_arch": {
       "source_url": "https://docs.victoriametrics.com/cluster-victoriametrics/",
@@ -3013,10 +4858,162 @@
     ]
   },
   {
+    "slug": "vllm",
+    "name": "vLLM Inference Server",
+    "vendor": "vLLM Project",
+    "category": "ai-infrastructure",
+    "arch_support": [
+      "x86_64"
+    ],
+    "description": "Self-hosted vLLM open-weight LLM inference engine (Apache 2.0) with PagedAttention KV-cache scheduling, continuous batching, and OpenAI-compatible serving.\n",
+    "ref_arch": {
+      "source_url": "https://docs.vllm.ai/en/latest/serving/distributed_serving.html",
+      "version": "vLLM 0.7+ distributed tensor-parallel & replica serving guidance",
+      "retrieved_date": "2026-11-11"
+    },
+    "sizes": {
+      "xs": {
+        "label": "Extra Small",
+        "range_description": "single-GPU 7B to 14B FP8/INT8 open-weight model serving for internal tools",
+        "ref_arch_tier": "single-gpu-inference",
+        "components": [
+          {
+            "role": "inference-worker",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "gpu": 1,
+            "storage_gb": 200,
+            "storage_type": "nvme"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "inference-worker",
+            "count": 1,
+            "vcpu": 8,
+            "memory_gb": 32,
+            "gpu": 1,
+            "storage_gb": 200,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "m": {
+        "label": "Medium",
+        "range_description": "multi-replica GPU serving for 14B to 32B quantized models with prefix caching",
+        "ref_arch_tier": "dual-replica-gpu-inference",
+        "components": [
+          {
+            "role": "inference-worker",
+            "count": 2,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "gpu": 1,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "router-gateway",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "inference-worker",
+            "count": 1,
+            "vcpu": 16,
+            "memory_gb": 64,
+            "gpu": 1,
+            "storage_gb": 500,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "router-gateway",
+            "count": 1,
+            "vcpu": 4,
+            "memory_gb": 8,
+            "storage_gb": 50,
+            "storage_type": "ssd"
+          },
+          {
+            "role": "load-balancer",
+            "count": 1,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      },
+      "xl": {
+        "label": "Extra Large",
+        "range_description": "tensor-parallel 4-GPU nodes serving 70B quantized models at sustained concurrency",
+        "ref_arch_tier": "tensor-parallel-tp4-cluster",
+        "components": [
+          {
+            "role": "tp4-inference-node",
+            "count": 2,
+            "vcpu": 48,
+            "memory_gb": 192,
+            "gpu": 4,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "router-gateway",
+            "count": 2,
+            "vcpu": 8,
+            "memory_gb": 16,
+            "storage_gb": 100,
+            "storage_type": "ssd"
+          }
+        ],
+        "ha_components": [
+          {
+            "role": "tp4-inference-node",
+            "count": 1,
+            "vcpu": 48,
+            "memory_gb": 192,
+            "gpu": 4,
+            "storage_gb": 1000,
+            "storage_type": "nvme"
+          },
+          {
+            "role": "load-balancer",
+            "count": 2,
+            "vcpu": 0,
+            "memory_gb": 0
+          }
+        ]
+      }
+    },
+    "notes": [
+      "GPU accelerator VRAM and memory bandwidth dominate self-hosted vLLM cost; Google Cloud G2 instances attach NVIDIA L4 24 GB GPUs while AWS G4dn and Azure NCas_T4_v3 attach 16 GB T4 GPUs, affecting maximum unquantized context length per replica.",
+      "Fast NVMe local or block storage dramatically shortens cold-start weight loading for multi-tens-of-gigabytes safetensors checkpoints."
+    ],
+    "disclaimers": [
+      "Based on vLLM published tensor-parallel (`--tensor-parallel-size`) and data-parallel replica deployment topologies mapped to widely available cloud inference GPU instances.",
+      "Estimate excludes H100/B200 frontier training/prefill clusters, shared model-registry object buckets, and API token-gateway egress charges."
+    ]
+  },
+  {
     "slug": "yugabytedb-self-hosted",
     "name": "YugabyteDB Self-Hosted",
     "vendor": "Yugabyte",
     "category": "data-store",
+    "arch_support": [
+      "x86_64",
+      "arm64"
+    ],
     "description": "Self-hosted YugabyteDB for distributed SQL workloads that need PostgreSQL compatibility, RF3 durability, and scale-out storage.\n",
     "ref_arch": {
       "source_url": "https://docs.yugabyte.com/stable/deploy/checklist/",

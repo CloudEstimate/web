@@ -23,9 +23,9 @@ async function main() {
   try {
     await fs.mkdir(pricingDir, { recursive: true });
     const shapeMappings = getShapeMappings();
-    const gcpMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.gcp))];
-    const awsMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.aws))];
-    const azureMachineTypes = [...new Set(shapeMappings.map((mapping) => mapping.azure))];
+    const gcpMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.gcp, mapping.arm_gcp]).filter(Boolean))];
+    const awsMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.aws, mapping.arm_aws]).filter(Boolean))];
+    const azureMachineTypes = [...new Set(shapeMappings.flatMap((mapping) => [mapping.azure, mapping.arm_azure]).filter(Boolean))];
 
     const providers = [
       ["gcp", () => fetchGcpPricing({ regions: providerTargets.gcp.regions, machineTypes: gcpMachineTypes })],

@@ -14,7 +14,26 @@
     "vendor": { "type": "string", "description": "Vendor company name." },
     "category": {
       "type": "string",
-      "enum": ["devops-platform", "data-store", "search", "streaming", "artifact-repo", "identity", "other"]
+      "enum": [
+        "devops-platform",
+        "data-store",
+        "search",
+        "streaming",
+        "artifact-repo",
+        "identity",
+        "observability",
+        "ai-infrastructure",
+        "other"
+      ]
+    },
+    "arch_support": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["x86_64", "arm64"]
+      },
+      "uniqueItems": true,
+      "description": "Supported CPU architectures for Linux self-managed nodes."
     },
     "description": { "type": "string", "maxLength": 280 },
     "ref_arch": {
@@ -74,8 +93,13 @@
       "properties": {
         "role": { "type": "string" },
         "count": { "type": "integer", "minimum": 1 },
-        "vcpu": { "type": "integer", "minimum": 1 },
-        "memory_gb": { "type": "number", "minimum": 0.5 },
+        "vcpu": { "type": "integer", "minimum": 0 },
+        "memory_gb": { "type": "number", "minimum": 0 },
+        "gpu": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Accelerator count per instance for GPU inference workloads."
+        },
         "storage_gb": { "type": "integer", "minimum": 0 },
         "storage_type": {
           "type": "string",

@@ -1,0 +1,87 @@
+slug: qdrant
+name: Qdrant Self-Managed
+vendor: Qdrant Solutions GmbH
+category: ai-infrastructure
+arch_support:
+  - x86_64
+  - arm64
+description: >
+  Self-managed Qdrant vector database (Apache 2.0) for low-latency HNSW similarity search, RAG retrieval, and hybrid semantic filtering.
+ref_arch:
+  source_url: https://qdrant.tech/documentation/guides/capacity-planning/
+  version: "Qdrant 1.13+ capacity planning & distributed cluster guidance"
+  retrieved_date: "2026-11-11"
+sizes:
+  xs:
+    label: Extra Small
+    range_description: up to 5 million 1536-dim vectors (FP32/Scalar Quantization) on a single node
+    ref_arch_tier: single-node-vector
+    components:
+      - role: qdrant-node
+        count: 1
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: nvme
+    ha_components:
+      - role: qdrant-node
+        count: 2
+        vcpu: 4
+        memory_gb: 32
+        storage_gb: 200
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  m:
+    label: Medium
+    range_description: 10 to 50 million 1536-dim vectors across a 3-node Raft-coordinated HNSW cluster
+    ref_arch_tier: three-node-distributed
+    components:
+      - role: qdrant-node
+        count: 3
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+    ha_components:
+      - role: qdrant-node
+        count: 2
+        vcpu: 8
+        memory_gb: 64
+        storage_gb: 500
+        storage_type: nvme
+      - role: load-balancer
+        count: 1
+        vcpu: 0
+        memory_gb: 0
+  xl:
+    label: Extra Large
+    range_description: 50 to 250 million vectors with replicated shards and mmap/scalar quantization
+    ref_arch_tier: six-node-high-scale
+    components:
+      - role: qdrant-node
+        count: 6
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 1500
+        storage_type: nvme
+    ha_components:
+      - role: qdrant-node
+        count: 3
+        vcpu: 16
+        memory_gb: 128
+        storage_gb: 1500
+        storage_type: nvme
+      - role: load-balancer
+        count: 2
+        vcpu: 0
+        memory_gb: 0
+notes:
+  - Qdrant's capacity formula (num_vectors * dim * 4 bytes * 1.5x HNSW graph overhead) makes 1:8 memory-optimized VMs and fast NVMe mmap storage the primary cost levers.
+  - Enabling int8 scalar or binary quantization cuts in-memory footprint by 4x to 24x, and Qdrant's Rust engine compiles natively for SIMD/NEON on Linux arm64 instances.
+disclaimers:
+  - Based on Qdrant's published RAM/disk capacity planning formulas and distributed Raft cluster topology.
+  - Estimate excludes embedding generation GPUs, snapshot object storage buckets, and cross-AZ gRPC shard replication traffic.
+

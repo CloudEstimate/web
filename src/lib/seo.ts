@@ -146,20 +146,34 @@ export function buildEstimateProductJsonLd(args: {
   image: string;
   price: number;
   lastModifiedDate: string;
+  isvName?: string;
+  refArchUrl?: string;
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "TechArticle",
+    headline: args.title,
     name: args.title,
     description: args.description,
     url: args.canonical,
     image: args.image,
-    offers: {
-      "@type": "Offer",
-      price: args.price.toFixed(2),
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock"
+    isAccessibleForFree: true,
+    dateModified: args.lastModifiedDate,
+    author: buildAuthorJsonLd(),
+    publisher: buildPublisherJsonLd(),
+    about: {
+      "@type": "SoftwareApplication",
+      name: args.isvName ?? args.title,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Linux"
     },
-    dateModified: args.lastModifiedDate
+    ...(args.refArchUrl
+      ? {
+          citation: {
+            "@type": "CreativeWork",
+            url: args.refArchUrl
+          }
+        }
+      : {})
   };
 }

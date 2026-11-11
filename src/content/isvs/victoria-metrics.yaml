@@ -1,7 +1,10 @@
 slug: victoria-metrics
 name: VictoriaMetrics
 vendor: VictoriaMetrics
-category: data-store
+category: observability
+arch_support:
+  - x86_64
+  - arm64
 description: >
   Self-managed VictoriaMetrics for long-retention metrics storage, Prometheus remote write, and cost-conscious observability backends.
 ref_arch:

@@ -1,10 +1,26 @@
 ---
 import { buildStateKey, getDefaultRegion, getRegionsForCloud } from "@/lib/estimates";
 import { getSizingExplanationWithMetadata } from "@/lib/explanations";
-import { formatCurrency, formatDate, formatRoleLabel, formatRoundedAnnual, formatStorage, formatUserRange } from "@/lib/format";
-import { cloudMeta, cloudOrder, termOrder, type CloudSlug, type CommitmentTerm, type SizeSlug } from "@/lib/site";
+import {
+  formatCurrency,
+  formatDate,
+  formatPercent,
+  formatRoleLabel,
+  formatRoundedAnnual,
+  formatStorage,
+  formatUserRange
+} from "@/lib/format";
+import {
+  cloudMeta,
+  cloudOrder,
+  regionLabels,
+  termOrder,
+  type CloudSlug,
+  type CommitmentTerm,
+  type SizeSlug
+} from "@/lib/site";
 import { buildTerraformSnippet } from "@/lib/terraform";
-import type { EstimateResult, IsvEntry } from "@/lib/types";
+import type { EstimateComponent, EstimateResult, IsvEntry } from "@/lib/types";
 
 type Props = {
   isv: IsvEntry;
@@ -25,6 +41,20 @@ const sizeOptions = (["xs", "s", "m", "l", "xl"] as SizeSlug[]).filter((size) =>
 const initialKey = buildStateKey({ cloud, ...initialState });
 const initialEstimate = estimateMatrix[initialKey];
 
+function isNonVmComponent(component: EstimateComponent) {
+  return component.instanceType === "managed-lb" || component.instanceType === "object-bucket";
+}
+
+function formatComponentStorage(component: EstimateComponent) {
+  if (!component.storageGb) {
+    return "—";
+  }
+
+  return component.storageType
+    ? `${formatStorage(component.storageGb)} ${component.storageType}`
+    : formatStorage(component.storageGb);
+}
+
 const clientData = {
   slug,
   name: isv.data.name,
@@ -32,7 +62,9 @@ const clientData = {
   disclaimers: isv.data.disclaimers,
   notes: isv.data.notes,
   currentCloud: cloud,
+  initialState,
   clouds: cloudMeta,
+  regionLabels,
   defaultRegions: Object.fromEntries(cloudOrder.map((value) => [value, getDefaultRegion(value)])),
   sizes: Object.fromEntries(
     sizeOptions.map((size) => [
@@ -150,6 +182,9 @@ const clientData = {
               <button aria-pressed={!initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="false" data-active={!initialState.ha ? "true" : "false"} type="button">Off</button>
               <button aria-pressed={initialState.ha ? "true" : "false"} class="button-chip" data-ha-button="true" data-active={initialState.ha ? "true" : "false"} type="button">On</button>
             </div>
+            <p class="mt-2 text-xs text-subtle" hidden={initialEstimate.haAddsComponents} id={`${widgetId}-ha-note`}>
+              Multi-node quorum or replication is already included in this baseline tier.
+            </p>
           </div>
 
           <div>
@@ -174,7 +209,9 @@ const clientData = {
               id={`${widgetId}-region`}
             >
               {getRegionsForCloud(cloud).map((region) => (
-                <option selected={region === initialState.region} value={region}>{region}</option>
+                <option selected={region === initialState.region} value={region}>
+                  {regionLabels[region] ? `${regionLabels[region]} (${region})` : region}
+                </option>
               ))}
             </select>
           </div>
@@ -208,25 +245,47 @@ const clientData = {
           </div>
         </div>
 
-        <div class="grid gap-6 p-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <div class="space-y-3">
-            <h2 class="section-heading text-lg">Line-item breakdown</h2>
-            <table class="data-table">
-              <tbody id={`${widgetId}-breakdown`}>
-                <tr>
-                  <td>Compute</td>
-                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.computeTotal)}</td>
-                </tr>
-                <tr>
-                  <td>Storage</td>
-                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.storageTotal)}</td>
-                </tr>
-                <tr>
-                  <td>Other</td>
-                  <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.otherTotal)}</td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="grid gap-6 p-5 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <div class="space-y-4">
+            <div class="space-y-3">
+              <h2 class="section-heading text-lg">Line-item breakdown</h2>
+              <table class="data-table">
+                <tbody id={`${widgetId}-breakdown`}>
+                  <tr>
+                    <td>Compute</td>
+                    <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.computeTotal)}</td>
+                  </tr>
+                  <tr>
+                    <td>Storage</td>
+                    <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.storageTotal)}</td>
+                  </tr>
+                  <tr>
+                    <td>Other</td>
+                    <td data-align="right" class="mono-data">{formatCurrency(initialEstimate.otherTotal)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              class="subtle-panel p-3.5 text-sm"
+              hidden={!initialEstimate.armAlternative}
+              id={`${widgetId}-arm-callout`}
+            >
+              {initialEstimate.armAlternative && (
+                <div class="space-y-1">
+                  <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <span class="font-medium">Arm64 option ({initialEstimate.armAlternative.archFamily})</span>
+                    <span class="mono-data font-semibold" style="color: var(--color-success);">
+                      {formatCurrency(initialEstimate.armAlternative.monthlyTotal)}/mo
+                    </span>
+                  </div>
+                  <p class="text-xs text-muted">
+                    Saves {formatCurrency(initialEstimate.armAlternative.savingsMonthlyUsd)}/mo ({formatPercent(initialEstimate.armAlternative.savingsPercent)}) across <span class="mono-data">{initialEstimate.armAlternative.instanceTypes.join(", ")}</span>.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           <div class="space-y-3">
@@ -246,10 +305,23 @@ const clientData = {
                   {initialEstimate.components.map((component) => (
                     <tr>
                       <td class="font-medium">{formatRoleLabel(component.role)}</td>
-                      <td>{component.count} × <span class="mono-data">{component.instanceType}</span></td>
-                      <td data-align="right" class="mono-data">{component.vcpu}</td>
-                      <td data-align="right" class="mono-data">{component.memoryGb}</td>
-                      <td data-align="right" class="mono-data">{component.storageGb > 0 ? formatStorage(component.storageGb) : "—"}</td>
+                      <td>
+                        {component.count} × <span class="mono-data">{component.instanceType}</span>
+                        {component.gpu > 0 && <span class="ml-1 text-xs text-muted">({component.gpu}× GPU)</span>}
+                      </td>
+                      <td data-align="right" class="mono-data">
+                        {isNonVmComponent(component) ? "—" : component.provisionedVcpu}
+                        {!isNonVmComponent(component) && component.provisionedVcpu !== component.vcpu && (
+                          <span class="ml-1 text-xs text-subtle" title={`Requested ${component.vcpu} vCPU`}>({component.vcpu})</span>
+                        )}
+                      </td>
+                      <td data-align="right" class="mono-data">
+                        {isNonVmComponent(component) ? "—" : component.provisionedMemoryGb}
+                        {!isNonVmComponent(component) && component.provisionedMemoryGb !== component.memoryGb && (
+                          <span class="ml-1 text-xs text-subtle" title={`Requested ${component.memoryGb} GB RAM`}>({component.memoryGb})</span>
+                        )}
+                      </td>
+                      <td data-align="right" class="mono-data">{formatComponentStorage(component)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -270,7 +342,9 @@ const clientData = {
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 class="section-heading">Export</h2>
-            <p class="mt-1 text-sm text-muted">Share the current URL or copy the launch Terraform baseline.</p>
+            <p class="mt-1 text-sm text-muted">
+              Share the current URL or copy the {cloudMeta[cloud].name} Terraform / OpenTofu baseline.
+            </p>
           </div>
 
           <div class="flex flex-wrap gap-2">
@@ -284,14 +358,14 @@ const clientData = {
 
         <div class="mt-4 overflow-hidden rounded-[6px] border" style="border-color: var(--color-border);">
           <div class="border-b px-4 py-2 text-sm font-medium" style="background: var(--color-bg-subtle); border-color: var(--color-border);">
-            Google Cloud Terraform baseline
+            {cloudMeta[cloud].name} Terraform / OpenTofu baseline
           </div>
           <pre class="overflow-x-auto bg-[var(--color-bg-subtle)] p-4 text-sm leading-6"><code id={`${widgetId}-terraform`}>{buildTerraformSnippet({
             slug,
             cloud,
             region: initialState.region,
             estimate: initialEstimate
-          }) ?? "Terraform export is available for Google Cloud at launch. AWS and Azure are deferred to v1.5."}</code></pre>
+          })}</code></pre>
         </div>
       </section>
 
@@ -359,7 +433,9 @@ const clientData = {
     const monthlyNode = document.getElementById(`${widgetId}-monthly`);
     const annualNode = document.getElementById(`${widgetId}-annual`);
     const breakdownNode = document.getElementById(`${widgetId}-breakdown`);
+    const armCalloutNode = document.getElementById(`${widgetId}-arm-callout`);
     const componentsNode = document.getElementById(`${widgetId}-components`);
+    const haNoteNode = document.getElementById(`${widgetId}-ha-note`);
     const explanationNode = document.getElementById(`${widgetId}-explanation`);
     const terraformNode = document.getElementById(`${widgetId}-terraform`);
     const regionSummaryNode = document.getElementById(`${widgetId}-region-summary`);
@@ -382,12 +458,15 @@ const clientData = {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
+    const pct = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 1
+    });
 
     const state = {
-      size: "m",
-      ha: false,
-      term: "on-demand",
-      region: data.defaultRegions[currentCloud]
+      size: data.initialState.size,
+      ha: Boolean(data.initialState.ha),
+      term: data.initialState.term,
+      region: data.initialState.region
     };
 
     function formatDate(value) {
@@ -398,16 +477,17 @@ const clientData = {
       }).format(new Date(`${value}T00:00:00Z`));
     }
 
-    function formatStorage(value) {
+    function formatStorage(value, storageType) {
       if (!value) {
         return "—";
       }
 
-      if (value >= 1000) {
-        return `${Number((value / 1000).toFixed(value % 1000 === 0 ? 0 : 1))} TB`;
-      }
+      const base =
+        value >= 1000
+          ? `${Number((value / 1000).toFixed(value % 1000 === 0 ? 0 : 1))} TB`
+          : `${value} GB`;
 
-      return `${value} GB`;
+      return storageType ? `${base} ${storageType}` : base;
     }
 
     function formatRoleLabel(value) {
@@ -465,7 +545,7 @@ const clientData = {
       return params.toString();
     }
 
-    function render() {
+    function render(options = { syncHistory: false }) {
       const stateKey = buildKey();
       const view = data.states[stateKey];
 
@@ -478,26 +558,71 @@ const clientData = {
       if (regionSummaryNode) {
         regionSummaryNode.textContent = state.region;
       }
+      if (haNoteNode) {
+        haNoteNode.hidden = Boolean(view.estimate.haAddsComponents);
+      }
       sizeSubheadNode.textContent = `${view.estimate.sizeLabel} — ${formatUserRange(data.sizes[state.size].rangeDescription)}`;
       sizeDefinitionNode.innerHTML = `Maps to ${data.name}'s ${view.estimate.refArchTier} reference architecture. <a href="${data.refArchUrl}">Source</a>`;
       explanationNode.textContent = view.explanation;
-      terraformNode.textContent = view.terraform || "Terraform export is available for Google Cloud at launch. AWS and Azure are deferred to v1.5.";
+      terraformNode.textContent = view.terraform || "";
       breakdownNode.innerHTML = `
         <tr><td>Compute</td><td data-align="right" class="mono-data">${currency.format(view.estimate.computeTotal)}</td></tr>
         <tr><td>Storage</td><td data-align="right" class="mono-data">${currency.format(view.estimate.storageTotal)}</td></tr>
         <tr><td>Other</td><td data-align="right" class="mono-data">${currency.format(view.estimate.otherTotal)}</td></tr>
       `;
+
+      if (armCalloutNode) {
+        const arm = view.estimate.armAlternative;
+        if (arm) {
+          armCalloutNode.hidden = false;
+          armCalloutNode.innerHTML = `
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <span class="font-medium">Arm64 option (${arm.archFamily})</span>
+                <span class="mono-data font-semibold" style="color: var(--color-success);">${currency.format(arm.monthlyTotal)}/mo</span>
+              </div>
+              <p class="text-xs text-muted">
+                Saves ${currency.format(arm.savingsMonthlyUsd)}/mo (${pct.format(arm.savingsPercent)}%) across <span class="mono-data">${arm.instanceTypes.join(", ")}</span>.
+              </p>
+            </div>
+          `;
+        } else {
+          armCalloutNode.hidden = true;
+          armCalloutNode.innerHTML = "";
+        }
+      }
+
       componentsNode.innerHTML = view.estimate.components
-        .map((component) => `
-          <tr>
-            <td class="font-medium">${formatRoleLabel(component.role)}</td>
-            <td>${component.count} × <span class="mono-data">${component.instanceType}</span></td>
-            <td data-align="right" class="mono-data">${component.vcpu}</td>
-            <td data-align="right" class="mono-data">${component.memoryGb}</td>
-            <td data-align="right" class="mono-data">${formatStorage(component.storageGb)}</td>
-          </tr>
-        `)
+        .map((component) => {
+          const nonVm = component.instanceType === "managed-lb" || component.instanceType === "object-bucket";
+          const gpuBadge = component.gpu > 0 ? ` <span class="ml-1 text-xs text-muted">(${component.gpu}× GPU)</span>` : "";
+          const vcpuCell = nonVm
+            ? "—"
+            : `${component.provisionedVcpu}${
+                component.provisionedVcpu !== component.vcpu
+                  ? ` <span class="ml-1 text-xs text-subtle" title="Requested ${component.vcpu} vCPU">(${component.vcpu})</span>`
+                  : ""
+              }`;
+          const ramCell = nonVm
+            ? "—"
+            : `${component.provisionedMemoryGb}${
+                component.provisionedMemoryGb !== component.memoryGb
+                  ? ` <span class="ml-1 text-xs text-subtle" title="Requested ${component.memoryGb} GB RAM">(${component.memoryGb})</span>`
+                  : ""
+              }`;
+
+          return `
+            <tr>
+              <td class="font-medium">${formatRoleLabel(component.role)}</td>
+              <td>${component.count} × <span class="mono-data">${component.instanceType}</span>${gpuBadge}</td>
+              <td data-align="right" class="mono-data">${vcpuCell}</td>
+              <td data-align="right" class="mono-data">${ramCell}</td>
+              <td data-align="right" class="mono-data">${formatStorage(component.storageGb, component.storageType)}</td>
+            </tr>
+          `;
+        })
         .join("");
+
       sourcesNode.innerHTML = `
         <p>Reference architecture: ${data.name} for ${view.estimate.refArchTier}, version ${view.estimate.citations.refArchVersion}, retrieved ${formatDate(view.estimate.citations.refArchRetrievedDate)}.</p>
         <p><a href="${view.estimate.citations.refArchUrl}">${view.estimate.citations.refArchUrl}</a></p>
@@ -531,6 +656,7 @@ const clientData = {
         link.href = `/sizing/${data.slug}/${targetCloud}?${searchString(targetCloud)}`;
       });
       compareLink.href = `/sizing/${data.slug}/compare?size=${state.size}&ha=${state.ha}&term=${state.term}`;
+
       trackSizingEvent("sizing_recommendation_served", {
         view_type: "single",
         isv_slug: data.slug,
@@ -550,30 +676,34 @@ const clientData = {
         pricing_snapshot_age_days: daysSince(view.estimate.pricingSnapshotDate),
         response_status: "served"
       });
-      history.replaceState({}, "", `${location.pathname}?${searchString()}`);
+
+      if (options.syncHistory) {
+        const targetPath = `/sizing/${data.slug}/${currentCloud}`;
+        history.replaceState({}, "", `${targetPath}?${searchString()}`);
+      }
     }
 
     document.querySelectorAll(`[data-size-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.size = button.dataset.sizeButton;
-        render();
+        render({ syncHistory: true });
       });
     });
     document.querySelectorAll(`[data-ha-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.ha = button.dataset.haButton === "true";
-        render();
+        render({ syncHistory: true });
       });
     });
     document.querySelectorAll(`[data-term-button]`).forEach((button) => {
       button.addEventListener("click", () => {
         state.term = button.dataset.termButton;
-        render();
+        render({ syncHistory: true });
       });
     });
     regionSelect?.addEventListener("change", (event) => {
       state.region = event.target.value;
-      render();
+      render({ syncHistory: true });
     });
 
     copyUrlButton?.addEventListener("click", async () => {
@@ -602,22 +732,28 @@ const clientData = {
     });
 
     const params = new URLSearchParams(location.search);
+    let hasQueryOverride = false;
+
     if (params.get("size") && data.sizes[params.get("size")]) {
       state.size = params.get("size");
+      hasQueryOverride = true;
     }
-    if (params.get("ha")) {
+    if (params.get("ha") === "true" || params.get("ha") === "false") {
       state.ha = params.get("ha") === "true";
+      hasQueryOverride = true;
     }
-    if (params.get("term")) {
+    if (params.get("term") && ["on-demand", "1yr", "3yr"].includes(params.get("term"))) {
       state.term = params.get("term");
+      hasQueryOverride = true;
     }
     if (params.get("region") && data.regionsByCloud[currentCloud].includes(params.get("region"))) {
       state.region = params.get("region");
       if (regionSelect) {
         regionSelect.value = state.region;
       }
+      hasQueryOverride = true;
     }
 
-    render();
+    render({ syncHistory: hasQueryOverride });
   }
 </script>
